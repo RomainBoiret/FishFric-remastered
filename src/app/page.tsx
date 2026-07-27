@@ -1,3 +1,4 @@
+import Image from "next/image";
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import { DemoButton } from "@/features/auth/DemoButton";
@@ -8,44 +9,78 @@ export default async function Home() {
   if (session?.user) redirect("/app");
 
   return (
-    <div className="relative flex min-h-full flex-1 flex-col overflow-hidden bg-[#04161f] text-[#e8f4f8]">
-      <div
-        aria-hidden
-        className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_30%_20%,#0a4a5c_0%,transparent_55%),radial-gradient(ellipse_at_80%_70%,#063040_0%,transparent_50%)]"
-      />
-      <main className="relative z-10 mx-auto flex w-full max-w-3xl flex-1 flex-col justify-center gap-8 px-6 py-24">
-        <p
-          className="text-5xl tracking-tight text-[#7ec8d8] sm:text-6xl"
-          style={{ fontFamily: "var(--font-display)" }}
-        >
-          Fish&Fric
-        </p>
-        <h1
-          className="max-w-xl text-2xl font-medium leading-snug text-[#e8f4f8] sm:text-3xl"
-          style={{ fontFamily: "var(--font-display)" }}
-        >
-          La banque qui nage avec toi.
-        </h1>
-        <p className="max-w-md text-lg leading-relaxed text-[#9bb8c4]">
-          Remaster full-stack — comptes, transferts, ledger et mode démo pour
-          les recruteurs curieux.
-        </p>
-        <div className="flex flex-wrap items-center gap-3 pt-2">
+    <div className="relative flex min-h-full flex-1 flex-col bg-[#04161f] text-[#e8f4f8]">
+      {/* Hero — one composition, full-bleed visual */}
+      <section className="relative flex min-h-[100svh] flex-col overflow-hidden">
+        <div className="absolute inset-0">
+          <Image
+            src="https://images.unsplash.com/photo-1682687982501-1e58ab814714?auto=format&fit=crop&w=2400&q=80"
+            alt=""
+            fill
+            priority
+            className="ff-drift object-cover object-center"
+            sizes="100vw"
+          />
+          <div
+            aria-hidden
+            className="absolute inset-0 bg-[linear-gradient(180deg,rgba(2,16,24,0.55)_0%,rgba(4,22,31,0.72)_45%,rgba(4,22,31,0.92)_100%)]"
+          />
+          <div
+            aria-hidden
+            className="ff-shimmer absolute inset-0 bg-[radial-gradient(ellipse_at_30%_15%,rgba(126,200,216,0.22),transparent_50%)]"
+          />
+        </div>
+
+        <main className="relative z-10 mx-auto flex w-full max-w-3xl flex-1 flex-col justify-end gap-6 px-6 pb-20 pt-28 sm:justify-center sm:pb-24">
+          <p
+            className="ff-rise text-6xl tracking-tight text-[#7ec8d8] sm:text-7xl md:text-8xl"
+            style={{ fontFamily: "var(--font-display)" }}
+          >
+            Fish&Fric
+          </p>
+          <h1
+            className="ff-rise ff-rise-delay-1 max-w-xl text-2xl font-medium leading-snug text-[#e8f4f8] sm:text-3xl"
+            style={{ fontFamily: "var(--font-display)" }}
+          >
+            La banque qui nage avec toi.
+          </h1>
+          <p className="ff-rise ff-rise-delay-2 max-w-md text-lg leading-relaxed text-[#c5dbe3]">
+            Comptes, transferts et ledger — une démo bancaire thématique pour
+            recruteurs curieux.
+          </p>
+          <div className="ff-rise ff-rise-delay-3 flex flex-wrap items-start gap-3 pt-2">
+            <DemoButton className="rounded-md bg-[#7ec8d8] px-5 py-2.5 text-sm font-semibold text-[#04161f] transition hover:bg-[#9ad7e4] disabled:opacity-60" />
+            <Link
+              href="/connexion"
+              className="rounded-md border border-white/25 px-5 py-2.5 text-sm font-medium text-[#e8f4f8] transition hover:border-[#7ec8d8] hover:text-[#7ec8d8]"
+            >
+              Connexion
+            </Link>
+          </div>
+        </main>
+      </section>
+
+      {/* Below fold — one job */}
+      <section className="relative border-t border-[#1e4a58] bg-[#04161f] px-6 py-20">
+        <div className="mx-auto flex w-full max-w-3xl flex-col gap-4">
+          <h2
+            className="text-2xl text-[#e8f4f8] sm:text-3xl"
+            style={{ fontFamily: "var(--font-display)" }}
+          >
+            Explore la démo en une minute.
+          </h2>
+          <p className="max-w-xl text-lg leading-relaxed text-[#9bb8c4]">
+            Ouvre trois comptes, déplace des fonds, envoie un P2P avec question
+            secrète. Tout tourne sur un vrai ledger PostgreSQL.
+          </p>
           <Link
             href="/inscription"
-            className="rounded-md bg-[#7ec8d8] px-5 py-2.5 text-sm font-semibold text-[#04161f] transition hover:bg-[#9ad7e4]"
+            className="mt-2 w-fit text-sm font-medium text-[#7ec8d8] underline-offset-4 transition hover:underline"
           >
-            Ouvrir un compte
+            Ou créer ton propre compte →
           </Link>
-          <Link
-            href="/connexion"
-            className="rounded-md border border-[#1e4a58] px-5 py-2.5 text-sm font-medium text-[#e8f4f8] transition hover:border-[#7ec8d8]"
-          >
-            Connexion
-          </Link>
-          <DemoButton />
         </div>
-      </main>
+      </section>
     </div>
   );
 }

@@ -15,7 +15,7 @@ const sans = Source_Sans_3({
 export const metadata: Metadata = {
   title: "Fish&Fric",
   description:
-    "Banque en ligne thématique — remaster portfolio. Comptes, transferts, démo recruteur.",
+    "La banque qui nage avec toi — démo portfolio. Comptes, transferts, P2P et ledger.",
 };
 
 export default function RootLayout({

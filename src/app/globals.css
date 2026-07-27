@@ -3,6 +3,10 @@
 :root {
   --background: #04161f;
   --foreground: #e8f4f8;
+  --foam: #7ec8d8;
+  --mist: #9bb8c4;
+  --depth: #0a2833;
+  --abyss: #021018;
 }
 
 @theme inline {
@@ -15,4 +19,67 @@
 body {
   background: var(--background);
   color: var(--foreground);
+}
+
+@keyframes ff-rise {
+  from {
+    opacity: 0;
+    transform: translateY(18px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes ff-drift {
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+  50% {
+    transform: translate3d(2%, -1.5%, 0) scale(1.04);
+  }
+}
+
+@keyframes ff-shimmer {
+  0%,
+  100% {
+    opacity: 0.35;
+  }
+  50% {
+    opacity: 0.55;
+  }
+}
+
+.ff-rise {
+  animation: ff-rise 0.9s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.ff-rise-delay-1 {
+  animation-delay: 0.12s;
+}
+
+.ff-rise-delay-2 {
+  animation-delay: 0.24s;
+}
+
+.ff-rise-delay-3 {
+  animation-delay: 0.36s;
+}
+
+.ff-drift {
+  animation: ff-drift 18s ease-in-out infinite;
+}
+
+.ff-shimmer {
+  animation: ff-shimmer 8s ease-in-out infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ff-rise,
+  .ff-drift,
+  .ff-shimmer {
+    animation: none;
+  }
 }
