@@ -1,0 +1,130 @@
+// Fish&Fric — schema métier (ledger + comptes + P2P)
+
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+enum AccountType {
+  CHECKING
+  SAVINGS
+  CREDIT
+}
+
+enum AccountStatus {
+  ACTIVE
+  CLOSED
+}
+
+enum EntryKind {
+  TRANSFER_INTERNAL
+  TRANSFER_P2P
+  BILL_PAYMENT
+  MOBILE_DEPOSIT
+  INTEREST
+  ADJUSTMENT
+}
+
+enum P2PStatus {
+  PENDING
+  ACCEPTED
+  REJECTED
+  EXPIRED
+  CANCELLED
+}
+
+model User {
+  id           String   @id @default(cuid())
+  email        String   @unique
+  passwordHash String
+  firstName    String
+  lastName     String
+  isDemo       Boolean  @default(false)
+  createdAt    DateTime @default(now())
+
+  accounts      BankAccount[]
+  notifications Notification[]
+  sentP2P       P2PTransfer[] @relation("P2PSender")
+  receivedP2P   P2PTransfer[] @relation("P2PRecipient")
+}
+
+model BankAccount {
+  id               String        @id @default(cuid())
+  userId           String
+  user             User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  type             AccountType
+  label            String?
+  /// Solde en centimes (cache dérivé du ledger)
+  balanceCents     Int           @default(0)
+  /// Plafond crédit (ex. -500000 = -5000,00 $). Null hors CREDIT.
+  creditLimitCents Int?
+  /// Taux d'intérêt en basis points (100 = 1,00 %)
+  interestBps      Int           @default(0)
+  status           AccountStatus @default(ACTIVE)
+  openedAt         DateTime      @default(now())
+  closedAt         DateTime?
+
+  entries     LedgerEntry[]
+  p2pAsSource P2PTransfer[] @relation("P2PSource")
+
+  @@index([userId, status])
+}
+
+model LedgerEntry {
+  id              String      @id @default(cuid())
+  accountId       String
+  account         BankAccount @relation(fields: [accountId], references: [id], onDelete: Cascade)
+  /// Signé : + crédit compte, - débit compte
+  amountCents     Int
+  kind            EntryKind
+  description     String
+  transferGroupId String?
+  p2pTransferId   String?
+  p2pTransfer     P2PTransfer? @relation(fields: [p2pTransferId], references: [id], onDelete: SetNull)
+  createdAt       DateTime    @default(now())
+
+  @@index([accountId, createdAt])
+  @@index([transferGroupId])
+}
+
+model P2PTransfer {
+  id              String    @id @default(cuid())
+  senderUserId    String
+  senderUser      User      @relation("P2PSender", fields: [senderUserId], references: [id], onDelete: Cascade)
+  recipientEmail  String
+  recipientUserId String?
+  recipientUser   User?     @relation("P2PRecipient", fields: [recipientUserId], references: [id], onDelete: SetNull)
+  sourceAccountId String
+  sourceAccount   BankAccount @relation("P2PSource", fields: [sourceAccountId], references: [id])
+  amountCents     Int
+  question        String
+  answerHash      String
+  status          P2PStatus @default(PENDING)
+  expiresAt       DateTime
+  resolvedAt      DateTime?
+  createdAt       DateTime  @default(now())
+
+  entries       LedgerEntry[]
+  notifications Notification[]
+
+  @@index([recipientEmail, status])
+  @@index([senderUserId, status])
+}
+
+model Notification {
+  id            String    @id @default(cuid())
+  userId        String
+  user          User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  title         String
+  body          String
+  readAt        DateTime?
+  p2pTransferId String?
+  p2pTransfer   P2PTransfer? @relation(fields: [p2pTransferId], references: [id], onDelete: SetNull)
+  createdAt     DateTime  @default(now())
+
+  @@index([userId, createdAt])
+}
