@@ -4,7 +4,7 @@ export const authConfig = {
   trustHost: true,
   session: { strategy: "jwt" },
   pages: {
-    signIn: "/connexion",
+    signIn: "/login",
   },
   providers: [],
   callbacks: {

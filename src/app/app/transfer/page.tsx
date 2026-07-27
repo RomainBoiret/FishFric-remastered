@@ -12,7 +12,7 @@ type PageProps = {
 
 export default async function TransferPage({ searchParams }: PageProps) {
   const session = await auth();
-  if (!session?.user) redirect("/connexion");
+  if (!session?.user) redirect("/login");
 
   const { from } = await searchParams;
 
@@ -48,7 +48,7 @@ export default async function TransferPage({ searchParams }: PageProps) {
             type="submit"
             className="text-sm text-[#9bb8c4] transition hover:text-[#e8f4f8]"
           >
-            Déconnexion
+            Sign out
           </button>
         </form>
       </header>
@@ -59,16 +59,16 @@ export default async function TransferPage({ searchParams }: PageProps) {
             href="/app"
             className="inline-block text-sm text-[#9bb8c4] transition hover:text-[#7ec8d8]"
           >
-            ← Mes comptes
+            ← My accounts
           </Link>
           <h1
             className="text-3xl"
             style={{ fontFamily: "var(--font-display)" }}
           >
-            Transfert interne
+            Internal transfer
           </h1>
           <p className="text-[#9bb8c4]">
-            Déplace des fonds entre tes comptes Fish&Fric.
+            Move funds between your Fish&Fric accounts.
           </p>
         </div>
 

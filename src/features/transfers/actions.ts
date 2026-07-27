@@ -19,7 +19,7 @@ export async function transferInternalAction(
 ): Promise<TransferActionState> {
   const session = await auth();
   if (!session?.user) {
-    return { error: "Session expirée. Reconnecte-toi." };
+    return { error: "Session expired. Please sign in again." };
   }
 
   const parsed = internalTransferSchema.safeParse({
@@ -29,12 +29,12 @@ export async function transferInternalAction(
   });
 
   if (!parsed.success) {
-    return { error: "Formulaire invalide." };
+    return { error: "Invalid form." };
   }
 
   const amountCents = parseAmountToCents(parsed.data.amount);
   if (amountCents == null) {
-    return { error: "Montant invalide (ex. 50 ou 50.25)." };
+    return { error: "Invalid amount (e.g. 50 or 50.25)." };
   }
 
   const { fromAccountId, toAccountId } = parsed.data;
@@ -55,7 +55,7 @@ export async function transferInternalAction(
       const to = accounts.find((a) => a.id === toAccountId);
 
       if (!from || !to) {
-        throw new Error("Compte introuvable.");
+        throw new Error("Account not found.");
       }
 
       const validation = validateInternalTransfer({
@@ -89,7 +89,7 @@ export async function transferInternalAction(
           accountId: from.id,
           amountCents: -amountCents,
           kind: "TRANSFER_INTERNAL",
-          description: `Vers ${toLabel}`,
+          description: `To ${toLabel}`,
           transferGroupId,
         },
       });
@@ -99,7 +99,7 @@ export async function transferInternalAction(
           accountId: to.id,
           amountCents,
           kind: "TRANSFER_INTERNAL",
-          description: `Depuis ${fromLabel}`,
+          description: `From ${fromLabel}`,
           transferGroupId,
         },
       });
@@ -116,14 +116,14 @@ export async function transferInternalAction(
     });
   } catch (error) {
     const message =
-      error instanceof Error ? error.message : "Transfert impossible.";
+      error instanceof Error ? error.message : "Transfer failed.";
     return { error: message };
   }
 
   revalidatePath("/app");
-  revalidatePath("/app/transfert");
-  revalidatePath(`/app/comptes/${fromAccountId}`);
-  revalidatePath(`/app/comptes/${toAccountId}`);
+  revalidatePath("/app/transfer");
+  revalidatePath(`/app/accounts/${fromAccountId}`);
+  revalidatePath(`/app/accounts/${toAccountId}`);
 
-  return { success: "Transfert effectué." };
+  return { success: "Transfer completed." };
 }

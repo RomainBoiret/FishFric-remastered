@@ -18,10 +18,10 @@ export function DemoButton({ className }: { className?: string }) {
         disabled={pending}
         className={
           className ??
-          "rounded-md border border-[#7ec8d8]/px-5 py-2.5 text-sm font-medium text-[#7ec8d8] transition hover:bg-[#0a2833] disabled:opacity-60"
+          "rounded-md border border-[#7ec8d8] px-5 py-2.5 text-sm font-medium text-[#7ec8d8] transition hover:bg-[#0a2833] disabled:opacity-60"
         }
       >
-        {pending ? "Ouverture démo…" : "Essayer la démo"}
+        {pending ? "Opening demo…" : "Try the demo"}
       </button>
       {state.error ? (
         <p className="text-sm text-[#f0a8a8]" role="alert">

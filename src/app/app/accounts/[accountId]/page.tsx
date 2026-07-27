@@ -19,7 +19,7 @@ type PageProps = {
 
 export default async function AccountDetailPage({ params }: PageProps) {
   const session = await auth();
-  if (!session?.user) redirect("/connexion");
+  if (!session?.user) redirect("/login");
 
   const { accountId } = await params;
   const account = await getOwnedAccount(session.user.id, accountId);
@@ -46,7 +46,7 @@ export default async function AccountDetailPage({ params }: PageProps) {
             type="submit"
             className="text-sm text-[#9bb8c4] transition hover:text-[#e8f4f8]"
           >
-            Déconnexion
+            Sign out
           </button>
         </form>
       </header>
@@ -57,7 +57,7 @@ export default async function AccountDetailPage({ params }: PageProps) {
             href="/app"
             className="inline-block text-sm text-[#9bb8c4] transition hover:text-[#7ec8d8]"
           >
-            ← Mes comptes
+            ← My accounts
           </Link>
 
           <div className="space-y-2">
@@ -78,28 +78,28 @@ export default async function AccountDetailPage({ params }: PageProps) {
             </p>
             {account.type === "CREDIT" && account.creditLimitCents != null ? (
               <p className="text-sm text-[#6a8894]">
-                Limite {formatMoney(account.creditLimitCents)}
+                Limit {formatMoney(account.creditLimitCents)}
               </p>
             ) : (
               <p className="text-sm text-[#6a8894]">
-                Intérêt {(account.interestBps / 100).toFixed(2)} % / an
+                Interest {(account.interestBps / 100).toFixed(2)}% / year
               </p>
             )}
           </div>
 
           {account.type !== "CREDIT" ? (
             <Link
-              href={`/app/transfert?from=${account.id}`}
+              href={`/app/transfer?from=${account.id}`}
               className="inline-flex rounded-md bg-[#7ec8d8] px-4 py-2.5 text-sm font-semibold text-[#04161f] transition hover:bg-[#9ad7e4]"
             >
-              Transférer depuis ce compte
+              Transfer from this account
             </Link>
           ) : (
             <Link
-              href="/app/transfert"
+              href="/app/transfer"
               className="inline-flex rounded-md border border-[#7ec8d8] px-4 py-2.5 text-sm font-medium text-[#7ec8d8] transition hover:bg-[#0a2833]"
             >
-              Rembourser la carte
+              Pay the card
             </Link>
           )}
         </div>
@@ -109,13 +109,11 @@ export default async function AccountDetailPage({ params }: PageProps) {
             className="text-xl text-[#e8f4f8]"
             style={{ fontFamily: "var(--font-display)" }}
           >
-            Historique
+            History
           </h2>
 
           {entries.length === 0 ? (
-            <p className="py-6 text-[#9bb8c4]">
-              Aucune opération pour l&apos;instant.
-            </p>
+            <p className="py-6 text-[#9bb8c4]">No transactions yet.</p>
           ) : (
             <ul className="flex flex-col">
               {entries.map((entry) => {

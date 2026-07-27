@@ -35,8 +35,8 @@ export function TransferForm({
   if (sources.length === 0 || accounts.length < 2) {
     return (
       <p className="text-[#9bb8c4]">
-        Il te faut au moins deux comptes (dont une source hors Carte requin)
-        pour faire un transfert.
+        You need at least two accounts (with a non–Shark Card source) to make a
+        transfer.
       </p>
     );
   }
@@ -44,7 +44,7 @@ export function TransferForm({
   return (
     <form action={formAction} className="flex w-full flex-col gap-4">
       <label className="flex flex-col gap-1.5 text-sm text-[#9bb8c4]">
-        Depuis
+        From
         <select
           name="fromAccountId"
           required
@@ -60,7 +60,7 @@ export function TransferForm({
       </label>
 
       <label className="flex flex-col gap-1.5 text-sm text-[#9bb8c4]">
-        Vers
+        To
         <select
           name="toAccountId"
           required
@@ -78,7 +78,7 @@ export function TransferForm({
       </label>
 
       <label className="flex flex-col gap-1.5 text-sm text-[#9bb8c4]">
-        Montant (CAD)
+        Amount (CAD)
         <input
           name="amount"
           inputMode="decimal"
@@ -105,7 +105,7 @@ export function TransferForm({
         disabled={pending}
         className="mt-2 rounded-md bg-[#7ec8d8] px-4 py-2.5 text-sm font-semibold text-[#04161f] transition hover:bg-[#9ad7e4] disabled:opacity-60"
       >
-        {pending ? "Transfert…" : "Transférer"}
+        {pending ? "Transferring…" : "Transfer"}
       </button>
     </form>
   );

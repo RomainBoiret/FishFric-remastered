@@ -30,7 +30,7 @@ export async function createP2PAction(
   formData: FormData,
 ): Promise<P2PActionState> {
   const session = await auth();
-  if (!session?.user) return { error: "Session expirée." };
+  if (!session?.user) return { error: "Session expired." };
 
   const parsed = createP2PSchema.safeParse({
     sourceAccountId: formData.get("sourceAccountId"),
@@ -41,17 +41,17 @@ export async function createP2PAction(
   });
 
   if (!parsed.success) {
-    return { error: "Formulaire invalide — vérifie les champs." };
+    return { error: "Invalid form — please check the fields." };
   }
 
   const amountCents = parseAmountToCents(parsed.data.amount);
   if (amountCents == null) {
-    return { error: "Montant invalide (ex. 40 ou 40.50)." };
+    return { error: "Invalid amount (e.g. 40 or 40.50)." };
   }
 
   const email = parsed.data.recipientEmail;
   if (email === session.user.email?.toLowerCase()) {
-    return { error: "Tu ne peux pas t'envoyer un P2P à toi-même." };
+    return { error: "You cannot send a P2P transfer to yourself." };
   }
 
   const answerHash = await bcrypt.hash(
@@ -70,11 +70,11 @@ export async function createP2PAction(
       });
 
       if (!source || !canSendP2PFrom(source.type)) {
-        throw new Error("Compte source invalide.");
+        throw new Error("Invalid source account.");
       }
 
       if (source.balanceCents < amountCents) {
-        throw new Error("Fonds insuffisants.");
+        throw new Error("Insufficient funds.");
       }
 
       const recipient = await tx.user.findUnique({ where: { email } });
@@ -98,7 +98,7 @@ export async function createP2PAction(
           accountId: source.id,
           amountCents: -amountCents,
           kind: "TRANSFER_P2P",
-          description: `P2P vers ${email} (en attente)`,
+          description: `P2P to ${email} (pending)`,
           p2pTransferId: p2p.id,
         },
       });
@@ -112,8 +112,8 @@ export async function createP2PAction(
         await tx.notification.create({
           data: {
             userId: recipient.id,
-            title: "Transfert P2P reçu",
-            body: `${session.user.name ?? "Quelqu'un"} t'envoie ${formatMoney(amountCents)}.`,
+            title: "P2P transfer received",
+            body: `${session.user.name ?? "Someone"} sent you ${formatMoney(amountCents)}.`,
             p2pTransferId: p2p.id,
           },
         });
@@ -121,12 +121,12 @@ export async function createP2PAction(
     });
   } catch (error) {
     return {
-      error: error instanceof Error ? error.message : "Envoi impossible.",
+      error: error instanceof Error ? error.message : "Could not send transfer.",
     };
   }
 
-  revalidateP2P([`/app/comptes/${parsed.data.sourceAccountId}`]);
-  return { success: "Transfert envoyé — en attente de réponse." };
+  revalidateP2P([`/app/accounts/${parsed.data.sourceAccountId}`]);
+  return { success: "Transfer sent — waiting for a reply." };
 }
 
 export async function acceptP2PAction(
@@ -134,16 +134,16 @@ export async function acceptP2PAction(
   formData: FormData,
 ): Promise<P2PActionState> {
   const session = await auth();
-  if (!session?.user) return { error: "Session expirée." };
+  if (!session?.user) return { error: "Session expired." };
 
   const parsed = acceptP2PSchema.safeParse({
     p2pId: formData.get("p2pId"),
     answer: formData.get("answer"),
   });
-  if (!parsed.success) return { error: "Formulaire invalide." };
+  if (!parsed.success) return { error: "Invalid form." };
 
   const userEmail = session.user.email?.toLowerCase();
-  if (!userEmail) return { error: "Session invalide." };
+  if (!userEmail) return { error: "Invalid session." };
 
   try {
     await prisma.$transaction(async (tx) => {
@@ -157,15 +157,15 @@ export async function acceptP2PAction(
       });
 
       if (!p2p || p2p.status !== "PENDING") {
-        throw new Error("Transfert introuvable ou déjà traité.");
+        throw new Error("Transfer not found or already processed.");
       }
 
       if (p2p.recipientEmail !== userEmail) {
-        throw new Error("Ce transfert ne t'est pas destiné.");
+        throw new Error("This transfer is not for you.");
       }
 
       if (isP2PExpired(p2p.expiresAt)) {
-        throw new Error("Ce transfert a expiré.");
+        throw new Error("This transfer has expired.");
       }
 
       const ok = await bcrypt.compare(
@@ -173,7 +173,7 @@ export async function acceptP2PAction(
         p2p.answerHash,
       );
       if (!ok) {
-        throw new Error("Réponse incorrecte.");
+        throw new Error("Incorrect answer.");
       }
 
       let checking = await tx.bankAccount.findFirst({
@@ -189,7 +189,7 @@ export async function acceptP2PAction(
           data: {
             userId: session.user.id,
             type: "CHECKING",
-            label: "Compte chèque",
+            label: "Checking account",
             balanceCents: 0,
             interestBps: ACCOUNT_RULES.interestBps.CHECKING,
           },
@@ -203,7 +203,7 @@ export async function acceptP2PAction(
           accountId: checking.id,
           amountCents: p2p.amountCents,
           kind: "TRANSFER_P2P",
-          description: `P2P reçu de ${senderName}`,
+          description: `P2P received from ${senderName}`,
           p2pTransferId: p2p.id,
         },
       });
@@ -229,27 +229,28 @@ export async function acceptP2PAction(
           amountCents: { lt: 0 },
         },
         data: {
-          description: `P2P vers ${userEmail} (accepté)`,
+          description: `P2P to ${userEmail} (accepted)`,
         },
       });
 
       await tx.notification.create({
         data: {
           userId: p2p.senderUserId,
-          title: "P2P accepté",
-          body: `${session.user.name ?? "Le destinataire"} a accepté ton transfert de ${formatMoney(p2p.amountCents)}.`,
+          title: "P2P accepted",
+          body: `${session.user.name ?? "The recipient"} accepted your ${formatMoney(p2p.amountCents)} transfer.`,
           p2pTransferId: p2p.id,
         },
       });
     });
   } catch (error) {
     return {
-      error: error instanceof Error ? error.message : "Acceptation impossible.",
+      error:
+        error instanceof Error ? error.message : "Could not accept transfer.",
     };
   }
 
   revalidateP2P();
-  return { success: "Fonds reçus sur ton compte chèque." };
+  return { success: "Funds received in your checking account." };
 }
 
 export async function rejectP2PAction(
@@ -257,15 +258,15 @@ export async function rejectP2PAction(
   formData: FormData,
 ): Promise<P2PActionState> {
   const session = await auth();
-  if (!session?.user) return { error: "Session expirée." };
+  if (!session?.user) return { error: "Session expired." };
 
   const parsed = rejectP2PSchema.safeParse({
     p2pId: formData.get("p2pId"),
   });
-  if (!parsed.success) return { error: "Formulaire invalide." };
+  if (!parsed.success) return { error: "Invalid form." };
 
   const userEmail = session.user.email?.toLowerCase();
-  if (!userEmail) return { error: "Session invalide." };
+  if (!userEmail) return { error: "Invalid session." };
 
   try {
     await prisma.$transaction(async (tx) => {
@@ -274,24 +275,24 @@ export async function rejectP2PAction(
       });
 
       if (!p2p || p2p.status !== "PENDING") {
-        throw new Error("Transfert introuvable ou déjà traité.");
+        throw new Error("Transfer not found or already processed.");
       }
 
       if (p2p.recipientEmail !== userEmail) {
-        throw new Error("Ce transfert ne t'est pas destiné.");
+        throw new Error("This transfer is not for you.");
       }
 
       const source = await tx.bankAccount.findUnique({
         where: { id: p2p.sourceAccountId },
       });
-      if (!source) throw new Error("Compte source introuvable.");
+      if (!source) throw new Error("Source account not found.");
 
       await tx.ledgerEntry.create({
         data: {
           accountId: source.id,
           amountCents: p2p.amountCents,
           kind: "TRANSFER_P2P",
-          description: `P2P vers ${p2p.recipientEmail} (refusé — remboursement)`,
+          description: `P2P to ${p2p.recipientEmail} (declined — refund)`,
           p2pTransferId: p2p.id,
         },
       });
@@ -313,18 +314,19 @@ export async function rejectP2PAction(
       await tx.notification.create({
         data: {
           userId: p2p.senderUserId,
-          title: "P2P refusé",
-          body: `Ton transfert de ${formatMoney(p2p.amountCents)} a été refusé. Fonds remis.`,
+          title: "P2P declined",
+          body: `Your ${formatMoney(p2p.amountCents)} transfer was declined. Funds returned.`,
           p2pTransferId: p2p.id,
         },
       });
     });
   } catch (error) {
     return {
-      error: error instanceof Error ? error.message : "Refus impossible.",
+      error:
+        error instanceof Error ? error.message : "Could not decline transfer.",
     };
   }
 
   revalidateP2P();
-  return { success: "Transfert refusé." };
+  return { success: "Transfer declined." };
 }

@@ -15,7 +15,7 @@ const sans = Source_Sans_3({
 export const metadata: Metadata = {
   title: "Fish&Fric",
   description:
-    "La banque qui nage avec toi — démo portfolio. Comptes, transferts, P2P et ledger.",
+    "The bank that swims with you — portfolio demo. Accounts, transfers, P2P, and ledger.",
 };
 
 export default function RootLayout({
@@ -25,7 +25,7 @@ export default function RootLayout({
 }>) {
   return (
     <html
-      lang="fr"
+      lang="en"
       className={`${display.variable} ${sans.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col font-sans">{children}</body>

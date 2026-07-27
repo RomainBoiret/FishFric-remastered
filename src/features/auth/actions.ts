@@ -29,7 +29,7 @@ export async function signupAction(
 
   if (!parsed.success) {
     return {
-      error: "Vérifie les champs du formulaire.",
+      error: "Please check the form fields.",
       fieldErrors: parsed.error.flatten().fieldErrors,
     };
   }
@@ -38,7 +38,7 @@ export async function signupAction(
 
   const existing = await prisma.user.findUnique({ where: { email } });
   if (existing) {
-    return { error: "Un compte existe déjà avec ce courriel." };
+    return { error: "An account already exists with this email." };
   }
 
   const passwordHash = await bcrypt.hash(password, 12);
@@ -57,7 +57,7 @@ export async function signupAction(
       data: {
         userId: user.id,
         type: "CHECKING",
-        label: "Compte chèque",
+        label: "Checking account",
         balanceCents: 0,
         interestBps: ACCOUNT_RULES.interestBps.CHECKING,
       },
@@ -72,7 +72,7 @@ export async function signupAction(
     });
   } catch (error) {
     if (error instanceof AuthError) {
-      return { error: "Compte créé, mais la connexion a échoué." };
+      return { error: "Account created, but sign-in failed." };
     }
     throw error;
   }
@@ -91,7 +91,7 @@ export async function loginAction(
 
   if (!parsed.success) {
     return {
-      error: "Courriel ou mot de passe invalide.",
+      error: "Invalid email or password.",
       fieldErrors: parsed.error.flatten().fieldErrors,
     };
   }
@@ -104,7 +104,7 @@ export async function loginAction(
     });
   } catch (error) {
     if (error instanceof AuthError) {
-      return { error: "Courriel ou mot de passe incorrect." };
+      return { error: "Incorrect email or password." };
     }
     throw error;
   }
@@ -122,8 +122,7 @@ export async function loginDemoAction(): Promise<AuthActionState> {
   } catch (error) {
     if (error instanceof AuthError) {
       return {
-        error:
-          "Compte démo introuvable. Lance `npm run db:seed` puis réessaie.",
+        error: "Demo account not found. Run `npm run db:seed` and try again.",
       };
     }
     throw error;

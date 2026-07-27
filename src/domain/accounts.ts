@@ -16,7 +16,7 @@ export function canOpenAccount(input: OpenAccountInput): {
 
   if (type === "CHECKING") {
     if (existingTypes.includes("CHECKING")) {
-      return { ok: false, reason: "Un compte chèque existe déjà." };
+      return { ok: false, reason: "A checking account already exists." };
     }
     return { ok: true };
   }
@@ -25,7 +25,7 @@ export function canOpenAccount(input: OpenAccountInput): {
     if (savingsCount >= ACCOUNT_RULES.maxSavingsAccounts) {
       return {
         ok: false,
-        reason: `Maximum ${ACCOUNT_RULES.maxSavingsAccounts} comptes épargne.`,
+        reason: `Maximum ${ACCOUNT_RULES.maxSavingsAccounts} savings accounts.`,
       };
     }
     return { ok: true };
@@ -33,12 +33,12 @@ export function canOpenAccount(input: OpenAccountInput): {
 
   if (type === "CREDIT") {
     if (existingTypes.includes("CREDIT")) {
-      return { ok: false, reason: "Une Carte requin existe déjà." };
+      return { ok: false, reason: "A Shark Card already exists." };
     }
     return { ok: true };
   }
 
-  return { ok: false, reason: "Type de compte invalide." };
+  return { ok: false, reason: "Invalid account type." };
 }
 
 export function assertSufficientFunds(
@@ -46,9 +46,9 @@ export function assertSufficientFunds(
   amountCents: number,
 ): void {
   if (amountCents <= 0) {
-    throw new Error("Le montant doit être positif.");
+    throw new Error("Amount must be positive.");
   }
   if (balanceCents < amountCents) {
-    throw new Error("Fonds insuffisants.");
+    throw new Error("Insufficient funds.");
   }
 }

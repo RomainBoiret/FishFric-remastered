@@ -1,7 +1,7 @@
 /**
- * Seed démo recruteur.
- * Démo: demo@fishfric.app / Demo-FishFric-2026!
- * Ami:  ami@fishfric.app / Demo-FishFric-2026!
+ * Recruiter demo seed.
+ * Demo:   demo@fishfric.app / Demo-FishFric-2026!
+ * Friend: ami@fishfric.app / Demo-FishFric-2026!
  */
 import "dotenv/config";
 import bcrypt from "bcryptjs";
@@ -51,21 +51,20 @@ async function main() {
     DEMO_CREDENTIALS.email,
     DEMO_CREDENTIALS.password,
     "Aqua",
-    "Recruteur",
+    "Recruiter",
     true,
   );
   const friend = await upsertDemoUser(
     FRIEND_CREDENTIALS.email,
     FRIEND_CREDENTIALS.password,
     "Nemo",
-    "Ami",
+    "Friend",
     true,
   );
 
   await wipeUserBanking(demo.id);
   await wipeUserBanking(friend.id);
 
-  // Also clear P2P by email match leftover
   await prisma.p2PTransfer.deleteMany({
     where: {
       OR: [
@@ -79,7 +78,7 @@ async function main() {
     data: {
       userId: demo.id,
       type: "CHECKING",
-      label: "Compte chèque",
+      label: "Checking account",
       balanceCents: 245_000,
       interestBps: ACCOUNT_RULES.interestBps.CHECKING,
     },
@@ -89,7 +88,7 @@ async function main() {
     data: {
       userId: demo.id,
       type: "SAVINGS",
-      label: "Épargne récifs",
+      label: "Reef savings",
       balanceCents: 812_000,
       interestBps: ACCOUNT_RULES.interestBps.SAVINGS,
     },
@@ -99,7 +98,7 @@ async function main() {
     data: {
       userId: demo.id,
       type: "CREDIT",
-      label: "Carte requin",
+      label: "Shark Card",
       balanceCents: -34_000,
       creditLimitCents: ACCOUNT_RULES.defaultCreditLimitCents,
       interestBps: ACCOUNT_RULES.interestBps.CREDIT,
@@ -110,7 +109,7 @@ async function main() {
     data: {
       userId: friend.id,
       type: "CHECKING",
-      label: "Compte chèque",
+      label: "Checking account",
       balanceCents: 150_000,
       interestBps: ACCOUNT_RULES.interestBps.CHECKING,
     },
@@ -125,14 +124,14 @@ async function main() {
         accountId: checking.id,
         amountCents: 320_000,
         kind: "ADJUSTMENT",
-        description: "Paie — Ocean Corp",
+        description: "Payroll — Ocean Corp",
         createdAt: daysAgo(12),
       },
       {
         accountId: checking.id,
         amountCents: -80_000,
         kind: "TRANSFER_INTERNAL",
-        description: "Vers Épargne récifs",
+        description: "To Reef savings",
         transferGroupId: "seed-transfer-1",
         createdAt: daysAgo(10),
       },
@@ -140,7 +139,7 @@ async function main() {
         accountId: savings.id,
         amountCents: 80_000,
         kind: "TRANSFER_INTERNAL",
-        description: "Depuis Compte chèque",
+        description: "From Checking account",
         transferGroupId: "seed-transfer-1",
         createdAt: daysAgo(10),
       },
@@ -148,21 +147,21 @@ async function main() {
         accountId: checking.id,
         amountCents: -12_500,
         kind: "BILL_PAYMENT",
-        description: "Nautico Assurance",
+        description: "Nautico Insurance",
         createdAt: daysAgo(6),
       },
       {
         accountId: savings.id,
         amountCents: 2_000,
         kind: "INTEREST",
-        description: "Intérêts mensuels",
+        description: "Monthly interest",
         createdAt: daysAgo(2),
       },
     ],
   });
 
   const pendingAmount = 40_00;
-  const answerHash = await bcrypt.hash("requin", 12);
+  const answerHash = await bcrypt.hash("shark", 12);
 
   const pending = await prisma.p2PTransfer.create({
     data: {
@@ -171,7 +170,7 @@ async function main() {
       recipientUserId: demo.id,
       sourceAccountId: friendChecking.id,
       amountCents: pendingAmount,
-      question: "Animal marin préféré ?",
+      question: "Favorite sea animal?",
       answerHash,
       status: "PENDING",
       expiresAt: p2pExpiresAt(),
@@ -183,7 +182,7 @@ async function main() {
       accountId: friendChecking.id,
       amountCents: -pendingAmount,
       kind: "TRANSFER_P2P",
-      description: `P2P vers ${DEMO_CREDENTIALS.email} (en attente)`,
+      description: `P2P to ${DEMO_CREDENTIALS.email} (pending)`,
       p2pTransferId: pending.id,
     },
   });
@@ -196,16 +195,16 @@ async function main() {
   await prisma.notification.create({
     data: {
       userId: demo.id,
-      title: "Transfert P2P reçu",
-      body: `Nemo Ami t'envoie ${(pendingAmount / 100).toFixed(2)} $.`,
+      title: "P2P transfer received",
+      body: `Nemo Friend sent you $${(pendingAmount / 100).toFixed(2)}.`,
       p2pTransferId: pending.id,
     },
   });
 
   console.log("Seed OK");
-  console.log(`  Démo: ${DEMO_CREDENTIALS.email} / ${DEMO_CREDENTIALS.password}`);
-  console.log(`  Ami:  ${FRIEND_CREDENTIALS.email} / ${FRIEND_CREDENTIALS.password}`);
-  console.log(`  P2P pending → démo, réponse: requin`);
+  console.log(`  Demo:   ${DEMO_CREDENTIALS.email} / ${DEMO_CREDENTIALS.password}`);
+  console.log(`  Friend: ${FRIEND_CREDENTIALS.email} / ${FRIEND_CREDENTIALS.password}`);
+  console.log("  Pending P2P → demo, answer: shark");
 }
 
 main()

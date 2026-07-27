@@ -10,7 +10,6 @@ export default async function Home() {
 
   return (
     <div className="relative flex min-h-full flex-1 flex-col bg-[#04161f] text-[#e8f4f8]">
-      {/* Hero — one composition, full-bleed visual */}
       <section className="relative flex min-h-[100svh] flex-col overflow-hidden">
         <div className="absolute inset-0">
           <Image
@@ -42,42 +41,41 @@ export default async function Home() {
             className="ff-rise ff-rise-delay-1 max-w-xl text-2xl font-medium leading-snug text-[#e8f4f8] sm:text-3xl"
             style={{ fontFamily: "var(--font-display)" }}
           >
-            La banque qui nage avec toi.
+            The bank that swims with you.
           </h1>
           <p className="ff-rise ff-rise-delay-2 max-w-md text-lg leading-relaxed text-[#c5dbe3]">
-            Comptes, transferts et ledger — une démo bancaire thématique pour
-            recruteurs curieux.
+            Accounts, transfers, and a real ledger — an ocean-themed banking
+            demo for curious recruiters.
           </p>
           <div className="ff-rise ff-rise-delay-3 flex flex-wrap items-start gap-3 pt-2">
             <DemoButton className="rounded-md bg-[#7ec8d8] px-5 py-2.5 text-sm font-semibold text-[#04161f] transition hover:bg-[#9ad7e4] disabled:opacity-60" />
             <Link
-              href="/connexion"
+              href="/login"
               className="rounded-md border border-white/25 px-5 py-2.5 text-sm font-medium text-[#e8f4f8] transition hover:border-[#7ec8d8] hover:text-[#7ec8d8]"
             >
-              Connexion
+              Sign in
             </Link>
           </div>
         </main>
       </section>
 
-      {/* Below fold — one job */}
       <section className="relative border-t border-[#1e4a58] bg-[#04161f] px-6 py-20">
         <div className="mx-auto flex w-full max-w-3xl flex-col gap-4">
           <h2
             className="text-2xl text-[#e8f4f8] sm:text-3xl"
             style={{ fontFamily: "var(--font-display)" }}
           >
-            Explore la démo en une minute.
+            Explore the demo in a minute.
           </h2>
           <p className="max-w-xl text-lg leading-relaxed text-[#9bb8c4]">
-            Ouvre trois comptes, déplace des fonds, envoie un P2P avec question
-            secrète. Tout tourne sur un vrai ledger PostgreSQL.
+            Open three accounts, move funds, send a P2P transfer with a security
+            question. Everything runs on a real PostgreSQL ledger.
           </p>
           <Link
-            href="/inscription"
+            href="/signup"
             className="mt-2 w-fit text-sm font-medium text-[#7ec8d8] underline-offset-4 transition hover:underline"
           >
-            Ou créer ton propre compte →
+            Or create your own account →
           </Link>
         </div>
       </section>

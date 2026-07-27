@@ -11,7 +11,7 @@ import { prisma } from "@/lib/db";
 
 export default async function P2PPage() {
   const session = await auth();
-  if (!session?.user) redirect("/connexion");
+  if (!session?.user) redirect("/login");
 
   const email = session.user.email?.toLowerCase() ?? "";
 
@@ -79,7 +79,7 @@ export default async function P2PPage() {
             type="submit"
             className="text-sm text-[#9bb8c4] transition hover:text-[#e8f4f8]"
           >
-            Déconnexion
+            Sign out
           </button>
         </form>
       </header>
@@ -90,23 +90,23 @@ export default async function P2PPage() {
             href="/app"
             className="inline-block text-sm text-[#9bb8c4] transition hover:text-[#7ec8d8]"
           >
-            ← Mes comptes
+            ← My accounts
           </Link>
           <h1
             className="text-3xl"
             style={{ fontFamily: "var(--font-display)" }}
           >
-            Transfert P2P
+            P2P transfer
           </h1>
           <p className="max-w-lg text-[#9bb8c4]">
-            Envoie des fonds avec une question secrète. Le destinataire doit
-            répondre pour les recevoir.
+            Send funds with a security question. The recipient must answer to
+            receive the money.
           </p>
           {isDemo ? (
             <p className="text-sm text-[#6a8894]">
-              Astuce démo : envoie à{" "}
+              Demo tip: send to{" "}
               <span className="text-[#7ec8d8]">{FRIEND_CREDENTIALS.email}</span>,
-              puis connecte-toi avec ce compte (même mot de passe) pour accepter.
+              then sign in with that account (same password) to accept.
             </p>
           ) : null}
         </div>
@@ -117,7 +117,7 @@ export default async function P2PPage() {
               className="text-xl"
               style={{ fontFamily: "var(--font-display)" }}
             >
-              Envoyer
+              Send
             </h2>
             <SendP2PForm
               sources={sources}
@@ -131,7 +131,7 @@ export default async function P2PPage() {
                 className="text-xl"
                 style={{ fontFamily: "var(--font-display)" }}
               >
-                À accepter
+                To accept
               </h2>
               <IncomingP2PList items={incomingItems} />
             </div>
@@ -141,10 +141,10 @@ export default async function P2PPage() {
                 className="text-xl"
                 style={{ fontFamily: "var(--font-display)" }}
               >
-                Envoyés en attente
+                Pending sent
               </h2>
               {outgoing.length === 0 ? (
-                <p className="text-sm text-[#6a8894]">Aucun envoi en attente.</p>
+                <p className="text-sm text-[#6a8894]">No pending sends.</p>
               ) : (
                 <ul className="flex flex-col">
                   {outgoing.map((p2p) => (
@@ -156,7 +156,7 @@ export default async function P2PPage() {
                         {formatMoney(p2p.amountCents)} → {p2p.recipientEmail}
                       </p>
                       <p className="text-[#6a8894]">
-                        Expire le {formatDateTime(p2p.expiresAt)}
+                        Expires {formatDateTime(p2p.expiresAt)}
                       </p>
                     </li>
                   ))}

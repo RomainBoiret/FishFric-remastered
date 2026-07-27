@@ -8,7 +8,7 @@ import { prisma } from "@/lib/db";
 
 export default async function AppHubPage() {
   const session = await auth();
-  if (!session?.user) redirect("/connexion");
+  if (!session?.user) redirect("/login");
 
   const accounts = await prisma.bankAccount.findMany({
     where: { userId: session.user.id, status: "ACTIVE" },
@@ -34,7 +34,7 @@ export default async function AppHubPage() {
             type="submit"
             className="text-sm text-[#9bb8c4] transition hover:text-[#e8f4f8]"
           >
-            Déconnexion
+            Sign out
           </button>
         </form>
       </header>
@@ -45,28 +45,28 @@ export default async function AppHubPage() {
             className="text-3xl sm:text-4xl"
             style={{ fontFamily: "var(--font-display)" }}
           >
-            Bonjour, {session.user.name?.split(" ")[0] ?? "Fisher"}
+            Hello, {session.user.name?.split(" ")[0] ?? "Fisher"}
           </h1>
           <p className="text-[#9bb8c4]">
-            Voici tes comptes.
+            Here are your accounts.
             {session.user.isDemo
-              ? " Mode démo — données fictives pour recruteurs."
+              ? " Demo mode — sample data for recruiters."
               : null}
           </p>
         </div>
 
         <div className="flex flex-wrap gap-3">
           <Link
-            href="/app/transfert"
+            href="/app/transfer"
             className="inline-flex rounded-md bg-[#7ec8d8] px-4 py-2.5 text-sm font-semibold text-[#04161f] transition hover:bg-[#9ad7e4]"
           >
-            Nouveau transfert
+            New transfer
           </Link>
           <Link
             href="/app/p2p"
             className="inline-flex rounded-md border border-[#7ec8d8] px-4 py-2.5 text-sm font-medium text-[#7ec8d8] transition hover:bg-[#0a2833]"
           >
-            Transfert P2P
+            P2P transfer
           </Link>
         </div>
 
@@ -74,7 +74,7 @@ export default async function AppHubPage() {
           {accounts.map((account) => (
             <li key={account.id} className="border-b border-[#1e4a58]">
               <Link
-                href={`/app/comptes/${account.id}`}
+                href={`/app/accounts/${account.id}`}
                 className="-mx-2 flex items-center justify-between px-2 py-4 transition hover:bg-[#0a2833]"
               >
                 <div>
@@ -95,7 +95,7 @@ export default async function AppHubPage() {
             </li>
           ))}
           {accounts.length === 0 ? (
-            <li className="py-8 text-[#9bb8c4]">Aucun compte actif.</li>
+            <li className="py-8 text-[#9bb8c4]">No active accounts.</li>
           ) : null}
         </ul>
       </main>

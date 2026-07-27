@@ -1,26 +1,26 @@
 # Fish&Fric (remastered)
 
-Remaster full-stack de la banque en ligne thématique **Fish&Fric** (projet intégrateur ÉTS 2024), publié comme démo portfolio.
+Full-stack remaster of **Fish&Fric**, an ocean-themed online banking demo originally built as an ÉTS integrator project (2024). Rebuilt as a public portfolio app recruiters can explore live.
 
 ## Stack
 
-- **Next.js** (App Router) + TypeScript + Tailwind
+- **Next.js** (App Router) + TypeScript + Tailwind CSS
 - **PostgreSQL** (Neon) + **Prisma**
-- **Auth.js** (credentials + JWT)
-- Domaine métier (`src/domain`) + **ledger** immuable
+- **Auth.js** (credentials + JWT sessions)
+- Lightweight domain layer (`src/domain`) with an **immutable ledger**
 
-## Fonctionnalités
+## Features
 
-- Comptes : chèque, épargne, Carte requin
-- Transferts internes (double écriture ledger)
-- P2P avec question / réponse
-- Mode démo recruteur (`demo@fishfric.app`)
+- Bank products: checking, savings, and “Carte requin” (credit)
+- Internal transfers (double-entry ledger writes)
+- P2P transfers with a security question / answer
+- Recruiter demo mode (`demo@fishfric.app`)
 
-## Démarrage local
+## Local setup
 
 ```bash
 cp .env.example .env
-# DATABASE_URL + AUTH_SECRET
+# Set DATABASE_URL, DIRECT_URL, and AUTH_SECRET
 
 npm install
 npm run db:migrate
@@ -28,32 +28,37 @@ npm run db:seed
 npm run dev
 ```
 
-Compte démo : `demo@fishfric.app` / `Demo-FishFric-2026!`  
-Compte ami (P2P) : `ami@fishfric.app` / même mot de passe
+Open [http://localhost:3000](http://localhost:3000).
 
-## Déploiement (Vercel)
+| Account | Email | Password |
+|---------|-------|----------|
+| Demo | `demo@fishfric.app` | `Demo-FishFric-2026!` |
+| Friend (P2P) | `ami@fishfric.app` | same password |
 
-1. Importer le repo sur [vercel.com](https://vercel.com)
-2. Variables d'environnement :
-   - `DATABASE_URL` — Neon **pooled** (host avec `-pooler`)
-   - `DIRECT_URL` — Neon **direct** (même credentials, host **sans** `-pooler`) — requis pour `prisma migrate deploy`
-   - `AUTH_SECRET` — secret Auth.js
-3. Redeploy — le build lance les migrations (sans advisory lock Neon) puis `next build`
-4. Seed prod une fois : `npm run db:seed` (avec `DATABASE_URL` pointant sur Neon)
+## Deploy (Vercel)
 
-> Si le build échoue avec `P1002` : vérifie `DIRECT_URL` (sans `-pooler`). Le script `scripts/migrate-deploy.mjs` désactive déjà le advisory lock Prisma.
+1. Import this repo on [vercel.com](https://vercel.com)
+2. Set environment variables:
+   - `DATABASE_URL` — Neon **pooled** URL (host includes `-pooler`)
+   - `DIRECT_URL` — Neon **direct** URL (same credentials, host **without** `-pooler`) — required for migrations
+   - `AUTH_SECRET` — Auth.js secret
+3. Deploy — the build runs migrations (advisory lock disabled for Neon) then `next build`
+4. Seed production once: `npm run db:seed` (with `DATABASE_URL` pointing at Neon)
 
-## Structure
+> If the build fails with `P1002`, check that `DIRECT_URL` has no `-pooler` host. `scripts/migrate-deploy.mjs` already disables Prisma advisory locking.
+
+## Project layout
 
 ```
 prisma/           # schema, migrations, seed
+scripts/          # migrate helpers for CI/Vercel
 src/
-  app/            # routes Next.js
-  domain/         # règles métier pures
+  app/            # Next.js routes
+  domain/         # pure business rules
   features/       # auth, accounts, transfers, p2p
-  lib/            # prisma, auth, utils
+  lib/            # prisma, auth, shared utils
 ```
 
-## Licence
+## License
 
 MIT

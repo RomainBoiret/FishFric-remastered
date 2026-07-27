@@ -25,23 +25,23 @@ export function validateInternalTransfer(input: {
   const { from, to, amountCents } = input;
 
   if (from.id === to.id) {
-    return { ok: false, reason: "Choisis deux comptes différents." };
+    return { ok: false, reason: "Choose two different accounts." };
   }
 
   if (amountCents <= 0) {
-    return { ok: false, reason: "Le montant doit être positif." };
+    return { ok: false, reason: "Amount must be positive." };
   }
 
-  // MVP : pas d'avance depuis la Carte requin (source interdite)
+  // MVP: no cash advances from Shark Card
   if (from.type === "CREDIT") {
     return {
       ok: false,
-      reason: "Impossible de transférer depuis la Carte requin.",
+      reason: "Cannot transfer from the Shark Card.",
     };
   }
 
   if (from.balanceCents < amountCents) {
-    return { ok: false, reason: "Fonds insuffisants sur le compte source." };
+    return { ok: false, reason: "Insufficient funds on the source account." };
   }
 
   if (to.type === "CREDIT") {
@@ -50,11 +50,11 @@ export function validateInternalTransfer(input: {
     if (next > 0) {
       return {
         ok: false,
-        reason: "Ce remboursement dépasse le solde dû sur la carte.",
+        reason: "This payment exceeds the amount owed on the card.",
       };
     }
     if (next < limit) {
-      return { ok: false, reason: "Limite de crédit dépassée." };
+      return { ok: false, reason: "Credit limit exceeded." };
     }
   }
 

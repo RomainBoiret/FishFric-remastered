@@ -1,9 +1,10 @@
 import Link from "next/link";
 import { redirect } from "next/navigation";
-import { SignupForm } from "@/features/auth/SignupForm";
+import { LoginForm } from "@/features/auth/LoginForm";
+import { DemoButton } from "@/features/auth/DemoButton";
 import { auth } from "@/lib/auth";
 
-export default async function InscriptionPage() {
+export default async function LoginPage() {
   const session = await auth();
   if (session?.user) redirect("/app");
 
@@ -11,7 +12,7 @@ export default async function InscriptionPage() {
     <div className="relative flex min-h-full flex-1 flex-col bg-[#04161f] text-[#e8f4f8]">
       <div
         aria-hidden
-        className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_80%_10%,#0a4a5c_0%,transparent_50%)]"
+        className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_20%_0%,#0a4a5c_0%,transparent_50%)]"
       />
       <main className="relative z-10 mx-auto flex w-full max-w-md flex-1 flex-col justify-center gap-8 px-6 py-16">
         <div className="space-y-2">
@@ -26,14 +27,17 @@ export default async function InscriptionPage() {
             className="text-3xl text-[#e8f4f8]"
             style={{ fontFamily: "var(--font-display)" }}
           >
-            Créer un compte
+            Sign in
           </h1>
-          <p className="text-[#9bb8c4]">
-            Un compte chèque t&apos;est ouvert automatiquement.
-          </p>
+          <p className="text-[#9bb8c4]">Access your ocean accounts.</p>
         </div>
 
-        <SignupForm />
+        <LoginForm />
+
+        <div className="border-t border-[#1e4a58] pt-6">
+          <p className="mb-3 text-sm text-[#6a8894]">Curious recruiter?</p>
+          <DemoButton />
+        </div>
       </main>
     </div>
   );

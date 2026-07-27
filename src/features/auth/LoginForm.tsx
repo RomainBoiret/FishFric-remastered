@@ -15,7 +15,7 @@ export function LoginForm() {
   return (
     <form action={formAction} className="flex w-full flex-col gap-4">
       <label className="flex flex-col gap-1.5 text-sm text-[#9bb8c4]">
-        Courriel
+        Email
         <input
           name="email"
           type="email"
@@ -25,7 +25,7 @@ export function LoginForm() {
         />
       </label>
       <label className="flex flex-col gap-1.5 text-sm text-[#9bb8c4]">
-        Mot de passe
+        Password
         <input
           name="password"
           type="password"
@@ -46,13 +46,16 @@ export function LoginForm() {
         disabled={pending}
         className="mt-2 rounded-md bg-[#7ec8d8] px-4 py-2.5 text-sm font-semibold text-[#04161f] transition hover:bg-[#9ad7e4] disabled:opacity-60"
       >
-        {pending ? "Connexion…" : "Se connecter"}
+        {pending ? "Signing in…" : "Sign in"}
       </button>
 
       <p className="text-center text-sm text-[#9bb8c4]">
-        Pas encore de compte ?{" "}
-        <Link href="/inscription" className="text-[#7ec8d8] underline-offset-2 hover:underline">
-          Créer un compte
+        No account yet?{" "}
+        <Link
+          href="/signup"
+          className="text-[#7ec8d8] underline-offset-2 hover:underline"
+        >
+          Create an account
         </Link>
       </p>
     </form>

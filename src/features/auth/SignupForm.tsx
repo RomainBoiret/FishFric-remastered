@@ -16,7 +16,7 @@ export function SignupForm() {
     <form action={formAction} className="flex w-full flex-col gap-4">
       <div className="grid gap-4 sm:grid-cols-2">
         <label className="flex flex-col gap-1.5 text-sm text-[#9bb8c4]">
-          Prénom
+          First name
           <input
             name="firstName"
             required
@@ -25,7 +25,7 @@ export function SignupForm() {
           />
         </label>
         <label className="flex flex-col gap-1.5 text-sm text-[#9bb8c4]">
-          Nom
+          Last name
           <input
             name="lastName"
             required
@@ -36,7 +36,7 @@ export function SignupForm() {
       </div>
 
       <label className="flex flex-col gap-1.5 text-sm text-[#9bb8c4]">
-        Courriel
+        Email
         <input
           name="email"
           type="email"
@@ -47,7 +47,7 @@ export function SignupForm() {
       </label>
 
       <label className="flex flex-col gap-1.5 text-sm text-[#9bb8c4]">
-        Mot de passe
+        Password
         <input
           name="password"
           type="password"
@@ -56,7 +56,7 @@ export function SignupForm() {
           className="rounded-md border border-[#1e4a58] bg-[#0a2833] px-3 py-2.5 text-[#e8f4f8] outline-none focus:border-[#7ec8d8]"
         />
         <span className="text-xs text-[#6a8894]">
-          8+ caractères, 1 majuscule, 1 chiffre
+          8+ characters, 1 uppercase, 1 number
         </span>
       </label>
 
@@ -71,13 +71,16 @@ export function SignupForm() {
         disabled={pending}
         className="mt-2 rounded-md bg-[#7ec8d8] px-4 py-2.5 text-sm font-semibold text-[#04161f] transition hover:bg-[#9ad7e4] disabled:opacity-60"
       >
-        {pending ? "Création…" : "Créer mon compte"}
+        {pending ? "Creating…" : "Create my account"}
       </button>
 
       <p className="text-center text-sm text-[#9bb8c4]">
-        Déjà client ?{" "}
-        <Link href="/connexion" className="text-[#7ec8d8] underline-offset-2 hover:underline">
-          Se connecter
+        Already a customer?{" "}
+        <Link
+          href="/login"
+          className="text-[#7ec8d8] underline-offset-2 hover:underline"
+        >
+          Sign in
         </Link>
       </p>
     </form>

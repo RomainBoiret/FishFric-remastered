@@ -25,7 +25,7 @@ export function SendP2PForm({
   if (sources.length === 0) {
     return (
       <p className="text-[#9bb8c4]">
-        Aucun compte éligible (chèque ou épargne) pour envoyer un P2P.
+        No eligible account (checking or savings) to send a P2P transfer.
       </p>
     );
   }
@@ -33,7 +33,7 @@ export function SendP2PForm({
   return (
     <form action={formAction} className="flex w-full flex-col gap-4">
       <label className="flex flex-col gap-1.5 text-sm text-[#9bb8c4]">
-        Depuis
+        From
         <select
           name="sourceAccountId"
           required
@@ -49,7 +49,7 @@ export function SendP2PForm({
       </label>
 
       <label className="flex flex-col gap-1.5 text-sm text-[#9bb8c4]">
-        Courriel du destinataire
+        Recipient email
         <input
           name="recipientEmail"
           type="email"
@@ -61,7 +61,7 @@ export function SendP2PForm({
       </label>
 
       <label className="flex flex-col gap-1.5 text-sm text-[#9bb8c4]">
-        Montant (CAD)
+        Amount (CAD)
         <input
           name="amount"
           inputMode="decimal"
@@ -72,17 +72,17 @@ export function SendP2PForm({
       </label>
 
       <label className="flex flex-col gap-1.5 text-sm text-[#9bb8c4]">
-        Question de sécurité
+        Security question
         <input
           name="question"
           required
-          placeholder="Nom de mon premier poisson ?"
+          placeholder="Name of my first fish?"
           className="rounded-md border border-[#1e4a58] bg-[#0a2833] px-3 py-2.5 text-[#e8f4f8] outline-none focus:border-[#7ec8d8]"
         />
       </label>
 
       <label className="flex flex-col gap-1.5 text-sm text-[#9bb8c4]">
-        Réponse
+        Answer
         <input
           name="answer"
           required
@@ -106,7 +106,7 @@ export function SendP2PForm({
         disabled={pending}
         className="mt-2 rounded-md bg-[#7ec8d8] px-4 py-2.5 text-sm font-semibold text-[#04161f] transition hover:bg-[#9ad7e4] disabled:opacity-60"
       >
-        {pending ? "Envoi…" : "Envoyer le P2P"}
+        {pending ? "Sending…" : "Send P2P"}
       </button>
     </form>
   );

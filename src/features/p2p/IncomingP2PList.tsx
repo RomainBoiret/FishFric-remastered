@@ -26,7 +26,7 @@ function AcceptForm({ p2p }: { p2p: IncomingP2P }) {
     <form action={formAction} className="mt-3 flex flex-col gap-2">
       <input type="hidden" name="p2pId" value={p2p.id} />
       <label className="flex flex-col gap-1 text-sm text-[#9bb8c4]">
-        Réponse
+        Answer
         <input
           name="answer"
           required
@@ -48,7 +48,7 @@ function AcceptForm({ p2p }: { p2p: IncomingP2P }) {
         disabled={pending}
         className="rounded-md bg-[#7ec8d8] px-3 py-2 text-sm font-semibold text-[#04161f] disabled:opacity-60"
       >
-        {pending ? "Validation…" : "Accepter"}
+        {pending ? "Confirming…" : "Accept"}
       </button>
     </form>
   );
@@ -65,7 +65,7 @@ function RejectForm({ p2pId }: { p2pId: string }) {
         disabled={pending}
         className="text-sm text-[#9bb8c4] underline-offset-2 hover:text-[#f0a8a8] hover:underline disabled:opacity-60"
       >
-        {pending ? "Refus…" : "Refuser"}
+        {pending ? "Declining…" : "Decline"}
       </button>
       {state.error ? (
         <p className="mt-1 text-sm text-[#f0a8a8]" role="alert">
@@ -78,7 +78,7 @@ function RejectForm({ p2pId }: { p2pId: string }) {
 
 export function IncomingP2PList({ items }: { items: IncomingP2P[] }) {
   if (items.length === 0) {
-    return <p className="text-sm text-[#6a8894]">Aucun P2P en attente.</p>;
+    return <p className="text-sm text-[#6a8894]">No pending P2P transfers.</p>;
   }
 
   return (
@@ -88,9 +88,9 @@ export function IncomingP2PList({ items }: { items: IncomingP2P[] }) {
           <p className="font-medium text-[#e8f4f8]">
             {p2p.senderName} · {formatMoney(p2p.amountCents)}
           </p>
-          <p className="mt-1 text-sm text-[#9bb8c4]">Q : {p2p.question}</p>
+          <p className="mt-1 text-sm text-[#9bb8c4]">Q: {p2p.question}</p>
           <p className="text-xs text-[#6a8894]">
-            Expire le {formatDateTime(new Date(p2p.expiresAt))}
+            Expires {formatDateTime(new Date(p2p.expiresAt))}
           </p>
           <AcceptForm p2p={p2p} />
           <div className="mt-2">

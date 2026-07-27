@@ -1,6 +1,6 @@
 /**
- * pg v8 traite sslmode=require comme verify-full et émet un warning.
- * uselibpqcompat=true aligne le comportement sur libpq et coupe le bruit.
+ * pg v8 treats sslmode=require as verify-full and emits a warning.
+ * uselibpqcompat=true aligns with libpq and silences the noise.
  */
 export function withPgSslCompat(connectionString: string): string {
   try {
