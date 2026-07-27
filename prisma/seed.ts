@@ -8,9 +8,10 @@ import { PrismaPg } from "@prisma/adapter-pg";
 import { PrismaClient } from "../src/generated/prisma/client";
 import { ACCOUNT_RULES } from "../src/domain/money";
 import { DEMO_CREDENTIALS } from "../src/features/auth/schemas";
+import { withPgSslCompat } from "../src/lib/pg-url";
 
 const adapter = new PrismaPg({
-  connectionString: process.env.DATABASE_URL!,
+  connectionString: withPgSslCompat(process.env.DATABASE_URL!),
 });
 const prisma = new PrismaClient({ adapter });
 

@@ -55,6 +55,15 @@ export default async function AppHubPage() {
           </p>
         </div>
 
+        <div>
+          <Link
+            href="/app/transfert"
+            className="inline-flex rounded-md bg-[#7ec8d8] px-4 py-2.5 text-sm font-semibold text-[#04161f] transition hover:bg-[#9ad7e4]"
+          >
+            Nouveau transfert
+          </Link>
+        </div>
+
         <ul className="flex flex-col">
           {accounts.map((account) => (
             <li key={account.id} className="border-b border-[#1e4a58]">

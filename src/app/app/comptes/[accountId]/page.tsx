@@ -86,6 +86,22 @@ export default async function AccountDetailPage({ params }: PageProps) {
               </p>
             )}
           </div>
+
+          {account.type !== "CREDIT" ? (
+            <Link
+              href={`/app/transfert?from=${account.id}`}
+              className="inline-flex rounded-md bg-[#7ec8d8] px-4 py-2.5 text-sm font-semibold text-[#04161f] transition hover:bg-[#9ad7e4]"
+            >
+              Transférer depuis ce compte
+            </Link>
+          ) : (
+            <Link
+              href="/app/transfert"
+              className="inline-flex rounded-md border border-[#7ec8d8] px-4 py-2.5 text-sm font-medium text-[#7ec8d8] transition hover:bg-[#0a2833]"
+            >
+              Rembourser la carte
+            </Link>
+          )}
         </div>
 
         <section className="space-y-4">
