@@ -1,4 +1,12 @@
-export default function Home() {
+import Link from "next/link";
+import { redirect } from "next/navigation";
+import { DemoButton } from "@/features/auth/DemoButton";
+import { auth } from "@/lib/auth";
+
+export default async function Home() {
+  const session = await auth();
+  if (session?.user) redirect("/app");
+
   return (
     <div className="relative flex min-h-full flex-1 flex-col overflow-hidden bg-[#04161f] text-[#e8f4f8]">
       <div
@@ -19,13 +27,23 @@ export default function Home() {
           La banque qui nage avec toi.
         </h1>
         <p className="max-w-md text-lg leading-relaxed text-[#9bb8c4]">
-          Remaster full-stack en cours — comptes, transferts, ledger et mode
-          démo pour les recruteurs curieux.
+          Remaster full-stack — comptes, transferts, ledger et mode démo pour
+          les recruteurs curieux.
         </p>
-        <div className="flex flex-wrap gap-3 pt-2">
-          <span className="rounded-md border border-[#1e4a58] bg-[#0a2833]/px-4 py-2 text-sm text-[#9bb8c4]">
-            Next.js · Prisma · PostgreSQL
-          </span>
+        <div className="flex flex-wrap items-center gap-3 pt-2">
+          <Link
+            href="/inscription"
+            className="rounded-md bg-[#7ec8d8] px-5 py-2.5 text-sm font-semibold text-[#04161f] transition hover:bg-[#9ad7e4]"
+          >
+            Ouvrir un compte
+          </Link>
+          <Link
+            href="/connexion"
+            className="rounded-md border border-[#1e4a58] px-5 py-2.5 text-sm font-medium text-[#e8f4f8] transition hover:border-[#7ec8d8]"
+          >
+            Connexion
+          </Link>
+          <DemoButton />
         </div>
       </main>
     </div>
