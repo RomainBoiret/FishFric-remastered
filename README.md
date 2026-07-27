@@ -38,10 +38,10 @@ Compte ami (P2P) : `ami@fishfric.app` / même mot de passe
    - `DATABASE_URL` — Neon **pooled** (host avec `-pooler`)
    - `DIRECT_URL` — Neon **direct** (même credentials, host **sans** `-pooler`) — requis pour `prisma migrate deploy`
    - `AUTH_SECRET` — secret Auth.js
-3. Redeploy — le build lance `prisma migrate deploy` puis `next build`
+3. Redeploy — le build lance les migrations (sans advisory lock Neon) puis `next build`
 4. Seed prod une fois : `npm run db:seed` (avec `DATABASE_URL` pointant sur Neon)
 
-> Si le build échoue avec `P1002` / advisory lock : `DIRECT_URL` manque ou pointe encore vers le pooler.
+> Si le build échoue avec `P1002` : vérifie `DIRECT_URL` (sans `-pooler`). Le script `scripts/migrate-deploy.mjs` désactive déjà le advisory lock Prisma.
 
 ## Structure
 
