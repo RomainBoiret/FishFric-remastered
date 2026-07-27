@@ -55,12 +55,18 @@ export default async function AppHubPage() {
           </p>
         </div>
 
-        <div>
+        <div className="flex flex-wrap gap-3">
           <Link
             href="/app/transfert"
             className="inline-flex rounded-md bg-[#7ec8d8] px-4 py-2.5 text-sm font-semibold text-[#04161f] transition hover:bg-[#9ad7e4]"
           >
             Nouveau transfert
+          </Link>
+          <Link
+            href="/app/p2p"
+            className="inline-flex rounded-md border border-[#7ec8d8] px-4 py-2.5 text-sm font-medium text-[#7ec8d8] transition hover:bg-[#0a2833]"
+          >
+            Transfert P2P
           </Link>
         </div>
 
