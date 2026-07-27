@@ -1,14 +1,10 @@
+import Link from "next/link";
 import { redirect } from "next/navigation";
-import { logoutAction } from "@/features/auth/actions";
+import { ACCOUNT_TYPE_LABELS } from "@/domain/labels";
 import { formatMoney } from "@/domain/money";
+import { logoutAction } from "@/features/auth/actions";
 import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/db";
-
-const typeLabels = {
-  CHECKING: "Compte chèque",
-  SAVINGS: "Compte épargne",
-  CREDIT: "Carte requin",
-} as const;
 
 export default async function AppHubPage() {
   const session = await auth();
@@ -59,26 +55,28 @@ export default async function AppHubPage() {
           </p>
         </div>
 
-        <ul className="flex flex-col gap-3">
+        <ul className="flex flex-col">
           {accounts.map((account) => (
-            <li
-              key={account.id}
-              className="flex items-center justify-between border-b border-[#1e4a58] py-4"
-            >
-              <div>
-                <p className="font-medium text-[#e8f4f8]">
-                  {account.label ?? typeLabels[account.type]}
-                </p>
-                <p className="text-sm text-[#6a8894]">
-                  {typeLabels[account.type]}
-                </p>
-              </div>
-              <p
-                className="text-xl tabular-nums text-[#7ec8d8]"
-                style={{ fontFamily: "var(--font-display)" }}
+            <li key={account.id} className="border-b border-[#1e4a58]">
+              <Link
+                href={`/app/comptes/${account.id}`}
+                className="-mx-2 flex items-center justify-between px-2 py-4 transition hover:bg-[#0a2833]"
               >
-                {formatMoney(account.balanceCents)}
-              </p>
+                <div>
+                  <p className="font-medium text-[#e8f4f8]">
+                    {account.label ?? ACCOUNT_TYPE_LABELS[account.type]}
+                  </p>
+                  <p className="text-sm text-[#6a8894]">
+                    {ACCOUNT_TYPE_LABELS[account.type]}
+                  </p>
+                </div>
+                <p
+                  className="text-xl tabular-nums text-[#7ec8d8]"
+                  style={{ fontFamily: "var(--font-display)" }}
+                >
+                  {formatMoney(account.balanceCents)}
+                </p>
+              </Link>
             </li>
           ))}
           {accounts.length === 0 ? (
