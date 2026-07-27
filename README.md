@@ -35,10 +35,13 @@ Compte ami (P2P) : `ami@fishfric.app` / même mot de passe
 
 1. Importer le repo sur [vercel.com](https://vercel.com)
 2. Variables d'environnement :
-   - `DATABASE_URL` — connection string Neon (idéalement pooled)
-   - `AUTH_SECRET` — même valeur que en local (ou nouvelle générée)
-3. Deploy — le script `build` lance `prisma migrate deploy` puis `next build`
-4. Après le 1er deploy : en local (ou CI), `npm run db:seed` une fois contre la DB de prod si tu veux la démo préremplie
+   - `DATABASE_URL` — Neon **pooled** (host avec `-pooler`)
+   - `DIRECT_URL` — Neon **direct** (même credentials, host **sans** `-pooler`) — requis pour `prisma migrate deploy`
+   - `AUTH_SECRET` — secret Auth.js
+3. Redeploy — le build lance `prisma migrate deploy` puis `next build`
+4. Seed prod une fois : `npm run db:seed` (avec `DATABASE_URL` pointant sur Neon)
+
+> Si le build échoue avec `P1002` / advisory lock : `DIRECT_URL` manque ou pointe encore vers le pooler.
 
 ## Structure
 
