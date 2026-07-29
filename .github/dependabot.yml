@@ -1,6 +1,5 @@
 version: 2
 updates:
-  # Node.js dependencies (package.json / package-lock.json at repo root)
   - package-ecosystem: "npm"
     directory: "/"
     schedule:
@@ -11,7 +10,7 @@ updates:
       - "dependencies"
       - "npm"
     groups:
-      # prisma and @prisma/client must stay on the same version.
+      # prisma and @prisma/client must stay in sync
       prisma:
         patterns:
           - "prisma"
@@ -24,7 +23,6 @@ updates:
           - "prisma"
           - "@prisma/*"
 
-  # GitHub Actions used in .github/workflows
   - package-ecosystem: "github-actions"
     directory: "/"
     schedule:

@@ -25,12 +25,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
 
-      # PRs are audited against their live Vercel preview deployment instead
-      # of a local build, since `next build` needs a seeded database. Vercel
-      # previews aren't guaranteed (integration may be off, or slow), so this
-      # never fails the job -- it just skips the audit for that run.
+      # audit the Vercel preview, a local build would need a seeded DB
+      # best-effort: no preview => skip the audit instead of failing
       - name: Wait for Vercel preview
         if: github.event_name == 'pull_request'
         id: preview
@@ -49,7 +47,7 @@ jobs:
             echo "url=${{ env.PRODUCTION_URL }}" >> "$GITHUB_OUTPUT"
           fi
 
-      # Only public, unauthenticated routes: everything under /app requires a session.
+      # public routes only, /app needs a session
       - name: Audit with Lighthouse
         id: lhci
         if: steps.target.outputs.url != ''
@@ -65,13 +63,13 @@ jobs:
 
       - name: Publish summary
         if: always() && steps.target.outputs.url != ''
-        uses: actions/github-script@v7
+        uses: actions/github-script@v9
         env:
           LHCI_MANIFEST: ${{ steps.lhci.outputs.manifest }}
         with:
           script: |
             const manifest = JSON.parse(process.env.LHCI_MANIFEST || "[]");
-            const pct = (n) => (n == null ? "—" : Math.round(n * 100));
+            const pct = (n) => (n == null ? "n/a" : Math.round(n * 100));
             const rows = manifest
               .filter((run) => run.isRepresentativeRun)
               .map((run) => {

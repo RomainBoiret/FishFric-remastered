@@ -137,8 +137,7 @@ describe("validateInternalTransfer", () => {
   });
 
   it("rejects a partial payment that leaves the balance past the credit limit", () => {
-    // Balance already exceeds the (possibly lowered) limit; a small payment
-    // reduces the debt but not enough to bring it back within the limit.
+    // already past the limit, the payment is too small to get back under it
     const from = account({ id: "from", balanceCents: 10_000 });
     const to = account({
       id: "to",

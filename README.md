@@ -51,10 +51,9 @@ Open [http://localhost:3000](http://localhost:3000).
 
 `.github/workflows/lighthouse.yml` audits the public routes (`/`, `/login`, `/signup`) with [Lighthouse CI](https://github.com/GoogleChrome/lighthouse-ci):
 
-- On PRs, it waits for the Vercel preview deployment and audits that URL.
-- On pushes to `main`, on a weekly schedule, and on manual dispatch, it audits production.
-- Thresholds live in [`.lighthouserc.json`](./.lighthouserc.json): accessibility, best practices, and SEO must score ≥ 90 (build fails otherwise); performance warns below 80.
-- Reports are uploaded to Lighthouse's temporary public storage and summarized on the workflow run.
+- On PRs it waits for the Vercel preview and audits that URL, otherwise (push to `main`, weekly cron, manual run) it audits production.
+- Thresholds are in [`.lighthouserc.json`](./.lighthouserc.json): a11y, best practices and SEO fail under 90, performance only warns under 80.
+- Reports go to Lighthouse temporary public storage, with a summary on the run.
 
 ## Project layout
 

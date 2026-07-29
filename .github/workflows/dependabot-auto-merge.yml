@@ -14,7 +14,7 @@ jobs:
     steps:
       - name: Dependabot metadata
         id: metadata
-        uses: dependabot/fetch-metadata@v2
+        uses: dependabot/fetch-metadata@v3
         with:
           github-token: "${{ secrets.GITHUB_TOKEN }}"
 
@@ -24,9 +24,7 @@ jobs:
           PR_URL: ${{ github.event.pull_request.html_url }}
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-      # Only patch/minor bumps auto-merge (majors, including a grouped
-      # Prisma major, always need a human look). GitHub only completes the
-      # merge once the branch protection required checks pass on the PR.
+      # patch/minor only, majors need a human
       - name: Enable auto-merge
         if: >-
           steps.metadata.outputs.update-type == 'version-update:semver-patch' ||

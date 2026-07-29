@@ -19,8 +19,7 @@ describe("formatMoney", () => {
   });
 
   it("respects the provided locale", () => {
-    // ICU inserts a locale-specific space (NBSP/narrow-NBSP) before "$",
-    // so match loosely instead of pinning the exact whitespace byte.
+    // loose match, ICU puts a NBSP before the $
     expect(formatMoney(150_00, "fr-CA")).toMatch(/^150,00\s*\$$/);
   });
 });

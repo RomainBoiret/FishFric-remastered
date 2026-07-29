@@ -9,8 +9,7 @@ export default defineConfig({
     coverage: {
       provider: "v8",
       reporter: ["text", "text-summary", "json-summary", "lcov", "html"],
-      // Only the pure domain layer is unit-tested so far; UI/routes/lib
-      // (DB, auth, Next internals) need integration-style setups instead.
+      // domain layer only, the rest needs an integration setup
       include: ["src/domain/**/*.ts"],
       thresholds: {
         lines: 90,
