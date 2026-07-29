@@ -1,0 +1,86 @@
+name: Lighthouse
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  schedule:
+    - cron: "40 4 * * 1"
+  workflow_dispatch:
+
+concurrency:
+  group: lighthouse-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: ${{ github.ref != 'refs/heads/main' }}
+
+permissions:
+  contents: read
+  deployments: read
+
+env:
+  PRODUCTION_URL: https://fish-fric-remastered-8ag2.vercel.app
+
+jobs:
+  lighthouse:
+    name: Lighthouse audit
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      # PRs are audited against their live Vercel preview deployment instead
+      # of a local build, since `next build` needs a seeded database.
+      - name: Wait for Vercel preview
+        if: github.event_name == 'pull_request'
+        id: preview
+        uses: patrickedqvist/wait-for-vercel-preview@v1.3.3
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          max_timeout: 300
+
+      - name: Resolve target URL
+        id: target
+        run: |
+          if [ "${{ github.event_name }}" = "pull_request" ]; then
+            echo "url=${{ steps.preview.outputs.url }}" >> "$GITHUB_OUTPUT"
+          else
+            echo "url=${{ env.PRODUCTION_URL }}" >> "$GITHUB_OUTPUT"
+          fi
+
+      # Only public, unauthenticated routes: everything under /app requires a session.
+      - name: Audit with Lighthouse
+        id: lhci
+        uses: treosh/lighthouse-ci-action@v12
+        with:
+          urls: |
+            ${{ steps.target.outputs.url }}/
+            ${{ steps.target.outputs.url }}/login
+            ${{ steps.target.outputs.url }}/signup
+          configPath: ./.lighthouserc.json
+          uploadArtifacts: true
+          temporaryPublicStorage: true
+
+      - name: Publish summary
+        if: always()
+        uses: actions/github-script@v7
+        env:
+          LHCI_MANIFEST: ${{ steps.lhci.outputs.manifest }}
+        with:
+          script: |
+            const manifest = JSON.parse(process.env.LHCI_MANIFEST || "[]");
+            const pct = (n) => (n == null ? "—" : Math.round(n * 100));
+            const rows = manifest
+              .filter((run) => run.isRepresentativeRun)
+              .map((run) => {
+                const s = run.summary;
+                return `| ${run.url} | ${pct(s.performance)} | ${pct(s.accessibility)} | ${pct(s["best-practices"])} | ${pct(s.seo)} |`;
+              });
+            await core.summary
+              .addHeading("Lighthouse report")
+              .addRaw(
+                [
+                  "| URL | Perf | A11y | Best practices | SEO |",
+                  "|---|---|---|---|---|",
+                  ...rows,
+                ].join("\n"),
+              )
+              .write();

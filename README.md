@@ -47,6 +47,15 @@ Open [http://localhost:3000](http://localhost:3000).
 
 > If the build fails with `P1002`, check that `DIRECT_URL` has no `-pooler` host. `scripts/migrate-deploy.mjs` already disables Prisma advisory locking.
 
+## Quality gate (Lighthouse)
+
+`.github/workflows/lighthouse.yml` audits the public routes (`/`, `/login`, `/signup`) with [Lighthouse CI](https://github.com/GoogleChrome/lighthouse-ci):
+
+- On PRs, it waits for the Vercel preview deployment and audits that URL.
+- On pushes to `main`, on a weekly schedule, and on manual dispatch, it audits production.
+- Thresholds live in [`.lighthouserc.json`](./.lighthouserc.json): accessibility, best practices, and SEO must score ≥ 90 (build fails otherwise); performance warns below 80.
+- Reports are uploaded to Lighthouse's temporary public storage and summarized on the workflow run.
+
 ## Project layout
 
 ```
