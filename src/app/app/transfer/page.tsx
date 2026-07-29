@@ -1,10 +1,17 @@
+import type { Metadata } from "next";
 import Link from "next/link";
 import { redirect } from "next/navigation";
+import { AppHeader, AppShell } from "@/components/brand/AppShell";
 import { ACCOUNT_TYPE_LABELS } from "@/domain/labels";
 import { TransferForm } from "@/features/transfers/TransferForm";
-import { logoutAction } from "@/features/auth/actions";
 import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/db";
+
+export const metadata: Metadata = {
+  title: "Transfer",
+  description: "Move money between your Fish&Fric accounts.",
+  alternates: { canonical: "/app/transfer" },
+};
 
 type PageProps = {
   searchParams: Promise<{ from?: string }>;
@@ -29,51 +36,31 @@ export default async function TransferPage({ searchParams }: PageProps) {
   }));
 
   return (
-    <div className="relative flex min-h-full flex-1 flex-col bg-[#04161f] text-[#e8f4f8]">
-      <div
-        aria-hidden
-        className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_30%_0%,#0a4a5c_0%,transparent_45%)]"
-      />
+    <AppShell>
+      <AppHeader />
 
-      <header className="relative z-10 mx-auto flex w-full max-w-3xl items-center justify-between px-6 py-6">
-        <Link
-          href="/app"
-          className="text-xl text-[#7ec8d8]"
-          style={{ fontFamily: "var(--font-display)" }}
-        >
-          Fish&Fric
-        </Link>
-        <form action={logoutAction}>
-          <button
-            type="submit"
-            className="text-sm text-[#9bb8c4] transition hover:text-[#e8f4f8]"
-          >
-            Sign out
-          </button>
-        </form>
-      </header>
-
-      <main className="relative z-10 mx-auto flex w-full max-w-md flex-1 flex-col gap-8 px-6 pb-16">
+      <main
+        id="main-content"
+        className="mx-auto flex w-full max-w-md flex-1 flex-col gap-6 px-4 py-8 sm:px-6"
+      >
         <div className="space-y-2">
           <Link
             href="/app"
-            className="inline-block text-sm text-[#9bb8c4] transition hover:text-[#7ec8d8]"
+            className="inline-block text-sm font-bold uppercase tracking-wide text-[var(--ff-muted)] hover:text-[var(--ff-gold)]"
           >
-            ← My accounts
+            <span aria-hidden="true">← </span>
+            My accounts
           </Link>
-          <h1
-            className="text-3xl"
-            style={{ fontFamily: "var(--font-display)" }}
-          >
-            Internal transfer
-          </h1>
-          <p className="text-[#9bb8c4]">
-            Move funds between your Fish&Fric accounts.
+          <h1 className="ff-display text-2xl">Transfer</h1>
+          <p className="text-sm text-[var(--ff-muted)]">
+            Move money between your Fish&Fric accounts.
           </p>
         </div>
 
-        <TransferForm accounts={options} defaultFromId={from} />
+        <section className="ff-surface p-5 sm:p-6" aria-label="Transfer form">
+          <TransferForm accounts={options} defaultFromId={from} />
+        </section>
       </main>
-    </div>
+    </AppShell>
   );
 }

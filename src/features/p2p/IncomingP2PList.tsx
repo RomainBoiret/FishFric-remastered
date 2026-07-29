@@ -1,6 +1,6 @@
 "use client";
 
-import { useActionState } from "react";
+import { useActionState, useId } from "react";
 import { formatMoney } from "@/domain/money";
 import { formatDateTime } from "@/domain/labels";
 import {
@@ -21,54 +21,81 @@ const initial: P2PActionState = {};
 
 function AcceptForm({ p2p }: { p2p: IncomingP2P }) {
   const [state, formAction, pending] = useActionState(acceptP2PAction, initial);
+  const answerId = useId();
+  const statusId = useId();
 
   return (
-    <form action={formAction} className="mt-3 flex flex-col gap-2">
+    <form
+      action={formAction}
+      className="mt-3 flex flex-col gap-2"
+      aria-label={`Accept transfer from ${p2p.senderName}`}
+      aria-busy={pending}
+    >
       <input type="hidden" name="p2pId" value={p2p.id} />
-      <label className="flex flex-col gap-1 text-sm text-[#9bb8c4]">
+      <label className="ff-label" htmlFor={answerId}>
         Answer
         <input
+          id={answerId}
           name="answer"
           required
-          className="rounded-md border border-[#1e4a58] bg-[#0a2833] px-3 py-2 text-[#e8f4f8] outline-none focus:border-[#7ec8d8]"
+          className="ff-input"
+          autoComplete="off"
+          aria-invalid={state.error ? true : undefined}
+          aria-describedby={state.error || state.success ? statusId : undefined}
         />
       </label>
       {state.error ? (
-        <p className="text-sm text-[#f0a8a8]" role="alert">
+        <p
+          id={statusId}
+          className="text-sm text-[var(--ff-danger)]"
+          role="alert"
+        >
           {state.error}
         </p>
       ) : null}
       {state.success ? (
-        <p className="text-sm text-[#7ec8d8]" role="status">
+        <p id={statusId} className="text-sm text-[var(--ff-ok)]" role="status">
           {state.success}
         </p>
       ) : null}
       <button
         type="submit"
         disabled={pending}
-        className="rounded-md bg-[#7ec8d8] px-3 py-2 text-sm font-semibold text-[#04161f] disabled:opacity-60"
+        className="ff-btn w-full"
+        aria-busy={pending}
       >
         {pending ? "Confirming…" : "Accept"}
+        {!pending ? <span aria-hidden="true"> ›</span> : null}
       </button>
     </form>
   );
 }
 
-function RejectForm({ p2pId }: { p2pId: string }) {
+function RejectForm({
+  p2pId,
+  senderName,
+}: {
+  p2pId: string;
+  senderName: string;
+}) {
   const [state, formAction, pending] = useActionState(rejectP2PAction, initial);
 
   return (
-    <form action={formAction}>
+    <form
+      action={formAction}
+      aria-label={`Decline transfer from ${senderName}`}
+    >
       <input type="hidden" name="p2pId" value={p2pId} />
       <button
         type="submit"
         disabled={pending}
-        className="text-sm text-[#9bb8c4] underline-offset-2 hover:text-[#f0a8a8] hover:underline disabled:opacity-60"
+        className="text-sm text-[var(--ff-muted)] underline underline-offset-4 hover:text-[var(--ff-danger)] disabled:opacity-60"
+        aria-busy={pending}
       >
         {pending ? "Declining…" : "Decline"}
       </button>
       {state.error ? (
-        <p className="mt-1 text-sm text-[#f0a8a8]" role="alert">
+        <p className="mt-1 text-sm text-[var(--ff-danger)]" role="alert">
           {state.error}
         </p>
       ) : null}
@@ -78,23 +105,32 @@ function RejectForm({ p2pId }: { p2pId: string }) {
 
 export function IncomingP2PList({ items }: { items: IncomingP2P[] }) {
   if (items.length === 0) {
-    return <p className="text-sm text-[#6a8894]">No pending P2P transfers.</p>;
+    return (
+      <p className="text-sm text-[var(--ff-muted)]" role="status">
+        No pending P2P transfers.
+      </p>
+    );
   }
 
   return (
-    <ul className="flex flex-col gap-4">
+    <ul className="m-0 flex list-none flex-col gap-4 p-0">
       {items.map((p2p) => (
-        <li key={p2p.id} className="border-b border-[#1e4a58] pb-4">
-          <p className="font-medium text-[#e8f4f8]">
+        <li
+          key={p2p.id}
+          className="border-b border-black/40 pb-4 last:border-b-0"
+        >
+          <p className="font-medium text-[var(--ff-ink)]">
             {p2p.senderName} · {formatMoney(p2p.amountCents)}
           </p>
-          <p className="mt-1 text-sm text-[#9bb8c4]">Q: {p2p.question}</p>
-          <p className="text-xs text-[#6a8894]">
+          <p className="mt-1 text-sm text-[var(--ff-muted)]">
+            Security question: {p2p.question}
+          </p>
+          <p className="text-xs text-[var(--ff-muted)]">
             Expires {formatDateTime(new Date(p2p.expiresAt))}
           </p>
           <AcceptForm p2p={p2p} />
           <div className="mt-2">
-            <RejectForm p2pId={p2p.id} />
+            <RejectForm p2pId={p2p.id} senderName={p2p.senderName} />
           </div>
         </li>
       ))}

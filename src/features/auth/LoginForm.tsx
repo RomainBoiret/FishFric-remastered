@@ -1,6 +1,6 @@
 "use client";
 
-import { useActionState } from "react";
+import { useActionState, useId } from "react";
 import Link from "next/link";
 import {
   loginAction,
@@ -11,32 +11,47 @@ const initial: AuthActionState = {};
 
 export function LoginForm() {
   const [state, formAction, pending] = useActionState(loginAction, initial);
+  const emailId = useId();
+  const passwordId = useId();
+  const errorId = useId();
 
   return (
-    <form action={formAction} className="flex w-full flex-col gap-4">
-      <label className="flex flex-col gap-1.5 text-sm text-[#9bb8c4]">
+    <form
+      action={formAction}
+      className="flex w-full flex-col gap-4"
+      noValidate={false}
+      aria-busy={pending}
+    >
+      <label className="ff-label" htmlFor={emailId}>
         Email
         <input
+          id={emailId}
           name="email"
           type="email"
           required
           autoComplete="email"
-          className="rounded-md border border-[#1e4a58] bg-[#0a2833] px-3 py-2.5 text-[#e8f4f8] outline-none focus:border-[#7ec8d8]"
+          inputMode="email"
+          className="ff-input"
+          aria-invalid={state.error ? true : undefined}
+          aria-describedby={state.error ? errorId : undefined}
         />
       </label>
-      <label className="flex flex-col gap-1.5 text-sm text-[#9bb8c4]">
+      <label className="ff-label" htmlFor={passwordId}>
         Password
         <input
+          id={passwordId}
           name="password"
           type="password"
           required
           autoComplete="current-password"
-          className="rounded-md border border-[#1e4a58] bg-[#0a2833] px-3 py-2.5 text-[#e8f4f8] outline-none focus:border-[#7ec8d8]"
+          className="ff-input"
+          aria-invalid={state.error ? true : undefined}
+          aria-describedby={state.error ? errorId : undefined}
         />
       </label>
 
       {state.error ? (
-        <p className="text-sm text-[#f0a8a8]" role="alert">
+        <p id={errorId} className="text-sm text-[var(--ff-danger)]" role="alert">
           {state.error}
         </p>
       ) : null}
@@ -44,17 +59,16 @@ export function LoginForm() {
       <button
         type="submit"
         disabled={pending}
-        className="mt-2 rounded-md bg-[#7ec8d8] px-4 py-2.5 text-sm font-semibold text-[#04161f] transition hover:bg-[#9ad7e4] disabled:opacity-60"
+        className="ff-btn mt-1 w-full"
+        aria-busy={pending}
       >
         {pending ? "Signing in…" : "Sign in"}
+        {!pending ? <span aria-hidden="true"> ›</span> : null}
       </button>
 
-      <p className="text-center text-sm text-[#9bb8c4]">
+      <p className="text-center text-sm normal-case tracking-normal text-[var(--ff-muted)]">
         No account yet?{" "}
-        <Link
-          href="/signup"
-          className="text-[#7ec8d8] underline-offset-2 hover:underline"
-        >
+        <Link href="/signup" className="ff-link">
           Create an account
         </Link>
       </p>

@@ -39,10 +39,10 @@ Open [http://localhost:3000](http://localhost:3000).
 
 1. Import this repo on [vercel.com](https://vercel.com)
 2. Set environment variables:
-   - `DATABASE_URL` — Neon **pooled** URL (host includes `-pooler`)
-   - `DIRECT_URL` — Neon **direct** URL (same credentials, host **without** `-pooler`) — required for migrations
-   - `AUTH_SECRET` — Auth.js secret
-3. Deploy — the build runs migrations (advisory lock disabled for Neon) then `next build`
+   - `DATABASE_URL` - Neon **pooled** URL (host includes `-pooler`)
+   - `DIRECT_URL` - Neon **direct** URL (same credentials, host **without** `-pooler`) - required for migrations
+   - `AUTH_SECRET` - Auth.js secret
+3. Deploy - the build runs migrations (advisory lock disabled for Neon) then `next build`
 4. Seed production once: `npm run db:seed` (with `DATABASE_URL` pointing at Neon)
 
 > If the build fails with `P1002`, check that `DIRECT_URL` has no `-pooler` host. `scripts/migrate-deploy.mjs` already disables Prisma advisory locking.

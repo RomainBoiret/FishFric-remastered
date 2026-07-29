@@ -41,7 +41,7 @@ export async function createP2PAction(
   });
 
   if (!parsed.success) {
-    return { error: "Invalid form — please check the fields." };
+    return { error: "Invalid form - please check the fields." };
   }
 
   const amountCents = parseAmountToCents(parsed.data.amount);
@@ -126,7 +126,7 @@ export async function createP2PAction(
   }
 
   revalidateP2P([`/app/accounts/${parsed.data.sourceAccountId}`]);
-  return { success: "Transfer sent — waiting for a reply." };
+  return { success: "Transfer sent - waiting for a reply." };
 }
 
 export async function acceptP2PAction(
@@ -292,7 +292,7 @@ export async function rejectP2PAction(
           accountId: source.id,
           amountCents: p2p.amountCents,
           kind: "TRANSFER_P2P",
-          description: `P2P to ${p2p.recipientEmail} (declined — refund)`,
+          description: `P2P to ${p2p.recipientEmail} (declined - refund)`,
           p2pTransferId: p2p.id,
         },
       });

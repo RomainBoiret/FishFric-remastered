@@ -1,6 +1,6 @@
 "use client";
 
-import { useActionState } from "react";
+import { useActionState, useId } from "react";
 import { formatMoney } from "@/domain/money";
 import { createP2PAction } from "@/features/p2p/actions";
 import type { P2PActionState } from "@/features/p2p/schemas";
@@ -21,82 +21,104 @@ export function SendP2PForm({
   defaultRecipient?: string;
 }) {
   const [state, formAction, pending] = useActionState(createP2PAction, initial);
+  const fromId = useId();
+  const emailId = useId();
+  const amountId = useId();
+  const questionId = useId();
+  const answerId = useId();
+  const statusId = useId();
 
   if (sources.length === 0) {
     return (
-      <p className="text-[#9bb8c4]">
-        No eligible account (checking or savings) to send a P2P transfer.
+      <p className="text-[var(--ff-muted)]" role="status">
+        No eligible account (checking or savings) for P2P.
       </p>
     );
   }
 
   return (
-    <form action={formAction} className="flex w-full flex-col gap-4">
-      <label className="flex flex-col gap-1.5 text-sm text-[#9bb8c4]">
+    <form
+      action={formAction}
+      className="flex w-full flex-col gap-4"
+      aria-busy={pending}
+    >
+      <label className="ff-label" htmlFor={fromId}>
         From
         <select
+          id={fromId}
           name="sourceAccountId"
           required
           defaultValue={sources[0]?.id}
-          className="rounded-md border border-[#1e4a58] bg-[#0a2833] px-3 py-2.5 text-[#e8f4f8] outline-none focus:border-[#7ec8d8]"
+          className="ff-input"
         >
           {sources.map((account) => (
             <option key={account.id} value={account.id}>
-              {account.label} — {formatMoney(account.balanceCents)}
+              {account.label} - {formatMoney(account.balanceCents)}
             </option>
           ))}
         </select>
       </label>
 
-      <label className="flex flex-col gap-1.5 text-sm text-[#9bb8c4]">
+      <label className="ff-label" htmlFor={emailId}>
         Recipient email
         <input
+          id={emailId}
           name="recipientEmail"
           type="email"
           required
           defaultValue={defaultRecipient}
           placeholder="ami@fishfric.app"
-          className="rounded-md border border-[#1e4a58] bg-[#0a2833] px-3 py-2.5 text-[#e8f4f8] outline-none focus:border-[#7ec8d8]"
+          autoComplete="email"
+          inputMode="email"
+          className="ff-input"
         />
       </label>
 
-      <label className="flex flex-col gap-1.5 text-sm text-[#9bb8c4]">
+      <label className="ff-label" htmlFor={amountId}>
         Amount (CAD)
         <input
+          id={amountId}
           name="amount"
           inputMode="decimal"
           placeholder="40.00"
           required
-          className="rounded-md border border-[#1e4a58] bg-[#0a2833] px-3 py-2.5 text-[#e8f4f8] outline-none focus:border-[#7ec8d8]"
+          className="ff-input"
         />
       </label>
 
-      <label className="flex flex-col gap-1.5 text-sm text-[#9bb8c4]">
+      <label className="ff-label" htmlFor={questionId}>
         Security question
         <input
+          id={questionId}
           name="question"
           required
-          placeholder="Name of my first fish?"
-          className="rounded-md border border-[#1e4a58] bg-[#0a2833] px-3 py-2.5 text-[#e8f4f8] outline-none focus:border-[#7ec8d8]"
+          placeholder="Favorite sea animal?"
+          className="ff-input"
         />
       </label>
 
-      <label className="flex flex-col gap-1.5 text-sm text-[#9bb8c4]">
+      <label className="ff-label" htmlFor={answerId}>
         Answer
         <input
+          id={answerId}
           name="answer"
           required
-          className="rounded-md border border-[#1e4a58] bg-[#0a2833] px-3 py-2.5 text-[#e8f4f8] outline-none focus:border-[#7ec8d8]"
+          className="ff-input"
+          autoComplete="off"
         />
       </label>
 
       {state.error ? (
-        <p className="text-sm text-[#f0a8a8]" role="alert">
+        <p
+          id={statusId}
+          className="text-sm text-[var(--ff-danger)]"
+          role="alert"
+        >
           {state.error}
         </p>
       ) : null}
       {state.success ? (
-        <p className="text-sm text-[#7ec8d8]" role="status">
+        <p id={statusId} className="text-sm text-[var(--ff-ok)]" role="status">
           {state.success}
         </p>
       ) : null}
@@ -104,9 +126,11 @@ export function SendP2PForm({
       <button
         type="submit"
         disabled={pending}
-        className="mt-2 rounded-md bg-[#7ec8d8] px-4 py-2.5 text-sm font-semibold text-[#04161f] transition hover:bg-[#9ad7e4] disabled:opacity-60"
+        className="ff-btn mt-2 w-full"
+        aria-busy={pending}
       >
         {pending ? "Sending…" : "Send P2P"}
+        {!pending ? <span aria-hidden="true"> ›</span> : null}
       </button>
     </form>
   );

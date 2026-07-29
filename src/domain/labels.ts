@@ -1,14 +1,14 @@
 export const ACCOUNT_TYPE_LABELS = {
-  CHECKING: "Checking account",
-  SAVINGS: "Savings account",
+  CHECKING: "Checking",
+  SAVINGS: "Savings",
   CREDIT: "Shark Card",
 } as const;
 
 export const ENTRY_KIND_LABELS = {
-  TRANSFER_INTERNAL: "Internal transfer",
+  TRANSFER_INTERNAL: "Transfer",
   TRANSFER_P2P: "P2P transfer",
   BILL_PAYMENT: "Bill payment",
-  MOBILE_DEPOSIT: "Mobile deposit",
+  MOBILE_DEPOSIT: "Deposit",
   INTEREST: "Interest",
   ADJUSTMENT: "Adjustment",
 } as const;

@@ -1,4 +1,4 @@
-// Fish&Fric — schema métier (ledger + comptes + P2P)
+// Fish&Fric - schema métier (ledger + comptes + P2P)
 
 generator client {
   provider = "prisma-client"

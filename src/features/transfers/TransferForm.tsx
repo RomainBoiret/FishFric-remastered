@@ -1,6 +1,6 @@
 "use client";
 
-import { useActionState } from "react";
+import { useActionState, useId } from "react";
 import { formatMoney } from "@/domain/money";
 import { transferInternalAction } from "@/features/transfers/actions";
 import type { TransferActionState } from "@/features/transfers/schemas";
@@ -25,6 +25,10 @@ export function TransferForm({
     transferInternalAction,
     initial,
   );
+  const fromId = useId();
+  const toId = useId();
+  const amountId = useId();
+  const statusId = useId();
 
   const sources = accounts.filter((a) => a.type !== "CREDIT");
   const defaultFrom =
@@ -34,68 +38,82 @@ export function TransferForm({
 
   if (sources.length === 0 || accounts.length < 2) {
     return (
-      <p className="text-[#9bb8c4]">
-        You need at least two accounts (with a non–Shark Card source) to make a
-        transfer.
+      <p className="text-[var(--ff-muted)]" role="status">
+        You need at least two accounts (with a non-credit source) to transfer.
       </p>
     );
   }
 
   return (
-    <form action={formAction} className="flex w-full flex-col gap-4">
-      <label className="flex flex-col gap-1.5 text-sm text-[#9bb8c4]">
+    <form
+      action={formAction}
+      className="flex w-full flex-col gap-4"
+      aria-busy={pending}
+    >
+      <label className="ff-label" htmlFor={fromId}>
         From
         <select
+          id={fromId}
           name="fromAccountId"
           required
           defaultValue={defaultFrom}
-          className="rounded-md border border-[#1e4a58] bg-[#0a2833] px-3 py-2.5 text-[#e8f4f8] outline-none focus:border-[#7ec8d8]"
+          className="ff-input"
         >
           {sources.map((account) => (
             <option key={account.id} value={account.id}>
-              {account.label} — {formatMoney(account.balanceCents)}
+              {account.label} - {formatMoney(account.balanceCents)}
             </option>
           ))}
         </select>
       </label>
 
-      <label className="flex flex-col gap-1.5 text-sm text-[#9bb8c4]">
+      <label className="ff-label" htmlFor={toId}>
         To
         <select
+          id={toId}
           name="toAccountId"
           required
           defaultValue={
             accounts.find((a) => a.id !== defaultFrom)?.id ?? accounts[0]?.id
           }
-          className="rounded-md border border-[#1e4a58] bg-[#0a2833] px-3 py-2.5 text-[#e8f4f8] outline-none focus:border-[#7ec8d8]"
+          className="ff-input"
         >
           {accounts.map((account) => (
             <option key={account.id} value={account.id}>
-              {account.label} — {formatMoney(account.balanceCents)}
+              {account.label} - {formatMoney(account.balanceCents)}
             </option>
           ))}
         </select>
       </label>
 
-      <label className="flex flex-col gap-1.5 text-sm text-[#9bb8c4]">
+      <label className="ff-label" htmlFor={amountId}>
         Amount (CAD)
         <input
+          id={amountId}
           name="amount"
           inputMode="decimal"
           placeholder="50.00"
           required
-          className="rounded-md border border-[#1e4a58] bg-[#0a2833] px-3 py-2.5 text-[#e8f4f8] outline-none focus:border-[#7ec8d8]"
+          className="ff-input"
+          aria-describedby={
+            state.error || state.success ? statusId : undefined
+          }
+          aria-invalid={state.error ? true : undefined}
         />
       </label>
 
       {state.error ? (
-        <p className="text-sm text-[#f0a8a8]" role="alert">
+        <p
+          id={statusId}
+          className="text-sm text-[var(--ff-danger)]"
+          role="alert"
+        >
           {state.error}
         </p>
       ) : null}
 
       {state.success ? (
-        <p className="text-sm text-[#7ec8d8]" role="status">
+        <p id={statusId} className="text-sm text-[var(--ff-ok)]" role="status">
           {state.success}
         </p>
       ) : null}
@@ -103,9 +121,11 @@ export function TransferForm({
       <button
         type="submit"
         disabled={pending}
-        className="mt-2 rounded-md bg-[#7ec8d8] px-4 py-2.5 text-sm font-semibold text-[#04161f] transition hover:bg-[#9ad7e4] disabled:opacity-60"
+        className="ff-btn mt-2 w-full"
+        aria-busy={pending}
       >
-        {pending ? "Transferring…" : "Transfer"}
+        {pending ? "Sending…" : "Transfer"}
+        {!pending ? <span aria-hidden="true"> ›</span> : null}
       </button>
     </form>
   );

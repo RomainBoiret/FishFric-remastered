@@ -1,84 +1,288 @@
-import Image from "next/image";
+import type { Metadata } from "next";
 import Link from "next/link";
 import { redirect } from "next/navigation";
+import { Atmosphere } from "@/components/brand/Atmosphere";
+import { BrandMark } from "@/components/brand/BrandMark";
+import { GitHubHeaderLink } from "@/components/brand/GitHubLink";
+import { SiteFooter } from "@/components/brand/SiteFooter";
 import { DemoButton } from "@/features/auth/DemoButton";
 import { auth } from "@/lib/auth";
+import { SITE_NAME, SITE_TAGLINE } from "@/lib/site";
+
+export const metadata: Metadata = {
+  title: { absolute: `${SITE_NAME} - Ocean banking demo` },
+  description: SITE_TAGLINE,
+  alternates: { canonical: "/" },
+};
+
+const FEATURES = [
+  {
+    title: "Accounts",
+    subtitle: "Your chests",
+    body: "Checking, savings, and a Shark Card - balances you can open and inspect.",
+    accent: "#2d8f83",
+  },
+  {
+    title: "Transfers",
+    subtitle: "Swim between pockets",
+    body: "Move money between your own accounts in a few clicks.",
+    accent: "#e0aa2c",
+  },
+  {
+    title: "P2P",
+    subtitle: "Bottle drops",
+    body: "Send funds locked behind a security question the recipient must answer.",
+    accent: "#5ec8e8",
+  },
+];
+
+const STEPS = [
+  {
+    n: "1",
+    title: "Open the demo",
+    body: "One click loads a seeded account with sample money.",
+  },
+  {
+    n: "2",
+    title: "Browse your accounts",
+    body: "Check balances and the transaction history (tide log).",
+  },
+  {
+    n: "3",
+    title: "Try a transfer",
+    body: "Move funds internally, or send a P2P transfer with a riddle.",
+  },
+];
 
 export default async function Home() {
   const session = await auth();
   if (session?.user) redirect("/app");
 
   return (
-    <div className="relative flex min-h-full flex-1 flex-col bg-[#04161f] text-[#e8f4f8]">
-      <section className="relative flex min-h-[100svh] flex-col overflow-hidden">
-        <div className="absolute inset-0">
-          <Image
-            src="https://images.unsplash.com/photo-1682687982501-1e58ab814714?auto=format&fit=crop&w=2400&q=80"
-            alt=""
-            fill
-            priority
-            className="ff-drift object-cover object-center"
-            sizes="100vw"
-          />
-          <div
-            aria-hidden
-            className="absolute inset-0 bg-[linear-gradient(180deg,rgba(2,16,24,0.55)_0%,rgba(4,22,31,0.72)_45%,rgba(4,22,31,0.92)_100%)]"
-          />
-          <div
-            aria-hidden
-            className="ff-shimmer absolute inset-0 bg-[radial-gradient(ellipse_at_30%_15%,rgba(126,200,216,0.22),transparent_50%)]"
-          />
-        </div>
+    <div className="relative flex min-h-full flex-1 flex-col">
+      <Atmosphere variant="hero" />
 
-        <main className="relative z-10 mx-auto flex w-full max-w-3xl flex-1 flex-col justify-end gap-6 px-6 pb-20 pt-28 sm:justify-center sm:pb-24">
-          <p
-            className="ff-rise text-6xl tracking-tight text-[#7ec8d8] sm:text-7xl md:text-8xl"
-            style={{ fontFamily: "var(--font-display)" }}
-          >
-            Fish&Fric
-          </p>
-          <h1
-            className="ff-rise ff-rise-delay-1 max-w-xl text-2xl font-medium leading-snug text-[#e8f4f8] sm:text-3xl"
-            style={{ fontFamily: "var(--font-display)" }}
-          >
-            The bank that swims with you.
-          </h1>
-          <p className="ff-rise ff-rise-delay-2 max-w-md text-lg leading-relaxed text-[#c5dbe3]">
-            Accounts, transfers, and a real ledger — an ocean-themed banking
-            demo for curious recruiters.
-          </p>
-          <div className="ff-rise ff-rise-delay-3 flex flex-wrap items-start gap-3 pt-2">
-            <DemoButton className="rounded-md bg-[#7ec8d8] px-5 py-2.5 text-sm font-semibold text-[#04161f] transition hover:bg-[#9ad7e4] disabled:opacity-60" />
-            <Link
-              href="/login"
-              className="rounded-md border border-white/25 px-5 py-2.5 text-sm font-medium text-[#e8f4f8] transition hover:border-[#7ec8d8] hover:text-[#7ec8d8]"
-            >
-              Sign in
-            </Link>
-          </div>
-        </main>
-      </section>
-
-      <section className="relative border-t border-[#1e4a58] bg-[#04161f] px-6 py-20">
-        <div className="mx-auto flex w-full max-w-3xl flex-col gap-4">
-          <h2
-            className="text-2xl text-[#e8f4f8] sm:text-3xl"
-            style={{ fontFamily: "var(--font-display)" }}
-          >
-            Explore the demo in a minute.
-          </h2>
-          <p className="max-w-xl text-lg leading-relaxed text-[#9bb8c4]">
-            Open three accounts, move funds, send a P2P transfer with a security
-            question. Everything runs on a real PostgreSQL ledger.
-          </p>
+      <header className="ff-nav relative z-20">
+        <div className="mx-auto flex w-full max-w-5xl items-center justify-between gap-4 px-4 py-3 sm:px-6">
           <Link
-            href="/signup"
-            className="mt-2 w-fit text-sm font-medium text-[#7ec8d8] underline-offset-4 transition hover:underline"
+            href="/"
+            className="ff-brand inline-flex items-center gap-2 text-sm sm:text-base"
+            aria-current="page"
           >
-            Or create your own account →
+            <BrandMark size={26} className="text-[var(--ff-gold)]" />
+            <span>{SITE_NAME}</span>
           </Link>
+          <nav aria-label="Primary">
+            <ul className="m-0 flex list-none items-center gap-2 p-0 sm:gap-3">
+              <li>
+                <GitHubHeaderLink />
+              </li>
+              <li className="hidden sm:block">
+                <Link
+                  href="/signup"
+                  className="text-xs font-bold uppercase tracking-wide text-[var(--ff-muted)] hover:text-white focus-visible:text-white"
+                >
+                  Create account
+                </Link>
+              </li>
+              <li>
+                <Link
+                  href="/login"
+                  className="ff-btn ff-btn-ghost px-3 py-2 text-xs sm:text-sm"
+                >
+                  Sign in
+                </Link>
+              </li>
+            </ul>
+          </nav>
         </div>
-      </section>
+      </header>
+
+      <main id="main-content" className="relative z-10 flex flex-1 flex-col">
+        <section
+          className="flex min-h-[calc(100svh-56px)] flex-col"
+          aria-labelledby="home-heading"
+        >
+          <div className="mx-auto flex w-full max-w-5xl flex-1 flex-col justify-center gap-8 px-4 py-12 sm:px-8 lg:px-12">
+            <div className="ff-in max-w-2xl space-y-4">
+              <p className="ff-display text-xs uppercase tracking-widest text-[var(--ff-gold)]">
+                Portfolio demo · ocean bank
+              </p>
+              <h1
+                id="home-heading"
+                className="ff-brand text-4xl leading-tight sm:text-5xl md:text-6xl"
+              >
+                {SITE_NAME}
+              </h1>
+              <p className="max-w-xl text-base leading-relaxed text-white/90 sm:text-lg">
+                A ocean-pixel-style banking demo you can click through - accounts,
+                transfers, and P2P on a real ledger.
+              </p>
+            </div>
+
+            <div className="grid items-stretch gap-5 lg:grid-cols-[minmax(0,22rem)_1fr]">
+              <div className="ff-in ff-in-1 ff-surface ff-surface-step ff-surface-accent w-full space-y-4 p-5 sm:p-6">
+                <h2 className="ff-display text-xl text-white sm:text-2xl">
+                  Start exploring
+                </h2>
+                <p className="text-sm leading-relaxed text-[var(--ff-muted)]">
+                  Use the demo reef (pre-loaded data) or create your own
+                  account.
+                </p>
+                <div className="flex flex-col gap-3">
+                  <DemoButton className="ff-btn w-full" label="Try the demo" />
+                  <Link href="/signup" className="ff-btn ff-btn-stone w-full">
+                    Create an account
+                    <span aria-hidden="true"> ›</span>
+                  </Link>
+                </div>
+              </div>
+
+              <ul className="ff-in ff-in-2 m-0 grid list-none gap-3 p-0 sm:grid-cols-3 lg:grid-cols-1 xl:grid-cols-3">
+                {FEATURES.map((item, index) => (
+                  <li
+                    key={`hero-${item.title}`}
+                    className="ff-surface ff-in flex flex-col justify-between gap-3 bg-[var(--ff-bg-panel)]/95 p-4"
+                    style={{ animationDelay: `${0.22 + index * 0.08}s` }}
+                  >
+                    <div
+                      className="h-2 w-10"
+                      style={{ background: item.accent }}
+                      aria-hidden="true"
+                    />
+                    <div className="space-y-1">
+                      <h3 className="ff-display text-base text-white">
+                        {item.title}
+                      </h3>
+                      <p className="text-[10px] font-bold uppercase tracking-wide text-[var(--ff-gold)]">
+                        {item.subtitle}
+                      </p>
+                    </div>
+                    <p className="text-xs leading-relaxed text-[var(--ff-muted)] sm:text-sm">
+                      {item.body}
+                    </p>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </div>
+        </section>
+
+        <section
+          className="border-t-4 border-black bg-[#0a222c] px-4 py-14 sm:px-8 lg:px-12"
+          aria-labelledby="features-heading"
+        >
+          <div className="mx-auto w-full max-w-5xl space-y-8">
+            <div className="max-w-xl space-y-2">
+              <h2
+                id="features-heading"
+                className="ff-display text-2xl text-white sm:text-3xl"
+              >
+                What you can do
+              </h2>
+              <p className="text-sm text-[var(--ff-muted)] sm:text-base">
+                Three clear features - same ocean vibe, plain banking actions.
+              </p>
+            </div>
+
+            <ul className="m-0 grid list-none gap-4 p-0 sm:grid-cols-3">
+              {FEATURES.map((item) => (
+                <li key={item.title} className="ff-surface space-y-3 p-5">
+                  <div
+                    className="h-2 w-10"
+                    style={{ background: item.accent }}
+                    aria-hidden="true"
+                  />
+                  <div className="space-y-1">
+                    <h3 className="ff-display text-lg text-white">
+                      {item.title}
+                    </h3>
+                    <p className="text-xs font-bold uppercase tracking-wide text-[var(--ff-gold)]">
+                      {item.subtitle}
+                    </p>
+                  </div>
+                  <p className="text-sm leading-relaxed text-[var(--ff-muted)]">
+                    {item.body}
+                  </p>
+                </li>
+              ))}
+            </ul>
+          </div>
+        </section>
+
+        <section
+          className="border-t-4 border-black bg-[#071218] px-4 py-14 sm:px-8 lg:px-12"
+          aria-labelledby="howto-heading"
+        >
+          <div className="mx-auto grid w-full max-w-5xl gap-10 lg:grid-cols-2 lg:items-start">
+            <div className="space-y-6">
+              <div className="space-y-2">
+                <h2
+                  id="howto-heading"
+                  className="ff-display text-2xl text-white sm:text-3xl"
+                >
+                  How it works
+                </h2>
+                <p className="text-sm text-[var(--ff-muted)] sm:text-base">
+                  Built for recruiters who want to click around quickly.
+                </p>
+              </div>
+              <ol className="m-0 space-y-4 p-0">
+                {STEPS.map((step) => (
+                  <li key={step.n} className="ff-surface flex gap-4 p-4">
+                    <span
+                      className="ff-display shrink-0 text-lg text-[var(--ff-gold)]"
+                      aria-hidden="true"
+                    >
+                      {step.n}
+                    </span>
+                    <div className="space-y-1">
+                      <h3 className="font-bold text-white">
+                        <span className="ff-sr-only">Step {step.n}: </span>
+                        {step.title}
+                      </h3>
+                      <p className="text-sm leading-relaxed text-[var(--ff-muted)]">
+                        {step.body}
+                      </p>
+                    </div>
+                  </li>
+                ))}
+              </ol>
+            </div>
+
+            <aside
+              className="ff-surface space-y-5 p-5 sm:p-6"
+              aria-labelledby="try-now-heading"
+            >
+              <h2
+                id="try-now-heading"
+                className="ff-display text-xl text-white"
+              >
+                Try it now
+              </h2>
+              <p className="text-sm leading-relaxed text-[var(--ff-muted)]">
+                The demo opens a ready-made account so you can explore transfers
+                and P2P without signing up.
+              </p>
+              <ul className="m-0 space-y-2 border-y-2 border-black/40 py-4 pl-5 text-sm text-[var(--ff-muted)]">
+                <li>Real ledger (amounts stored in cents)</li>
+                <li>Internal transfers between your accounts</li>
+                <li>P2P transfers with a security question</li>
+              </ul>
+              <DemoButton className="ff-btn w-full" label="Try the demo" />
+              <Link
+                href="/login"
+                className="block text-center text-xs font-bold uppercase tracking-wide text-[var(--ff-muted)] hover:text-white"
+              >
+                Already have an account? Sign in
+                <span aria-hidden="true"> →</span>
+              </Link>
+            </aside>
+          </div>
+        </section>
+      </main>
+
+      <SiteFooter />
     </div>
   );
 }

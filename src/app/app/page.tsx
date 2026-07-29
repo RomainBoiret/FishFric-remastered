@@ -1,10 +1,17 @@
+import type { Metadata } from "next";
 import Link from "next/link";
 import { redirect } from "next/navigation";
+import { AppHeader, AppShell } from "@/components/brand/AppShell";
 import { ACCOUNT_TYPE_LABELS } from "@/domain/labels";
 import { formatMoney } from "@/domain/money";
-import { logoutAction } from "@/features/auth/actions";
 import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/db";
+
+export const metadata: Metadata = {
+  title: "My accounts",
+  description: "View your Fish&Fric checking, savings, and Shark Card balances.",
+  alternates: { canonical: "/app" },
+};
 
 export default async function AppHubPage() {
   const session = await auth();
@@ -16,89 +23,87 @@ export default async function AppHubPage() {
   });
 
   return (
-    <div className="relative flex min-h-full flex-1 flex-col bg-[#04161f] text-[#e8f4f8]">
-      <div
-        aria-hidden
-        className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_50%_0%,#0a4a5c_0%,transparent_45%)]"
-      />
+    <AppShell>
+      <AppHeader />
 
-      <header className="relative z-10 mx-auto flex w-full max-w-3xl items-center justify-between px-6 py-6">
-        <p
-          className="text-xl text-[#7ec8d8]"
-          style={{ fontFamily: "var(--font-display)" }}
-        >
-          Fish&Fric
-        </p>
-        <form action={logoutAction}>
-          <button
-            type="submit"
-            className="text-sm text-[#9bb8c4] transition hover:text-[#e8f4f8]"
-          >
-            Sign out
-          </button>
-        </form>
-      </header>
-
-      <main className="relative z-10 mx-auto flex w-full max-w-3xl flex-1 flex-col gap-8 px-6 pb-16">
-        <div className="space-y-2">
-          <h1
-            className="text-3xl sm:text-4xl"
-            style={{ fontFamily: "var(--font-display)" }}
-          >
-            Hello, {session.user.name?.split(" ")[0] ?? "Fisher"}
+      <main
+        id="main-content"
+        className="mx-auto flex w-full max-w-3xl flex-1 flex-col gap-8 px-4 py-8 sm:px-6"
+      >
+        <div className="ff-in space-y-2">
+          <h1 className="ff-display text-2xl sm:text-3xl">
+            Hello, {session.user.name?.split(" ")[0] ?? "there"}
           </h1>
-          <p className="text-[#9bb8c4]">
-            Here are your accounts.
+          <p className="text-sm text-[var(--ff-muted)]">
+            Your accounts.
             {session.user.isDemo
-              ? " Demo mode — sample data for recruiters."
+              ? " Demo mode - sample data for visitors."
               : null}
           </p>
         </div>
 
-        <div className="flex flex-wrap gap-3">
-          <Link
-            href="/app/transfer"
-            className="inline-flex rounded-md bg-[#7ec8d8] px-4 py-2.5 text-sm font-semibold text-[#04161f] transition hover:bg-[#9ad7e4]"
-          >
+        <nav
+          aria-label="Quick actions"
+          className="ff-in ff-in-1 grid gap-3 sm:grid-cols-2"
+        >
+          <Link href="/app/transfer" className="ff-btn w-full">
             New transfer
+            <span aria-hidden="true"> ›</span>
           </Link>
-          <Link
-            href="/app/p2p"
-            className="inline-flex rounded-md border border-[#7ec8d8] px-4 py-2.5 text-sm font-medium text-[#7ec8d8] transition hover:bg-[#0a2833]"
-          >
+          <Link href="/app/p2p" className="ff-btn ff-btn-ghost w-full">
             P2P transfer
+            <span aria-hidden="true"> ›</span>
           </Link>
-        </div>
+        </nav>
 
-        <ul className="flex flex-col">
-          {accounts.map((account) => (
-            <li key={account.id} className="border-b border-[#1e4a58]">
-              <Link
-                href={`/app/accounts/${account.id}`}
-                className="-mx-2 flex items-center justify-between px-2 py-4 transition hover:bg-[#0a2833]"
-              >
-                <div>
-                  <p className="font-medium text-[#e8f4f8]">
-                    {account.label ?? ACCOUNT_TYPE_LABELS[account.type]}
-                  </p>
-                  <p className="text-sm text-[#6a8894]">
-                    {ACCOUNT_TYPE_LABELS[account.type]}
-                  </p>
-                </div>
-                <p
-                  className="text-xl tabular-nums text-[#7ec8d8]"
-                  style={{ fontFamily: "var(--font-display)" }}
+        <section
+          aria-labelledby="accounts-heading"
+          className="ff-in ff-in-2"
+        >
+          <h2 id="accounts-heading" className="ff-sr-only">
+            Account list
+          </h2>
+          <ul className="ff-surface m-0 list-none overflow-hidden p-0">
+            {accounts.map((account, index) => {
+              const name =
+                account.label ?? ACCOUNT_TYPE_LABELS[account.type];
+              const balance = formatMoney(account.balanceCents);
+              return (
+                <li
+                  key={account.id}
+                  className={
+                    index < accounts.length - 1 ? "border-b-2 border-black" : ""
+                  }
                 >
-                  {formatMoney(account.balanceCents)}
-                </p>
-              </Link>
-            </li>
-          ))}
-          {accounts.length === 0 ? (
-            <li className="py-8 text-[#9bb8c4]">No active accounts.</li>
-          ) : null}
-        </ul>
+                  <Link
+                    href={`/app/accounts/${account.id}`}
+                    className="ff-row-link flex items-center justify-between gap-4 px-4 py-4 sm:px-5"
+                    aria-label={`${name}, balance ${balance}`}
+                  >
+                    <div>
+                      <p className="font-bold text-white">{name}</p>
+                      <p className="text-xs uppercase tracking-wide text-[var(--ff-muted)]">
+                        {ACCOUNT_TYPE_LABELS[account.type]}
+                      </p>
+                    </div>
+                    <p
+                      className="ff-display text-base tabular-nums text-[var(--ff-gold)] sm:text-lg"
+                      aria-hidden="true"
+                    >
+                      {balance}
+                    </p>
+                  </Link>
+                </li>
+              );
+            })}
+            {accounts.length === 0 ? (
+              <li className="px-5 py-8 text-[var(--ff-muted)]">
+                No accounts yet.
+              </li>
+            ) : null}
+          </ul>
+        </section>
       </main>
-    </div>
+    </AppShell>
   );
 }

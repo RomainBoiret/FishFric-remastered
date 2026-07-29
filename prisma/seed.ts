@@ -124,7 +124,7 @@ async function main() {
         accountId: checking.id,
         amountCents: 320_000,
         kind: "ADJUSTMENT",
-        description: "Payroll — Ocean Corp",
+        description: "Payroll - Ocean Corp",
         createdAt: daysAgo(12),
       },
       {

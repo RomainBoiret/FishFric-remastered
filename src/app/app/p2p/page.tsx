@@ -1,13 +1,21 @@
+import type { Metadata } from "next";
 import Link from "next/link";
 import { redirect } from "next/navigation";
+import { AppHeader, AppShell } from "@/components/brand/AppShell";
 import { ACCOUNT_TYPE_LABELS, formatDateTime } from "@/domain/labels";
 import { formatMoney } from "@/domain/money";
-import { logoutAction } from "@/features/auth/actions";
 import { IncomingP2PList } from "@/features/p2p/IncomingP2PList";
 import { FRIEND_CREDENTIALS } from "@/features/p2p/schemas";
 import { SendP2PForm } from "@/features/p2p/SendP2PForm";
 import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/db";
+
+export const metadata: Metadata = {
+  title: "P2P transfer",
+  description:
+    "Send a Fish&Fric P2P transfer locked behind a security question.",
+  alternates: { canonical: "/app/p2p" },
+};
 
 export default async function P2PPage() {
   const session = await auth();
@@ -60,112 +68,94 @@ export default async function P2PPage() {
   const isDemo = session.user.isDemo;
 
   return (
-    <div className="relative flex min-h-full flex-1 flex-col bg-[#04161f] text-[#e8f4f8]">
-      <div
-        aria-hidden
-        className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_80%_0%,#0a4a5c_0%,transparent_45%)]"
-      />
+    <AppShell>
+      <AppHeader />
 
-      <header className="relative z-10 mx-auto flex w-full max-w-3xl items-center justify-between px-6 py-6">
-        <Link
-          href="/app"
-          className="text-xl text-[#7ec8d8]"
-          style={{ fontFamily: "var(--font-display)" }}
-        >
-          Fish&Fric
-        </Link>
-        <form action={logoutAction}>
-          <button
-            type="submit"
-            className="text-sm text-[#9bb8c4] transition hover:text-[#e8f4f8]"
-          >
-            Sign out
-          </button>
-        </form>
-      </header>
-
-      <main className="relative z-10 mx-auto flex w-full max-w-3xl flex-1 flex-col gap-12 px-6 pb-16">
+      <main
+        id="main-content"
+        className="mx-auto flex w-full max-w-3xl flex-1 flex-col gap-8 px-4 py-8 sm:px-6"
+      >
         <div className="space-y-2">
           <Link
             href="/app"
-            className="inline-block text-sm text-[#9bb8c4] transition hover:text-[#7ec8d8]"
+            className="inline-block text-sm font-bold uppercase tracking-wide text-[var(--ff-muted)] hover:text-[var(--ff-gold)]"
           >
-            ← My accounts
+            <span aria-hidden="true">← </span>
+            My accounts
           </Link>
-          <h1
-            className="text-3xl"
-            style={{ fontFamily: "var(--font-display)" }}
-          >
-            P2P transfer
-          </h1>
-          <p className="max-w-lg text-[#9bb8c4]">
-            Send funds with a security question. The recipient must answer to
-            receive the money.
+          <h1 className="ff-display text-2xl">P2P transfer</h1>
+          <p className="max-w-lg text-sm text-[var(--ff-muted)]">
+            Send funds with a security question (bottle drop). The recipient
+            answers to claim the transfer.
           </p>
           {isDemo ? (
-            <p className="text-sm text-[#6a8894]">
+            <p className="text-sm text-[var(--ff-muted)]">
               Demo tip: send to{" "}
-              <span className="text-[#7ec8d8]">{FRIEND_CREDENTIALS.email}</span>,
-              then sign in with that account (same password) to accept.
+              <span className="font-bold text-[var(--ff-gold)]">
+                {FRIEND_CREDENTIALS.email}
+              </span>
+              , then sign in with that account (same password) to accept.
             </p>
           ) : null}
         </div>
 
-        <section className="grid gap-12 lg:grid-cols-2">
-          <div className="space-y-4">
-            <h2
-              className="text-xl"
-              style={{ fontFamily: "var(--font-display)" }}
-            >
+        <div className="grid gap-6 lg:grid-cols-2">
+          <section
+            className="ff-surface space-y-4 p-5 sm:p-6"
+            aria-labelledby="p2p-send-heading"
+          >
+            <h2 id="p2p-send-heading" className="ff-display text-lg">
               Send
             </h2>
             <SendP2PForm
               sources={sources}
               defaultRecipient={isDemo ? FRIEND_CREDENTIALS.email : undefined}
             />
-          </div>
+          </section>
 
-          <div className="space-y-8">
-            <div className="space-y-4">
-              <h2
-                className="text-xl"
-                style={{ fontFamily: "var(--font-display)" }}
-              >
-                To accept
+          <div className="space-y-6">
+            <section
+              className="ff-surface space-y-4 p-5 sm:p-6"
+              aria-labelledby="p2p-incoming-heading"
+            >
+              <h2 id="p2p-incoming-heading" className="ff-display text-lg">
+                Incoming
               </h2>
               <IncomingP2PList items={incomingItems} />
-            </div>
+            </section>
 
-            <div className="space-y-4">
-              <h2
-                className="text-xl"
-                style={{ fontFamily: "var(--font-display)" }}
-              >
+            <section
+              className="ff-surface space-y-4 p-5 sm:p-6"
+              aria-labelledby="p2p-pending-heading"
+            >
+              <h2 id="p2p-pending-heading" className="ff-display text-lg">
                 Pending sent
               </h2>
               {outgoing.length === 0 ? (
-                <p className="text-sm text-[#6a8894]">No pending sends.</p>
+                <p className="text-sm text-[var(--ff-muted)]" role="status">
+                  No pending sends.
+                </p>
               ) : (
-                <ul className="flex flex-col">
+                <ul className="m-0 flex list-none flex-col p-0">
                   {outgoing.map((p2p) => (
                     <li
                       key={p2p.id}
-                      className="border-b border-[#1e4a58] py-3 text-sm"
+                      className="border-b-2 border-black py-3 text-sm last:border-b-0"
                     >
-                      <p className="text-[#e8f4f8]">
+                      <p className="font-bold text-white">
                         {formatMoney(p2p.amountCents)} → {p2p.recipientEmail}
                       </p>
-                      <p className="text-[#6a8894]">
+                      <p className="text-[var(--ff-muted)]">
                         Expires {formatDateTime(p2p.expiresAt)}
                       </p>
                     </li>
                   ))}
                 </ul>
               )}
-            </div>
+            </section>
           </div>
-        </section>
+        </div>
       </main>
-    </div>
+    </AppShell>
   );
 }

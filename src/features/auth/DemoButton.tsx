@@ -8,23 +8,32 @@ import {
 
 const initial: AuthActionState = {};
 
-export function DemoButton({ className }: { className?: string }) {
+export function DemoButton({
+  className,
+  label = "Try the demo",
+}: {
+  className?: string;
+  label?: string;
+}) {
   const [state, formAction, pending] = useActionState(loginDemoAction, initial);
 
   return (
-    <form action={formAction} className="flex flex-col gap-2">
+    <form action={formAction} className="flex w-full flex-col gap-2">
       <button
         type="submit"
         disabled={pending}
-        className={
-          className ??
-          "rounded-md border border-[#7ec8d8] px-5 py-2.5 text-sm font-medium text-[#7ec8d8] transition hover:bg-[#0a2833] disabled:opacity-60"
-        }
+        className={className ?? "ff-btn ff-btn-ghost"}
+        aria-busy={pending}
+        aria-label={pending ? "Opening demo account" : label}
       >
-        {pending ? "Opening demo…" : "Try the demo"}
+        {pending ? "Loading…" : label}
+        {!pending ? <span aria-hidden="true"> ›</span> : null}
       </button>
       {state.error ? (
-        <p className="text-sm text-[#f0a8a8]" role="alert">
+        <p
+          className="text-sm normal-case tracking-normal text-[var(--ff-danger)]"
+          role="alert"
+        >
           {state.error}
         </p>
       ) : null}
