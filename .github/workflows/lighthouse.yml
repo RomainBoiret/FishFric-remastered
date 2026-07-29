@@ -28,10 +28,13 @@ jobs:
         uses: actions/checkout@v4
 
       # PRs are audited against their live Vercel preview deployment instead
-      # of a local build, since `next build` needs a seeded database.
+      # of a local build, since `next build` needs a seeded database. Vercel
+      # previews aren't guaranteed (integration may be off, or slow), so this
+      # never fails the job -- it just skips the audit for that run.
       - name: Wait for Vercel preview
         if: github.event_name == 'pull_request'
         id: preview
+        continue-on-error: true
         uses: patrickedqvist/wait-for-vercel-preview@v1.3.3
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
@@ -49,6 +52,7 @@ jobs:
       # Only public, unauthenticated routes: everything under /app requires a session.
       - name: Audit with Lighthouse
         id: lhci
+        if: steps.target.outputs.url != ''
         uses: treosh/lighthouse-ci-action@v12
         with:
           urls: |
@@ -60,7 +64,7 @@ jobs:
           temporaryPublicStorage: true
 
       - name: Publish summary
-        if: always()
+        if: always() && steps.target.outputs.url != ''
         uses: actions/github-script@v7
         env:
           LHCI_MANIFEST: ${{ steps.lhci.outputs.manifest }}
