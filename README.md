@@ -2,6 +2,8 @@
 
 Full-stack remaster of **Fish&Fric**, an ocean-themed online banking demo originally built as an ÉTS integrator project (2024). Rebuilt as a public portfolio app recruiters can explore live.
 
+> **Fictional data only.** Fish&Fric is a demo product for portfolio and hiring purposes. All users, balances, transfers, and transactions are fake. Do not enter real banking credentials or personal financial information.
+
 ## Stack
 
 - **Next.js** (App Router) + TypeScript + Tailwind CSS
@@ -15,6 +17,7 @@ Full-stack remaster of **Fish&Fric**, an ocean-themed online banking demo origin
 - Internal transfers (double-entry ledger writes)
 - P2P transfers with a security question / answer
 - Recruiter demo mode (`demo@fishfric.app`)
+- Ledger integrity check: `balanceCents` is a cache derived from `LedgerEntry`, and we prove it stays in sync
 
 ## Local setup
 
@@ -34,6 +37,20 @@ Open [http://localhost:3000](http://localhost:3000).
 |---------|-------|----------|
 | Demo | `demo@fishfric.app` | `Demo-FishFric-2026!` |
 | Friend (P2P) | `ami@fishfric.app` | same password |
+
+## Ledger integrity
+
+`BankAccount.balanceCents` is a denormalized cache. The source of truth is the immutable `LedgerEntry` stream (amounts in cents, signed).
+
+```bash
+# Pure domain tests (no database)
+npm test
+
+# Reconcile every account against Σ LedgerEntry (needs DATABASE_URL)
+npm run db:verify-ledger
+```
+
+The verify script exits non-zero if any cached balance drifts from the ledger sum.
 
 ## Deploy (Vercel)
 
@@ -60,10 +77,10 @@ Open [http://localhost:3000](http://localhost:3000).
 
 ```
 prisma/           # schema, migrations, seed
-scripts/          # migrate helpers for CI/Vercel
+scripts/          # migrate + ledger verify helpers
 src/
   app/            # Next.js routes
-  domain/         # pure business rules
+  domain/         # pure business rules (+ ledger integrity)
   features/       # auth, accounts, transfers, p2p
   lib/            # prisma, auth, shared utils
 ```
