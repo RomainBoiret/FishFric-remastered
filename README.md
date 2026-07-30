@@ -1,9 +1,5 @@
 # Fish&Fric (remastered)
 
-<p align="center">
-  <img src="./docs/assets/banner.png" alt="Fish&Fric - ocean banking demo remastered" width="960" />
-</p>
-
 Full-stack remaster of **Fish&Fric**, an ocean-themed online banking demo. Recruiters can explore it live: accounts, transfers, P2P, bill pay, and **HMAC-signed cheque deposits** on a real cent-based ledger.
 
 > **Fictional data only.** All users, balances, transfers, and transactions are fake. Do not enter real banking credentials or personal financial information.
@@ -27,13 +23,7 @@ Full-stack remaster of **Fish&Fric**, an ocean-themed online banking demo. Recru
 | Cheque deposit | Server-issued SVG, payee + HMAC + one-time clear |
 | Alerts & history | Capped inbox / histories: dismiss one or clear all |
 
-### Signed cheque (illustration)
-
-<p align="center">
-  <img src="./docs/assets/demo-cheque.png" alt="Sample Fish&Fric signed demo cheque for $120.00" width="720" />
-</p>
-
-Issue → download to your PC → deposit once. Re-uploading the same file is rejected.
+Issue a demo cheque, download it, deposit once. Re-uploading the same file is rejected. More context lives in the in-app story at `/docs`.
 
 ## Stack
 
@@ -102,7 +92,6 @@ The verify script exits non-zero if any cached balance drifts from the ledger su
 ## Project layout
 
 ```
-docs/assets/      # README illustrations (banner, sample cheque PNGs)
 prisma/           # schema, migrations, seed
 scripts/          # migrate + ledger verify helpers
 src/
