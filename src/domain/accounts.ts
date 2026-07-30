@@ -2,6 +2,12 @@ import { ACCOUNT_RULES } from "@/domain/money";
 
 export type AccountType = "CHECKING" | "SAVINGS" | "CREDIT";
 
+export const ACCOUNT_TYPES = [
+  "CHECKING",
+  "SAVINGS",
+  "CREDIT",
+] as const satisfies readonly AccountType[];
+
 export type OpenAccountInput = {
   type: AccountType;
   existingTypes: AccountType[];
@@ -39,6 +45,31 @@ export function canOpenAccount(input: OpenAccountInput): {
   }
 
   return { ok: false, reason: "Invalid account type." };
+}
+
+/** Account types the user is still allowed to open. */
+export function getOpenableAccountTypes(input: {
+  existingTypes: AccountType[];
+  savingsCount: number;
+}): AccountType[] {
+  return ACCOUNT_TYPES.filter(
+    (type) =>
+      canOpenAccount({
+        type,
+        existingTypes: input.existingTypes,
+        savingsCount: input.savingsCount,
+      }).ok,
+  );
+}
+
+export function defaultAccountLabel(
+  type: AccountType,
+  savingsCount = 0,
+): string {
+  if (type === "CHECKING") return "Checking account";
+  if (type === "CREDIT") return "Shark Card";
+  if (savingsCount <= 0) return "Savings account";
+  return `Savings account ${savingsCount + 1}`;
 }
 
 export function assertSufficientFunds(

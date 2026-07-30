@@ -44,7 +44,7 @@ export default async function AppHubPage() {
 
         <nav
           aria-label="Quick actions"
-          className="ff-in ff-in-1 grid gap-3 sm:grid-cols-2"
+          className="ff-in ff-in-1 grid gap-3 sm:grid-cols-3"
         >
           <Link href="/app/transfer" className="ff-btn w-full">
             New transfer
@@ -52,6 +52,10 @@ export default async function AppHubPage() {
           </Link>
           <Link href="/app/p2p" className="ff-btn ff-btn-ghost w-full">
             P2P transfer
+            <span aria-hidden="true"> ›</span>
+          </Link>
+          <Link href="/app/accounts/open" className="ff-btn ff-btn-ghost w-full">
+            Open account
             <span aria-hidden="true"> ›</span>
           </Link>
         </nav>

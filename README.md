@@ -13,7 +13,8 @@ Full-stack remaster of **Fish&Fric**, an ocean-themed online banking demo origin
 
 ## Features
 
-- Bank products: checking, savings, and “Carte requin” (credit)
+- Bank products: checking, savings, and Shark Card (credit)
+- Open additional accounts (rules-enforced: 1 checking, up to 3 savings, 1 Shark Card)
 - Internal transfers (double-entry ledger writes)
 - P2P transfers with a security question / answer
 - Recruiter demo mode (`demo@fishfric.app`)
