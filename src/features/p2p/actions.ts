@@ -10,6 +10,7 @@ import {
   p2pExpiresAt,
 } from "@/domain/p2p";
 import { parseAmountToCents } from "@/domain/transfers";
+import { createUserNotification } from "@/features/notifications/create";
 import {
   acceptP2PSchema,
   createP2PSchema,
@@ -111,13 +112,11 @@ export async function createP2PAction(
       });
 
       if (recipient) {
-        await tx.notification.create({
-          data: {
-            userId: recipient.id,
-            title: "P2P transfer received",
-            body: `${session.user.name ?? "Someone"} sent you ${formatMoney(amountCents)}.`,
-            p2pTransferId: p2p.id,
-          },
+        await createUserNotification(tx, {
+          userId: recipient.id,
+          title: "P2P transfer received",
+          body: `${session.user.name ?? "Someone"} sent you ${formatMoney(amountCents)}.`,
+          p2pTransferId: p2p.id,
         });
       }
     });
@@ -235,13 +234,11 @@ export async function acceptP2PAction(
         },
       });
 
-      await tx.notification.create({
-        data: {
-          userId: p2p.senderUserId,
-          title: "P2P accepted",
-          body: `${session.user.name ?? "The recipient"} accepted your ${formatMoney(p2p.amountCents)} transfer.`,
-          p2pTransferId: p2p.id,
-        },
+      await createUserNotification(tx, {
+        userId: p2p.senderUserId,
+        title: "P2P accepted",
+        body: `${session.user.name ?? "The recipient"} accepted your ${formatMoney(p2p.amountCents)} transfer.`,
+        p2pTransferId: p2p.id,
       });
     });
   } catch (error) {
@@ -313,13 +310,11 @@ export async function rejectP2PAction(
         },
       });
 
-      await tx.notification.create({
-        data: {
-          userId: p2p.senderUserId,
-          title: "P2P declined",
-          body: `Your ${formatMoney(p2p.amountCents)} transfer was declined. Funds returned.`,
-          p2pTransferId: p2p.id,
-        },
+      await createUserNotification(tx, {
+        userId: p2p.senderUserId,
+        title: "P2P declined",
+        body: `Your ${formatMoney(p2p.amountCents)} transfer was declined. Funds returned.`,
+        p2pTransferId: p2p.id,
       });
     });
   } catch (error) {

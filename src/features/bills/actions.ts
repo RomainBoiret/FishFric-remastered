@@ -8,6 +8,7 @@ import {
   billPaymentSchema,
   type BillPayActionState,
 } from "@/features/bills/schemas";
+import { createUserNotification } from "@/features/notifications/create";
 import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/db";
 
@@ -89,12 +90,10 @@ export async function payBillAction(
         data: { balanceCents: from.balanceCents - amountCents },
       });
 
-      await tx.notification.create({
-        data: {
-          userId,
-          title: "Bill payment sent",
-          body: `Paid ${formatMoney(amountCents)} to ${payeeName}.`,
-        },
+      await createUserNotification(tx, {
+        userId,
+        title: "Bill payment sent",
+        body: `Paid ${formatMoney(amountCents)} to ${payeeName}.`,
       });
     });
   } catch (error) {

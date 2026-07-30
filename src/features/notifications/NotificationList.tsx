@@ -5,7 +5,7 @@ import { useActionState } from "react";
 import { useActionToast } from "@/components/ui/toast";
 import { formatDateTime } from "@/domain/labels";
 import {
-  markAllNotificationsReadAction,
+  clearAllNotificationsAction,
   markNotificationReadAction,
   type NotificationActionState,
 } from "@/features/notifications/actions";
@@ -21,7 +21,7 @@ export type NotificationItem = {
 
 const initial: NotificationActionState = {};
 
-function MarkReadButton({ notificationId }: { notificationId: string }) {
+function DismissButton({ notificationId }: { notificationId: string }) {
   const [, formAction, pending] = useActionState(
     markNotificationReadAction,
     initial,
@@ -36,42 +36,40 @@ function MarkReadButton({ notificationId }: { notificationId: string }) {
         className="text-xs font-bold uppercase tracking-wide text-[var(--ff-gold)] hover:text-[var(--ff-gold-hi)] disabled:opacity-60"
         aria-busy={pending}
       >
-        {pending ? "…" : "Mark read"}
+        {pending ? "…" : "Dismiss"}
       </button>
     </form>
   );
 }
 
-function MarkAllReadButton({ hasUnread }: { hasUnread: boolean }) {
+function ClearAllButton({ hasItems }: { hasItems: boolean }) {
   const [state, formAction, pending] = useActionState(
-    markAllNotificationsReadAction,
+    clearAllNotificationsAction,
     initial,
   );
   useActionToast(state, pending);
 
-  if (!hasUnread) return null;
+  if (!hasItems) return null;
 
   return (
     <form action={formAction}>
       <button
         type="submit"
         disabled={pending}
-        className="ff-btn ff-btn-ghost px-3 py-2 text-xs"
+        className="ff-btn ff-btn-sm ff-btn-ghost"
         aria-busy={pending}
       >
-        {pending ? "Marking…" : "Mark all read"}
+        {pending ? "Clearing…" : "Clear all"}
       </button>
     </form>
   );
 }
 
 export function NotificationList({ items }: { items: NotificationItem[] }) {
-  const hasUnread = items.some((item) => item.readAt == null);
-
   if (items.length === 0) {
     return (
       <p className="text-sm text-[var(--ff-muted)]" role="status">
-        No notifications yet. P2P transfers will show up here.
+        No notifications yet. Activity alerts show up here (max 8 kept).
       </p>
     );
   }
@@ -79,7 +77,7 @@ export function NotificationList({ items }: { items: NotificationItem[] }) {
   return (
     <div className="flex flex-col gap-4">
       <div className="flex justify-end">
-        <MarkAllReadButton hasUnread={hasUnread} />
+        <ClearAllButton hasItems={items.length > 0} />
       </div>
 
       <ul className="ff-surface m-0 list-none overflow-hidden p-0">
@@ -128,7 +126,7 @@ export function NotificationList({ items }: { items: NotificationItem[] }) {
                     </p>
                   ) : null}
                 </div>
-                {unread ? <MarkReadButton notificationId={item.id} /> : null}
+                <DismissButton notificationId={item.id} />
               </article>
             </li>
           );

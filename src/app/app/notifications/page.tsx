@@ -4,6 +4,7 @@ import { redirect } from "next/navigation";
 import { AppHeader, AppShell } from "@/components/brand/AppShell";
 import { NotificationList } from "@/features/notifications/NotificationList";
 import { getNotificationsForUser } from "@/features/notifications/queries";
+import { NOTIFICATION_RULES } from "@/domain/notifications";
 import { auth } from "@/lib/auth";
 
 export const metadata: Metadata = {
@@ -47,7 +48,7 @@ export default async function NotificationsPage() {
           <h1 className="ff-display text-2xl">Notifications</h1>
           <p className="text-sm text-[var(--ff-muted)]">
             {unread === 0
-              ? "You are up to date."
+              ? `You are up to date. Inbox keeps at most ${NOTIFICATION_RULES.maxPerUser} alerts.`
               : unread === 1
                 ? "1 unread alert."
                 : `${unread} unread alerts.`}

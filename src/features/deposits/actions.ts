@@ -13,6 +13,7 @@ import {
   submitMobileDepositSchema,
   type DepositActionState,
 } from "@/features/deposits/schemas";
+import { createUserNotification } from "@/features/notifications/create";
 import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/db";
 
@@ -94,12 +95,10 @@ export async function submitMobileDepositAction(
         },
       });
 
-      await tx.notification.create({
-        data: {
-          userId,
-          title: "Mobile deposit pending",
-          body: `${formatMoney(amountCents)} is under review (${imageLabel}).`,
-        },
+      await createUserNotification(tx, {
+        userId,
+        title: "Mobile deposit pending",
+        body: `${formatMoney(amountCents)} is under review (${imageLabel}).`,
       });
 
       return deposit.id;
@@ -186,12 +185,10 @@ export async function creditMobileDepositAction(
         },
       });
 
-      await tx.notification.create({
-        data: {
-          userId,
-          title: "Mobile deposit credited",
-          body: `${formatMoney(deposit.amountCents)} is now available.`,
-        },
+      await createUserNotification(tx, {
+        userId,
+        title: "Mobile deposit credited",
+        body: `${formatMoney(deposit.amountCents)} is now available.`,
       });
     });
   } catch (error) {
