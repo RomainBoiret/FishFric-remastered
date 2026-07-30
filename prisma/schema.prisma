@@ -43,6 +43,12 @@ enum MobileDepositStatus {
   REJECTED
 }
 
+enum ChequeInstrumentStatus {
+  ISSUED
+  CLEARED
+  VOID
+}
+
 model User {
   id           String   @id @default(cuid())
   email        String   @unique
@@ -52,11 +58,12 @@ model User {
   isDemo       Boolean  @default(false)
   createdAt    DateTime @default(now())
 
-  accounts       BankAccount[]
-  notifications  Notification[]
-  sentP2P        P2PTransfer[]  @relation("P2PSender")
-  receivedP2P    P2PTransfer[]  @relation("P2PRecipient")
-  mobileDeposits MobileDeposit[]
+  accounts          BankAccount[]
+  notifications     Notification[]
+  sentP2P           P2PTransfer[]  @relation("P2PSender")
+  receivedP2P       P2PTransfer[]  @relation("P2PRecipient")
+  mobileDeposits    MobileDeposit[]
+  chequeInstruments ChequeInstrument[]
 }
 
 model BankAccount {
@@ -127,22 +134,44 @@ model P2PTransfer {
 }
 
 model MobileDeposit {
-  id          String              @id @default(cuid())
-  userId      String
-  user        User                @relation(fields: [userId], references: [id], onDelete: Cascade)
-  accountId   String
-  account     BankAccount         @relation(fields: [accountId], references: [id], onDelete: Cascade)
-  amountCents Int
-  status      MobileDepositStatus @default(PENDING)
+  id                 String              @id @default(cuid())
+  userId             String
+  user               User                @relation(fields: [userId], references: [id], onDelete: Cascade)
+  accountId          String
+  account            BankAccount         @relation(fields: [accountId], references: [id], onDelete: Cascade)
+  amountCents        Int
+  status             MobileDepositStatus @default(PENDING)
   /// Demo only: uploaded filename or sample cheque label (no binary stored)
-  imageLabel  String?
-  createdAt   DateTime            @default(now())
-  resolvedAt  DateTime?
+  imageLabel         String?
+  chequeInstrumentId String?             @unique
+  chequeInstrument   ChequeInstrument?   @relation(fields: [chequeInstrumentId], references: [id], onDelete: SetNull)
+  createdAt          DateTime            @default(now())
+  resolvedAt         DateTime?
 
   entries LedgerEntry[]
 
   @@index([userId, createdAt])
   @@index([accountId, status])
+}
+
+/// Demo anti-fraud cheque: unique, signed, payee-bound, one-shot clear.
+model ChequeInstrument {
+  id            String                 @id @default(cuid())
+  payeeUserId   String
+  payeeUser     User                   @relation(fields: [payeeUserId], references: [id], onDelete: Cascade)
+  amountCents   Int
+  payeeName     String
+  /// HMAC-SHA256 hex over id|amount|payee|exp
+  signature     String
+  status        ChequeInstrumentStatus @default(ISSUED)
+  expiresAt     DateTime
+  issuedAt      DateTime               @default(now())
+  clearedAt     DateTime?
+
+  deposit MobileDeposit?
+
+  @@index([payeeUserId, status])
+  @@index([status, expiresAt])
 }
 
 model Notification {

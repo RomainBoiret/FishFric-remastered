@@ -25,6 +25,7 @@ export default async function MobileDepositPage({ searchParams }: PageProps) {
   if (!session?.user) redirect("/login");
 
   const { to } = await searchParams;
+  const payeeName = session.user.name?.trim() || "Fish&Fric customer";
 
   const accounts = await prisma.bankAccount.findMany({
     where: { userId: session.user.id, status: "ACTIVE" },
@@ -42,7 +43,7 @@ export default async function MobileDepositPage({ searchParams }: PageProps) {
   const deposits = await prisma.mobileDeposit.findMany({
     where: { userId: session.user.id },
     orderBy: { createdAt: "desc" },
-    take: 12,
+    take: 3,
     include: {
       account: { select: { label: true, type: true } },
     },
@@ -65,7 +66,7 @@ export default async function MobileDepositPage({ searchParams }: PageProps) {
 
       <main
         id="main-content"
-        className="mx-auto flex w-full max-w-md flex-1 flex-col gap-8 px-4 py-8 sm:px-6"
+        className="mx-auto flex w-full max-w-3xl flex-1 flex-col gap-8 px-4 py-8 sm:px-6"
       >
         <div className="space-y-2">
           <Link
@@ -76,27 +77,35 @@ export default async function MobileDepositPage({ searchParams }: PageProps) {
             My accounts
           </Link>
           <h1 className="ff-display text-2xl">Mobile deposit</h1>
-          <p className="text-sm text-[var(--ff-muted)]">
-            Snap a cheque (or use the sample). Status goes{" "}
-            <span className="text-[var(--ff-ink)]">pending → credited</span>{" "}
-            with a <span className="text-[var(--ff-ink)]">MOBILE_DEPOSIT</span>{" "}
-            ledger entry. No OCR - demo only.
+          <p className="max-w-lg text-sm text-[var(--ff-muted)]">
+            Issue a signed demo cheque (saved on your PC) or upload a photo.
+            ID, payee, signature and one-time clear are checked, then{" "}
+            <span className="text-[var(--ff-ink)]">pending → credited</span>.
           </p>
         </div>
 
-        <section className="ff-surface p-5 sm:p-6" aria-label="Deposit form">
-          <MobileDepositForm
-            accounts={depositAccounts}
-            defaultAccountId={to}
-          />
-        </section>
+        <div className="grid gap-6 lg:grid-cols-2">
+          <section
+            className="ff-surface space-y-4 p-5 sm:p-6"
+            aria-labelledby="deposit-form-heading"
+          >
+            <h2 id="deposit-form-heading" className="ff-display text-lg">
+              New deposit
+            </h2>
+            <MobileDepositForm
+              accounts={depositAccounts}
+              defaultAccountId={to}
+              payeeName={payeeName}
+            />
+          </section>
 
-        <section className="space-y-3" aria-labelledby="deposit-history-heading">
-          <h2 id="deposit-history-heading" className="ff-display text-lg">
-            Recent deposits
-          </h2>
-          <DepositHistoryList items={history} />
-        </section>
+          <section
+            className="ff-surface space-y-4 p-5 sm:p-6"
+            aria-labelledby="deposit-history-heading"
+          >
+            <DepositHistoryList items={history} payeeName={payeeName} />
+          </section>
+        </div>
       </main>
     </AppShell>
   );

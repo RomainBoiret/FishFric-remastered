@@ -1,4 +1,5 @@
 import type { AccountType } from "@/domain/accounts";
+import { demoChequeFileName } from "@/domain/cheque-svg";
 
 export const MOBILE_DEPOSIT_RULES = {
   minAmountCents: 100, // $1.00
@@ -6,8 +7,12 @@ export const MOBILE_DEPOSIT_RULES = {
   /** Client-side simulated review delay before credit */
   reviewDelayMs: 1800,
   maxImageBytes: 2 * 1024 * 1024,
-  allowedImageTypes: ["image/jpeg", "image/png", "image/webp"] as const,
-  sampleImageLabel: "sample-cheque.png",
+  allowedImageTypes: [
+    "image/jpeg",
+    "image/png",
+    "image/webp",
+    "image/svg+xml",
+  ] as const,
 } as const;
 
 export type DepositAccount = {
@@ -46,13 +51,59 @@ export function validateMobileDeposit(input: {
   return { ok: true };
 }
 
+/** Generated / uploaded Fish&Fric cheques: face amount must match deposit. */
+export function validateChequeFaceMatchesDeposit(input: {
+  amountCents: number;
+  faceAmountCents: number;
+}): { ok: true } | { ok: false; reason: string } {
+  if (input.amountCents !== input.faceAmountCents) {
+    return {
+      ok: false,
+      reason: `Cheque face is $${(input.faceAmountCents / 100).toFixed(2)} but deposit amount is $${(input.amountCents / 100).toFixed(2)}.`,
+    };
+  }
+  return { ok: true };
+}
+
+/** Generated cheques: face amount must match the submitted deposit amount. */
+export function validateGeneratedChequeAmount(input: {
+  amountCents: number;
+  chequeAmountCents: number;
+  chequeFileName: string;
+  chequeId?: string;
+}): { ok: true } | { ok: false; reason: string } {
+  const face = validateChequeFaceMatchesDeposit({
+    amountCents: input.amountCents,
+    faceAmountCents: input.chequeAmountCents,
+  });
+  if (!face.ok) {
+    return {
+      ok: false,
+      reason: `${face.reason} Re-issue / re-download the cheque.`,
+    };
+  }
+
+  const expectedName = demoChequeFileName(
+    input.amountCents,
+    input.chequeId,
+  );
+  if (input.chequeFileName !== expectedName) {
+    return {
+      ok: false,
+      reason: "Cheque file does not match the deposit amount.",
+    };
+  }
+
+  return { ok: true };
+}
+
 export function isAllowedDepositImage(file: {
   type: string;
   size: number;
 }): { ok: true } | { ok: false; reason: string } {
   const allowed = MOBILE_DEPOSIT_RULES.allowedImageTypes as readonly string[];
   if (!allowed.includes(file.type)) {
-    return { ok: false, reason: "Use a JPG, PNG, or WebP image." };
+    return { ok: false, reason: "Use a JPG, PNG, WebP, or SVG image." };
   }
   if (file.size > MOBILE_DEPOSIT_RULES.maxImageBytes) {
     return { ok: false, reason: "Image must be 2 MB or smaller." };

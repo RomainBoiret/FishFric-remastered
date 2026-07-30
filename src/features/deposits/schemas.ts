@@ -3,10 +3,14 @@ import { z } from "zod";
 export const submitMobileDepositSchema = z.object({
   accountId: z.string().min(1),
   amount: z.string().min(1, "Amount required"),
-  useSampleCheck: z
-    .union([z.literal("on"), z.literal("true"), z.literal("1"), z.null()])
-    .optional()
-    .transform((v) => v === "on" || v === "true" || v === "1"),
+  depositMode: z.enum(["generated", "upload"]),
+  chequeAmount: z.string().optional(),
+  chequeFileName: z.string().optional(),
+  chequeId: z.string().optional(),
+});
+
+export const issueDemoChequeSchema = z.object({
+  amount: z.string().min(1, "Amount required"),
 });
 
 export const creditMobileDepositSchema = z.object({
@@ -19,4 +23,13 @@ export type DepositActionState = {
   depositId?: string;
   /** Hint for the client to run the simulated review */
   pendingReview?: boolean;
+};
+
+export type IssueChequeActionState = {
+  error?: string;
+  success?: string;
+  chequeId?: string;
+  amountCents?: number;
+  fileName?: string;
+  svg?: string;
 };

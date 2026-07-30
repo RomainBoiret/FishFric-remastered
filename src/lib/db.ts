@@ -18,16 +18,25 @@ function createPrismaClient() {
   return new PrismaClient({ adapter });
 }
 
-function hasMobileDeposit(client: PrismaClient): boolean {
-  return typeof (client as { mobileDeposit?: unknown }).mobileDeposit !== "undefined";
+function clientHasModel(
+  client: PrismaClient,
+  model: "mobileDeposit" | "chequeInstrument",
+): boolean {
+  return (
+    typeof (client as unknown as Record<string, unknown>)[model] !== "undefined"
+  );
 }
 
 function getPrismaClient(): PrismaClient {
   const cached = globalForPrisma.prisma;
 
   // After `prisma generate`, Turbopack / HMR can keep a stale global client
-  // that predates new models (e.g. mobileDeposit).
-  if (cached && hasMobileDeposit(cached)) {
+  // that predates new models (e.g. mobileDeposit, chequeInstrument).
+  if (
+    cached &&
+    clientHasModel(cached, "mobileDeposit") &&
+    clientHasModel(cached, "chequeInstrument")
+  ) {
     return cached;
   }
 

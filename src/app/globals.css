@@ -278,6 +278,24 @@ html {
     0 3px 0 #071218;
 }
 
+.ff-scroll {
+  scrollbar-width: thin;
+  scrollbar-color: var(--ff-gold-edge) transparent;
+}
+
+.ff-scroll::-webkit-scrollbar {
+  width: 8px;
+}
+
+.ff-scroll::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.ff-scroll::-webkit-scrollbar-thumb {
+  background: var(--ff-gold-edge);
+  border: 2px solid transparent;
+}
+
 .ff-surface-step {
   clip-path: polygon(
     0 12px,
