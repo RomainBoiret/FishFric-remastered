@@ -29,6 +29,8 @@ import {
   type IssueChequeActionState,
 } from "@/features/deposits/schemas";
 import { createUserNotification } from "@/features/notifications/create";
+import { pruneUserMobileDeposits } from "@/features/deposits/history";
+import { pruneAccountLedgerHistory } from "@/features/accounts/history";
 import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/db";
 
@@ -74,6 +76,8 @@ async function rejectMobileDeposit(input: {
       resolvedAt: new Date(),
     },
   });
+
+  await pruneUserMobileDeposits(prisma, input.userId);
 
   revalidateDeposits(account.id);
   return { error: input.reason };
@@ -398,6 +402,8 @@ export async function submitMobileDepositAction(
         body: `${formatMoney(amountCents)} is under review (${imageLabel}).`,
       });
 
+      await pruneUserMobileDeposits(tx, userId);
+
       return deposit.id;
     });
   } catch (error) {
@@ -475,6 +481,8 @@ export async function creditMobileDepositAction(
         },
       });
 
+      await pruneAccountLedgerHistory(tx, account.id);
+
       await tx.bankAccount.update({
         where: { id: account.id },
         data: { balanceCents: account.balanceCents + deposit.amountCents },
@@ -512,7 +520,31 @@ export type ClearDepositsActionState = {
   success?: string;
 };
 
-/** Removes deposit history rows only - does not reverse ledger credits. */
+/** Dismiss one history row (delete - keeps the list from growing). */
+export async function dismissMobileDepositAction(
+  _prev: ClearDepositsActionState,
+  formData: FormData,
+): Promise<ClearDepositsActionState> {
+  const session = await auth();
+  if (!session?.user) {
+    return { error: "Session expired. Please sign in again." };
+  }
+
+  const id = String(formData.get("depositId") ?? "");
+  if (!id) return { error: "Invalid deposit." };
+
+  await prisma.mobileDeposit.deleteMany({
+    where: {
+      id,
+      userId: session.user.id,
+    },
+  });
+
+  revalidateDeposits();
+  return {};
+}
+
+/** Clear the whole deposit history for this user (ledger balances stay). */
 export async function clearMobileDepositHistoryAction(
   _prev: ClearDepositsActionState,
   _formData: FormData,
@@ -536,7 +568,7 @@ export async function clearMobileDepositHistoryAction(
   return {
     success:
       result.count === 1
-        ? "1 deposit cleared from history."
-        : `${result.count} deposits cleared from history.`,
+        ? "1 deposit cleared."
+        : `${result.count} deposits cleared.`,
   };
 }

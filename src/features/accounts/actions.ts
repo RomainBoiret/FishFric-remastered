@@ -96,3 +96,96 @@ export async function openAccountAction(
     accountId,
   };
 }
+
+export type AccountHistoryActionState = {
+  error?: string;
+  success?: string;
+};
+
+function revalidateAccountHistory(accountId: string) {
+  revalidatePath("/app");
+  revalidatePath(`/app/accounts/${accountId}`);
+  revalidatePath("/app", "layout");
+}
+
+/** Dismiss one history row (soft-hide - ledger balance stays). */
+export async function dismissLedgerEntryAction(
+  _prev: AccountHistoryActionState,
+  formData: FormData,
+): Promise<AccountHistoryActionState> {
+  const session = await auth();
+  if (!session?.user) {
+    return { error: "Session expired. Please sign in again." };
+  }
+
+  const entryId = String(formData.get("entryId") ?? "");
+  const accountId = String(formData.get("accountId") ?? "");
+  if (!entryId || !accountId) return { error: "Invalid entry." };
+
+  const account = await prisma.bankAccount.findFirst({
+    where: {
+      id: accountId,
+      userId: session.user.id,
+      status: "ACTIVE",
+    },
+    select: { id: true },
+  });
+  if (!account) return { error: "Account not found." };
+
+  await prisma.ledgerEntry.updateMany({
+    where: {
+      id: entryId,
+      accountId: account.id,
+      hiddenAt: null,
+    },
+    data: { hiddenAt: new Date() },
+  });
+
+  revalidateAccountHistory(account.id);
+  return {};
+}
+
+/** Clear the whole visible history for this account (soft-hide only). */
+export async function clearAccountHistoryAction(
+  _prev: AccountHistoryActionState,
+  formData: FormData,
+): Promise<AccountHistoryActionState> {
+  const session = await auth();
+  if (!session?.user) {
+    return { error: "Session expired. Please sign in again." };
+  }
+
+  const accountId = String(formData.get("accountId") ?? "");
+  if (!accountId) return { error: "Invalid account." };
+
+  const account = await prisma.bankAccount.findFirst({
+    where: {
+      id: accountId,
+      userId: session.user.id,
+      status: "ACTIVE",
+    },
+    select: { id: true },
+  });
+  if (!account) return { error: "Account not found." };
+
+  const result = await prisma.ledgerEntry.updateMany({
+    where: {
+      accountId: account.id,
+      hiddenAt: null,
+    },
+    data: { hiddenAt: new Date() },
+  });
+
+  revalidateAccountHistory(account.id);
+
+  if (result.count === 0) {
+    return { success: "History already empty." };
+  }
+
+  return {
+    success:
+      result.count === 1
+        ? "1 transaction cleared."
+        : `${result.count} transactions cleared.`,
+  };
+}

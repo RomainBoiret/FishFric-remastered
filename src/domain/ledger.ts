@@ -3,6 +3,14 @@
  * `BankAccount.balanceCents` is a denormalized cache of Σ LedgerEntry.amountCents.
  */
 
+/** Same retention model as notifications/deposits - hide overflow, never delete. */
+export const ACCOUNT_HISTORY_RULES = {
+  /** Max visible history rows per account (oldest auto-hidden). */
+  maxVisiblePerAccount: 10,
+  /** How many to show on the account page. */
+  listTake: 10,
+} as const;
+
 export function sumLedgerCents(
   entries: ReadonlyArray<{ amountCents: number }>,
 ): number {

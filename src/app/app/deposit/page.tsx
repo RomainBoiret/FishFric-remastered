@@ -2,10 +2,11 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import { AppHeader, AppShell } from "@/components/brand/AppShell";
-import { canDepositTo } from "@/domain/deposits";
+import { canDepositTo, DEPOSIT_HISTORY_RULES } from "@/domain/deposits";
 import { ACCOUNT_TYPE_LABELS } from "@/domain/labels";
 import { DepositHistoryList } from "@/features/deposits/DepositHistoryList";
 import { MobileDepositForm } from "@/features/deposits/MobileDepositForm";
+import { getMobileDepositsForUser } from "@/features/deposits/queries";
 import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/db";
 
@@ -40,14 +41,7 @@ export default async function MobileDepositPage({ searchParams }: PageProps) {
       label: account.label ?? ACCOUNT_TYPE_LABELS[account.type],
     }));
 
-  const deposits = await prisma.mobileDeposit.findMany({
-    where: { userId: session.user.id },
-    orderBy: { createdAt: "desc" },
-    take: 3,
-    include: {
-      account: { select: { label: true, type: true } },
-    },
-  });
+  const deposits = await getMobileDepositsForUser(session.user.id);
 
   const history = deposits.map((deposit) => ({
     id: deposit.id,
@@ -81,6 +75,7 @@ export default async function MobileDepositPage({ searchParams }: PageProps) {
             Issue a signed demo cheque (saved on your PC) or upload a photo.
             ID, payee, signature and one-time clear are checked, then{" "}
             <span className="text-[var(--ff-ink)]">pending → credited</span>.
+            History keeps at most {DEPOSIT_HISTORY_RULES.maxPerUser} deposits.
           </p>
         </div>
 

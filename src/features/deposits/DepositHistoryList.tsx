@@ -8,9 +8,11 @@ import {
   chequeSvgDataUri,
   isGeneratedChequeLabel,
 } from "@/domain/cheque-svg";
+import { DEPOSIT_HISTORY_RULES } from "@/domain/deposits";
 import { formatMoney } from "@/domain/money";
 import {
   clearMobileDepositHistoryAction,
+  dismissMobileDepositAction,
   type ClearDepositsActionState,
 } from "@/features/deposits/actions";
 
@@ -30,7 +32,7 @@ const STATUS_LABEL: Record<DepositHistoryItem["status"], string> = {
   REJECTED: "Rejected",
 };
 
-const clearInitial: ClearDepositsActionState = {};
+const initial: ClearDepositsActionState = {};
 
 function chequeCaption(imageLabel: string | null): string {
   if (!imageLabel) return "Cheque";
@@ -55,10 +57,32 @@ function formatDepositDate(iso: string): string {
   }).format(new Date(iso));
 }
 
-function ClearHistoryButton({ hasItems }: { hasItems: boolean }) {
+function DismissButton({ depositId }: { depositId: string }) {
+  const [, formAction, pending] = useActionState(
+    dismissMobileDepositAction,
+    initial,
+  );
+
+  return (
+    <form action={formAction}>
+      <input type="hidden" name="depositId" value={depositId} />
+      <button
+        type="submit"
+        disabled={pending}
+        className="text-xs font-bold uppercase tracking-wide text-[var(--ff-gold)] hover:text-[var(--ff-gold-hi)] disabled:opacity-60"
+        aria-busy={pending}
+        title="Removes this history row only. Ledger balances stay."
+      >
+        {pending ? "…" : "Dismiss"}
+      </button>
+    </form>
+  );
+}
+
+function ClearAllButton({ hasItems }: { hasItems: boolean }) {
   const [state, formAction, pending] = useActionState(
     clearMobileDepositHistoryAction,
-    clearInitial,
+    initial,
   );
   useActionToast(state, pending);
 
@@ -69,11 +93,11 @@ function ClearHistoryButton({ hasItems }: { hasItems: boolean }) {
       <button
         type="submit"
         disabled={pending}
-        className="text-xs font-bold uppercase tracking-wide text-[var(--ff-muted)] underline-offset-4 hover:text-[var(--ff-gold)] hover:underline disabled:opacity-60"
+        className="ff-btn ff-btn-sm ff-btn-ghost"
         aria-busy={pending}
         title="Removes history rows only. Ledger balances stay."
       >
-        {pending ? "Clearing…" : "Clear"}
+        {pending ? "Clearing…" : "Clear all"}
       </button>
     </form>
   );
@@ -109,25 +133,21 @@ export function DepositHistoryList({
         <h2 id="deposit-history-heading" className="ff-display text-lg">
           Recent deposits
         </h2>
-        <div className="border-2 border-dashed border-black/50 bg-black/15 px-4 py-8 text-center">
-          <p className="text-sm text-[var(--ff-muted)]" role="status">
-            No deposits yet.
-          </p>
-          <p className="mt-1 text-xs text-[var(--ff-muted)]">
-            Submitted cheques will show up here.
-          </p>
-        </div>
+        <p className="text-sm text-[var(--ff-muted)]" role="status">
+          No deposits yet. Submitted cheques show up here (max{" "}
+          {DEPOSIT_HISTORY_RULES.maxPerUser} kept).
+        </p>
       </div>
     );
   }
 
   return (
     <div className="flex flex-col gap-4">
-      <div className="flex items-baseline justify-between gap-3">
+      <div className="flex items-center justify-between gap-3">
         <h2 id="deposit-history-heading" className="ff-display text-lg">
           Recent deposits
         </h2>
-        <ClearHistoryButton hasItems />
+        <ClearAllButton hasItems />
       </div>
 
       <ul className="m-0 list-none space-y-3 p-0">
@@ -181,7 +201,10 @@ export function DepositHistoryList({
                         {item.accountLabel}
                       </p>
                     </div>
-                    <StatusPill status={item.status} />
+                    <div className="flex flex-col items-end gap-2">
+                      <StatusPill status={item.status} />
+                      <DismissButton depositId={item.id} />
+                    </div>
                   </div>
 
                   <div className="flex flex-wrap items-center gap-x-2 gap-y-1 text-xs text-[var(--ff-muted)]">

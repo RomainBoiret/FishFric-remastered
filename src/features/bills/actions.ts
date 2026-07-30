@@ -9,6 +9,7 @@ import {
   type BillPayActionState,
 } from "@/features/bills/schemas";
 import { createUserNotification } from "@/features/notifications/create";
+import { pruneAccountLedgerHistory } from "@/features/accounts/history";
 import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/db";
 
@@ -84,6 +85,8 @@ export async function payBillAction(
           description,
         },
       });
+
+      await pruneAccountLedgerHistory(tx, from.id);
 
       await tx.bankAccount.update({
         where: { id: from.id },

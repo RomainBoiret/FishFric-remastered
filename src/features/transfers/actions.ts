@@ -6,12 +6,13 @@ import {
   parseAmountToCents,
   validateInternalTransfer,
 } from "@/domain/transfers";
+import { auth } from "@/lib/auth";
+import { prisma } from "@/lib/db";
+import { pruneAccountLedgerHistory } from "@/features/accounts/history";
 import {
   internalTransferSchema,
   type TransferActionState,
 } from "@/features/transfers/schemas";
-import { auth } from "@/lib/auth";
-import { prisma } from "@/lib/db";
 
 export async function transferInternalAction(
   _prev: TransferActionState,
@@ -103,6 +104,9 @@ export async function transferInternalAction(
           transferGroupId,
         },
       });
+
+      await pruneAccountLedgerHistory(tx, from.id);
+      await pruneAccountLedgerHistory(tx, to.id);
 
       await tx.bankAccount.update({
         where: { id: from.id },

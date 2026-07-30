@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { useActionState } from "react";
 import { useActionToast } from "@/components/ui/toast";
+import { NOTIFICATION_RULES } from "@/domain/notifications";
 import { formatDateTime } from "@/domain/labels";
 import {
   clearAllNotificationsAction,
@@ -69,7 +70,8 @@ export function NotificationList({ items }: { items: NotificationItem[] }) {
   if (items.length === 0) {
     return (
       <p className="text-sm text-[var(--ff-muted)]" role="status">
-        No notifications yet. Activity alerts show up here (max 8 kept).
+        No notifications yet. Activity alerts show up here (max{" "}
+        {NOTIFICATION_RULES.maxPerUser} kept).
       </p>
     );
   }

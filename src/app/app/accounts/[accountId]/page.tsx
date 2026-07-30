@@ -2,12 +2,10 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import { AppHeader, AppShell } from "@/components/brand/AppShell";
-import {
-  ACCOUNT_TYPE_LABELS,
-  ENTRY_KIND_LABELS,
-  formatDateTime,
-} from "@/domain/labels";
+import { ACCOUNT_TYPE_LABELS } from "@/domain/labels";
+import { ACCOUNT_HISTORY_RULES } from "@/domain/ledger";
 import { formatMoney } from "@/domain/money";
+import { AccountHistoryList } from "@/features/accounts/AccountHistoryList";
 import {
   getAccountLedger,
   getOwnedAccount,
@@ -57,6 +55,14 @@ export default async function AccountDetailPage({ params }: PageProps) {
   const entries = await getAccountLedger(account.id);
   const title = account.label ?? ACCOUNT_TYPE_LABELS[account.type];
   const balance = formatMoney(account.balanceCents);
+
+  const history = entries.map((entry) => ({
+    id: entry.id,
+    amountCents: entry.amountCents,
+    kind: entry.kind,
+    description: entry.description,
+    createdAt: entry.createdAt.toISOString(),
+  }));
 
   return (
     <AppShell>
@@ -126,53 +132,12 @@ export default async function AccountDetailPage({ params }: PageProps) {
           </section>
         </div>
 
-        <section aria-labelledby="history-heading" className="space-y-4">
-          <h2 id="history-heading" className="ff-display text-lg">
-            History
-          </h2>
-
-          {entries.length === 0 ? (
-            <p
-              className="ff-surface py-6 text-center text-[var(--ff-muted)]"
-              role="status"
-            >
-              Still waters - no transactions yet.
-            </p>
-          ) : (
-            <ul className="ff-surface m-0 flex list-none flex-col overflow-hidden p-0">
-              {entries.map((entry) => {
-                const credit = entry.amountCents > 0;
-                const amount = formatMoney(entry.amountCents);
-                return (
-                  <li
-                    key={entry.id}
-                    className="flex items-start justify-between gap-4 border-b-2 border-black px-4 py-4 last:border-b-0 sm:px-5"
-                  >
-                    <div className="min-w-0 space-y-1">
-                      <p className="truncate font-bold text-white">
-                        {entry.description}
-                      </p>
-                      <p className="text-xs text-[var(--ff-muted)]">
-                        {ENTRY_KIND_LABELS[entry.kind]} ·{" "}
-                        <time dateTime={entry.createdAt.toISOString()}>
-                          {formatDateTime(entry.createdAt)}
-                        </time>
-                      </p>
-                    </div>
-                    <p
-                      className={`ff-display shrink-0 text-sm tabular-nums sm:text-base ${
-                        credit ? "text-[var(--ff-ok)]" : "text-white"
-                      }`}
-                      aria-label={`${credit ? "Credit" : "Debit"} ${amount}`}
-                    >
-                      {credit ? "+" : ""}
-                      {amount}
-                    </p>
-                  </li>
-                );
-              })}
-            </ul>
-          )}
+        <section aria-labelledby="history-heading" className="space-y-2">
+          <p className="text-sm text-[var(--ff-muted)]">
+            Keeps at most {ACCOUNT_HISTORY_RULES.maxVisiblePerAccount} visible
+            rows. Clearing hides them only - balances stay.
+          </p>
+          <AccountHistoryList accountId={account.id} items={history} />
         </section>
       </main>
     </AppShell>

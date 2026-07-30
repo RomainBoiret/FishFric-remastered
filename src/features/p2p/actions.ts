@@ -11,6 +11,7 @@ import {
 } from "@/domain/p2p";
 import { parseAmountToCents } from "@/domain/transfers";
 import { createUserNotification } from "@/features/notifications/create";
+import { pruneAccountLedgerHistory } from "@/features/accounts/history";
 import {
   acceptP2PSchema,
   createP2PSchema,
@@ -105,6 +106,8 @@ export async function createP2PAction(
           p2pTransferId: p2p.id,
         },
       });
+
+      await pruneAccountLedgerHistory(tx, source.id);
 
       await tx.bankAccount.update({
         where: { id: source.id },
@@ -209,6 +212,8 @@ export async function acceptP2PAction(
         },
       });
 
+      await pruneAccountLedgerHistory(tx, checking.id);
+
       await tx.bankAccount.update({
         where: { id: checking.id },
         data: { balanceCents: checking.balanceCents + p2p.amountCents },
@@ -295,6 +300,8 @@ export async function rejectP2PAction(
           p2pTransferId: p2p.id,
         },
       });
+
+      await pruneAccountLedgerHistory(tx, source.id);
 
       await tx.bankAccount.update({
         where: { id: source.id },

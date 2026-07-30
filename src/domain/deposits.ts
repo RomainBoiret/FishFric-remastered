@@ -15,6 +15,14 @@ export const MOBILE_DEPOSIT_RULES = {
   ] as const,
 } as const;
 
+/** Same retention model as notifications: capped list, prune oldest. */
+export const DEPOSIT_HISTORY_RULES = {
+  /** Hard cap of stored deposit history rows per user (oldest dropped). */
+  maxPerUser: 8,
+  /** How many to show in the deposit history panel. */
+  listTake: 8,
+} as const;
+
 export type DepositAccount = {
   id: string;
   type: AccountType;

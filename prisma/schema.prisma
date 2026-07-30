@@ -103,8 +103,11 @@ model LedgerEntry {
   mobileDepositId String?
   mobileDeposit   MobileDeposit? @relation(fields: [mobileDepositId], references: [id], onDelete: SetNull)
   createdAt       DateTime    @default(now())
+  /// Soft-hide from account history UI (ledger + balances stay intact)
+  hiddenAt        DateTime?
 
   @@index([accountId, createdAt])
+  @@index([accountId, hiddenAt, createdAt])
   @@index([transferGroupId])
   @@index([mobileDepositId])
 }

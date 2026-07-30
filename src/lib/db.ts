@@ -2,8 +2,15 @@ import { PrismaPg } from "@prisma/adapter-pg";
 import { PrismaClient } from "@/generated/prisma/client";
 import { withPgSslCompat } from "@/lib/pg-url";
 
+/**
+ * Bump when the Prisma schema gains models or fields so HMR drops a stale
+ * global client. After bumping, restart `next dev` if validation errors persist.
+ */
+const PRISMA_SCHEMA_REV = 2;
+
 const globalForPrisma = globalThis as unknown as {
   prisma: PrismaClient | undefined;
+  prismaRev: number | undefined;
 };
 
 function createPrismaClient() {
@@ -31,9 +38,10 @@ function getPrismaClient(): PrismaClient {
   const cached = globalForPrisma.prisma;
 
   // After `prisma generate`, Turbopack / HMR can keep a stale global client
-  // that predates new models (e.g. mobileDeposit, chequeInstrument).
+  // that predates new models or fields (e.g. hiddenAt on LedgerEntry).
   if (
     cached &&
+    globalForPrisma.prismaRev === PRISMA_SCHEMA_REV &&
     clientHasModel(cached, "mobileDeposit") &&
     clientHasModel(cached, "chequeInstrument")
   ) {
@@ -47,6 +55,7 @@ function getPrismaClient(): PrismaClient {
   const client = createPrismaClient();
   if (process.env.NODE_ENV !== "production") {
     globalForPrisma.prisma = client;
+    globalForPrisma.prismaRev = PRISMA_SCHEMA_REV;
   }
   return client;
 }
