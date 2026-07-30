@@ -46,42 +46,43 @@ export default async function AppHubPage() {
           </p>
         </div>
 
-        <nav
-          aria-label="Quick actions"
-          className="ff-in ff-in-1 grid gap-2 sm:grid-cols-2 lg:grid-cols-3"
-        >
-          <Link href="/app/transfer" className="ff-btn ff-btn-sm w-full">
-            New transfer
-            <span aria-hidden="true"> ›</span>
-          </Link>
-          <Link
-            href="/app/p2p"
-            className="ff-btn ff-btn-sm ff-btn-prismarine w-full"
-          >
-            P2P transfer
-            <span aria-hidden="true"> ›</span>
-          </Link>
-          <Link
-            href="/app/bills"
-            className="ff-btn ff-btn-sm ff-btn-stone w-full"
-          >
-            Pay a bill
-            <span aria-hidden="true"> ›</span>
-          </Link>
-          <Link
-            href="/app/deposit"
-            className="ff-btn ff-btn-sm ff-btn-ghost w-full"
-          >
-            Mobile deposit
-            <span aria-hidden="true"> ›</span>
-          </Link>
-          <Link
-            href="/app/accounts/open"
-            className="ff-btn ff-btn-sm ff-btn-sand w-full"
-          >
-            Open account
-            <span aria-hidden="true"> ›</span>
-          </Link>
+        <nav aria-label="Quick actions" className="ff-in ff-in-1 space-y-2">
+          <div className="grid gap-2 sm:grid-cols-3">
+            <Link href="/app/transfer" className="ff-btn ff-btn-sm w-full">
+              Between accounts
+              <span aria-hidden="true"> ›</span>
+            </Link>
+            <Link
+              href="/app/p2p"
+              className="ff-btn ff-btn-sm ff-btn-prismarine w-full"
+            >
+              Send to a friend
+              <span aria-hidden="true"> ›</span>
+            </Link>
+            <Link
+              href="/app/bills"
+              className="ff-btn ff-btn-sm ff-btn-stone w-full"
+            >
+              Pay bills
+              <span aria-hidden="true"> ›</span>
+            </Link>
+          </div>
+          <div className="grid gap-2 sm:grid-cols-2">
+            <Link
+              href="/app/deposit"
+              className="ff-btn ff-btn-sm ff-btn-danger w-full"
+            >
+              Deposit a cheque
+              <span aria-hidden="true"> ›</span>
+            </Link>
+            <Link
+              href="/app/accounts/open"
+              className="ff-btn ff-btn-sm ff-btn-sand w-full"
+            >
+              Open an account
+              <span aria-hidden="true"> ›</span>
+            </Link>
+          </div>
         </nav>
 
         <section

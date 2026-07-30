@@ -256,13 +256,29 @@ html {
   filter: none;
 }
 
+.ff-btn-danger {
+  background: var(--ff-danger);
+  border-color: #8a2424;
+  color: #fff;
+  box-shadow:
+    inset 0 3px 0 rgba(255, 255, 255, 0.16),
+    inset 0 -4px 0 rgba(0, 0, 0, 0.28),
+    0 3px 0 #071218;
+}
+
+.ff-btn-danger:hover:not(:disabled) {
+  background: #d44a4a;
+  filter: none;
+}
+
 .ff-btn-sm.ff-btn-ghost {
   box-shadow: none;
 }
 
 .ff-btn-sm.ff-btn-prismarine,
 .ff-btn-sm.ff-btn-stone,
-.ff-btn-sm.ff-btn-sand {
+.ff-btn-sm.ff-btn-sand,
+.ff-btn-sm.ff-btn-danger {
   box-shadow:
     inset 0 2px 0 rgba(255, 255, 255, 0.18),
     inset 0 -3px 0 rgba(0, 0, 0, 0.26),
@@ -271,7 +287,8 @@ html {
 
 .ff-btn-sm.ff-btn-prismarine:hover:not(:disabled),
 .ff-btn-sm.ff-btn-stone:hover:not(:disabled),
-.ff-btn-sm.ff-btn-sand:hover:not(:disabled) {
+.ff-btn-sm.ff-btn-sand:hover:not(:disabled),
+.ff-btn-sm.ff-btn-danger:hover:not(:disabled) {
   box-shadow:
     inset 0 2px 0 rgba(255, 255, 255, 0.22),
     inset 0 -3px 0 rgba(0, 0, 0, 0.22),
