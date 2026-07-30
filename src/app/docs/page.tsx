@@ -1,10 +1,9 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { Atmosphere } from "@/components/brand/Atmosphere";
-import { BrandMark } from "@/components/brand/BrandMark";
-import { GitHubHeaderLink } from "@/components/brand/GitHubLink";
 import { PixelFish } from "@/components/brand/PixelFish";
 import { SiteFooter } from "@/components/brand/SiteFooter";
+import { SiteHeader } from "@/components/brand/SiteHeader";
 import {
   buildDemoChequeSvg,
   chequeSvgDataUri,
@@ -208,38 +207,7 @@ export default function DocsPage() {
     <div className="relative flex min-h-full flex-1 flex-col">
       <Atmosphere variant="hero" />
 
-      <header className="ff-nav relative z-20">
-        <div className="mx-auto flex w-full max-w-5xl items-center justify-between gap-4 px-4 py-3 sm:px-6">
-          <Link
-            href="/"
-            className="ff-brand inline-flex items-center gap-2 text-sm sm:text-base"
-          >
-            <BrandMark size={26} className="text-[var(--ff-gold)]" />
-            <span>{SITE_NAME}</span>
-          </Link>
-          <nav aria-label="Primary">
-            <ul className="m-0 flex list-none items-center gap-2 p-0">
-              <li>
-                <span
-                  className="px-2 text-xs font-bold uppercase tracking-wide text-[var(--ff-gold)]"
-                  aria-current="page"
-                >
-                  Docs
-                </span>
-              </li>
-              <li>
-                <GitHubHeaderLink />
-              </li>
-              <li>
-                <Link href="/login" className="ff-btn ff-btn-sm">
-                  Sign in
-                  <span aria-hidden="true"> ›</span>
-                </Link>
-              </li>
-            </ul>
-          </nav>
-        </div>
-      </header>
+      <SiteHeader current="docs" />
 
       <main id="main-content" className="relative z-10 flex flex-1 flex-col">
         <section

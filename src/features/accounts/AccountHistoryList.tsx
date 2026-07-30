@@ -107,8 +107,8 @@ export function AccountHistoryList({
 
   return (
     <div className="flex flex-col gap-4">
-      <div className="flex items-center justify-between gap-3">
-        <h2 id="history-heading" className="ff-display text-lg">
+      <div className="flex flex-wrap items-center justify-between gap-2 sm:gap-3">
+        <h2 id="history-heading" className="ff-display min-w-0 text-lg">
           History
         </h2>
         <ClearAllButton accountId={accountId} hasItems />

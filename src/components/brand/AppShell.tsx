@@ -25,19 +25,22 @@ export function AppShell({ children }: AppShellProps) {
 export function AppHeader({ showLogout = true }: { showLogout?: boolean }) {
   return (
     <header className="ff-nav relative z-20">
-      <div className="mx-auto flex w-full max-w-4xl items-center justify-between gap-4 px-4 py-3 sm:px-6">
+      <div className="mx-auto flex w-full max-w-4xl items-center justify-between gap-2 px-4 py-3 sm:gap-4 sm:px-6">
         <Link
           href="/app"
-          className="ff-brand inline-flex items-center gap-2 text-base sm:text-lg"
+          className="ff-brand inline-flex min-w-0 items-center gap-2 text-base sm:text-lg"
         >
-          <BrandMark size={28} className="text-[var(--ff-gold)]" />
-          <span>{SITE_NAME}</span>
+          <BrandMark size={28} className="shrink-0 text-[var(--ff-gold)]" />
+          <span className="truncate">{SITE_NAME}</span>
           <span className="ff-sr-only"> - home</span>
         </Link>
-        <nav aria-label="Account" className="flex items-center gap-2">
+        <nav
+          aria-label="Account"
+          className="flex shrink-0 flex-wrap items-center justify-end gap-1.5 sm:gap-2"
+        >
           <Link
             href="/docs"
-            className="px-2 text-xs font-bold uppercase tracking-wide text-[var(--ff-muted)] hover:text-[var(--ff-gold)]"
+            className="inline-block px-2 py-2 text-xs font-bold uppercase tracking-wide text-[var(--ff-muted)] hover:text-[var(--ff-gold)]"
           >
             Docs
           </Link>

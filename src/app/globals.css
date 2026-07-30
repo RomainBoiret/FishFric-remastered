@@ -33,13 +33,15 @@
   --font-pixel: var(--font-pixel);
 }
 
+html {
+  scroll-behavior: smooth;
+  overflow-x: clip;
+}
+
 body {
   background: var(--ff-bg);
   color: var(--ff-ink);
-}
-
-html {
-  scroll-behavior: smooth;
+  overflow-x: clip;
 }
 
 @media (prefers-reduced-motion: reduce) {

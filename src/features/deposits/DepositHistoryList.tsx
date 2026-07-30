@@ -143,8 +143,11 @@ export function DepositHistoryList({
 
   return (
     <div className="flex flex-col gap-4">
-      <div className="flex items-center justify-between gap-3">
-        <h2 id="deposit-history-heading" className="ff-display text-lg">
+      <div className="flex flex-wrap items-center justify-between gap-2 sm:gap-3">
+        <h2
+          id="deposit-history-heading"
+          className="ff-display min-w-0 text-lg"
+        >
           Recent deposits
         </h2>
         <ClearAllButton hasItems />
@@ -208,7 +211,9 @@ export function DepositHistoryList({
                   </div>
 
                   <div className="flex flex-wrap items-center gap-x-2 gap-y-1 text-xs text-[var(--ff-muted)]">
-                    <span>{chequeCaption(item.imageLabel)}</span>
+                    <span className="min-w-0 max-w-full truncate">
+                      {chequeCaption(item.imageLabel)}
+                    </span>
                     <span aria-hidden="true">·</span>
                     <time dateTime={item.createdAt}>
                       {formatDepositDate(item.createdAt)}

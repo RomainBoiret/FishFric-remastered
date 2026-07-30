@@ -117,10 +117,10 @@ export function IncomingP2PList({ items }: { items: IncomingP2P[] }) {
           key={p2p.id}
           className="border-b border-black/40 pb-4 last:border-b-0"
         >
-          <p className="font-medium text-[var(--ff-ink)]">
+          <p className="min-w-0 break-words font-medium text-[var(--ff-ink)]">
             {p2p.senderName} · {formatMoney(p2p.amountCents)}
           </p>
-          <p className="mt-1 text-sm text-[var(--ff-muted)]">
+          <p className="mt-1 min-w-0 break-words text-sm text-[var(--ff-muted)]">
             Security question: {p2p.question}
           </p>
           <p className="text-xs text-[var(--ff-muted)]">

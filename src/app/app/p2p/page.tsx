@@ -91,7 +91,7 @@ export default async function P2PPage() {
           {isDemo ? (
             <p className="text-sm text-[var(--ff-muted)]">
               Demo tip: send to{" "}
-              <span className="font-bold text-[var(--ff-gold)]">
+              <span className="break-all font-bold text-[var(--ff-gold)]">
                 {FRIEND_CREDENTIALS.email}
               </span>
               , then sign in with that account (same password) to accept.
@@ -142,10 +142,15 @@ export default async function P2PPage() {
                       key={p2p.id}
                       className="border-b-2 border-black py-3 text-sm last:border-b-0"
                     >
-                      <p className="font-bold text-white">
-                        {formatMoney(p2p.amountCents)} → {p2p.recipientEmail}
-                      </p>
-                      <p className="text-[var(--ff-muted)]">
+                      <div className="flex min-w-0 flex-col gap-1 sm:flex-row sm:items-baseline sm:justify-between sm:gap-3">
+                        <p className="ff-display shrink-0 font-bold tabular-nums text-white">
+                          {formatMoney(p2p.amountCents)}
+                        </p>
+                        <p className="min-w-0 break-all text-[var(--ff-muted)] sm:text-right">
+                          {p2p.recipientEmail}
+                        </p>
+                      </div>
+                      <p className="mt-1 text-[var(--ff-muted)]">
                         Expires {formatDateTime(p2p.expiresAt)}
                       </p>
                     </li>

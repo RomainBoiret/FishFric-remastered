@@ -47,7 +47,7 @@ export default async function AppHubPage() {
         </div>
 
         <nav aria-label="Quick actions" className="ff-in ff-in-1 space-y-2">
-          <div className="grid gap-2 sm:grid-cols-3">
+          <div className="grid gap-2 sm:grid-cols-2 lg:grid-cols-3">
             <Link href="/app/transfer" className="ff-btn ff-btn-sm w-full">
               Between accounts
               <span aria-hidden="true"> ›</span>
@@ -61,7 +61,7 @@ export default async function AppHubPage() {
             </Link>
             <Link
               href="/app/bills"
-              className="ff-btn ff-btn-sm ff-btn-stone w-full"
+              className="ff-btn ff-btn-sm ff-btn-stone w-full sm:col-span-2 lg:col-span-1"
             >
               Pay bills
               <span aria-hidden="true"> ›</span>
@@ -106,17 +106,17 @@ export default async function AppHubPage() {
                 >
                   <Link
                     href={`/app/accounts/${account.id}`}
-                    className="ff-row-link flex items-center justify-between gap-4 px-4 py-4 sm:px-5"
+                    className="ff-row-link flex items-center justify-between gap-3 px-4 py-4 sm:gap-4 sm:px-5"
                     aria-label={`${name}, balance ${balance}`}
                   >
-                    <div>
-                      <p className="font-bold text-white">{name}</p>
+                    <div className="min-w-0">
+                      <p className="truncate font-bold text-white">{name}</p>
                       <p className="text-xs uppercase tracking-wide text-[var(--ff-muted)]">
                         {ACCOUNT_TYPE_LABELS[account.type]}
                       </p>
                     </div>
                     <p
-                      className="ff-display text-base tabular-nums text-[var(--ff-gold)] sm:text-lg"
+                      className="ff-display shrink-0 text-base tabular-nums text-[var(--ff-gold)] sm:text-lg"
                       aria-hidden="true"
                     >
                       {balance}

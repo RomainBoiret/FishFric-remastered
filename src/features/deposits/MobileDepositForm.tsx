@@ -337,10 +337,23 @@ export function MobileDepositForm({
                 alt={`Demo cheque for ${formatMoney(previewCents)}`}
                 className="h-auto w-full"
               />
-              <figcaption className="border-t-2 border-black px-3 py-2 text-xs text-[var(--ff-muted)]">
-                {lockedCheque
-                  ? `Issued · ${formatMoney(lockedCheque.amountCents)} · ${lockedCheque.chequeId.slice(-8)} · ${lockedCheque.fileName}`
-                  : `Preview only (not cashable) · ${formatMoney(previewCents)}`}
+              <figcaption className="space-y-1 border-t-2 border-black px-3 py-2 text-xs text-[var(--ff-muted)]">
+                {lockedCheque ? (
+                  <>
+                    <p className="m-0">
+                      Issued · {formatMoney(lockedCheque.amountCents)} · …
+                      {lockedCheque.chequeId.slice(-8)}
+                    </p>
+                    <p className="m-0 truncate" title={lockedCheque.fileName}>
+                      {lockedCheque.fileName}
+                    </p>
+                  </>
+                ) : (
+                  <p className="m-0">
+                    Preview only (not cashable) ·{" "}
+                    {formatMoney(previewCents)}
+                  </p>
+                )}
               </figcaption>
             </figure>
           ) : (

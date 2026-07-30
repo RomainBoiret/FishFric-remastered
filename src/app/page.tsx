@@ -2,9 +2,8 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import { Atmosphere } from "@/components/brand/Atmosphere";
-import { BrandMark } from "@/components/brand/BrandMark";
-import { GitHubHeaderLink } from "@/components/brand/GitHubLink";
 import { SiteFooter } from "@/components/brand/SiteFooter";
+import { SiteHeader } from "@/components/brand/SiteHeader";
 import { DemoButton } from "@/features/auth/DemoButton";
 import { auth } from "@/lib/auth";
 import {
@@ -107,54 +106,14 @@ export default async function Home() {
     <div className="relative flex min-h-full flex-1 flex-col">
       <Atmosphere variant="hero" />
 
-      <header className="ff-nav relative z-20">
-        <div className="mx-auto flex w-full max-w-5xl items-center justify-between gap-4 px-4 py-3 sm:px-6">
-          <Link
-            href="/"
-            className="ff-brand inline-flex items-center gap-2 text-sm sm:text-base"
-            aria-current="page"
-          >
-            <BrandMark size={26} className="text-[var(--ff-gold)]" />
-            <span>{SITE_NAME}</span>
-          </Link>
-          <nav aria-label="Primary">
-            <ul className="m-0 flex list-none items-center gap-2 p-0">
-              <li>
-                <Link
-                  href="/docs"
-                  className="px-2 text-xs font-bold uppercase tracking-wide text-[var(--ff-muted)] hover:text-[var(--ff-gold)]"
-                >
-                  Docs
-                </Link>
-              </li>
-              <li>
-                <GitHubHeaderLink />
-              </li>
-              <li>
-                <Link
-                  href="/signup"
-                  className="ff-btn ff-btn-sm ff-btn-sand"
-                >
-                  Create account
-                </Link>
-              </li>
-              <li>
-                <Link href="/login" className="ff-btn ff-btn-sm">
-                  Sign in
-                  <span aria-hidden="true"> ›</span>
-                </Link>
-              </li>
-            </ul>
-          </nav>
-        </div>
-      </header>
+      <SiteHeader current="home" />
 
       <main id="main-content" className="relative z-10 flex flex-1 flex-col">
         <section
-          className="flex min-h-[calc(100svh-56px)] flex-col"
+          className="flex flex-col md:min-h-[calc(100svh-56px)]"
           aria-labelledby="home-heading"
         >
-          <div className="mx-auto flex w-full max-w-5xl flex-1 flex-col justify-center gap-8 px-4 py-12 sm:px-8 lg:px-12">
+          <div className="mx-auto flex w-full max-w-5xl flex-1 flex-col justify-center gap-6 px-4 py-10 sm:gap-8 sm:px-8 sm:py-12 lg:px-12">
             <div className="ff-in max-w-2xl space-y-4">
               <p className="ff-display text-xs uppercase tracking-widest text-[var(--ff-gold)]">
                 Portfolio demo · ocean bank
@@ -208,7 +167,7 @@ export default async function Home() {
                 </div>
               </div>
 
-              <ul className="ff-in ff-in-2 m-0 grid list-none gap-3 p-0 sm:grid-cols-3 lg:grid-cols-1 xl:grid-cols-3">
+              <ul className="ff-in ff-in-2 m-0 hidden list-none gap-3 p-0 sm:grid sm:grid-cols-3 lg:grid-cols-1 xl:grid-cols-3">
                 {HERO_FEATURES.map((item, index) => (
                   <li
                     key={`hero-${item.title}`}
