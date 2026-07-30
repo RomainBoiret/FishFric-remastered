@@ -20,4 +20,4 @@ export const SITE_AUTHOR = "Romain Boiret";
 export const SITE_GITHUB =
   "https://github.com/RomainBoiret/FishFric-remastered";
 export const SITE_TAGLINE =
-  "An ocean-themed banking demo - accounts, transfers, and P2P on a real ledger.";
+  "An ocean-themed banking demo - accounts, transfers, P2P, bills, and signed cheque deposits on a real ledger.";

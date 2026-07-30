@@ -15,17 +15,39 @@ export const metadata: Metadata = {
   alternates: { canonical: "/" },
 };
 
+/** Hero strip - three highlights only (keep first viewport light). */
+const HERO_FEATURES = [
+  {
+    title: "Ledger accounts",
+    subtitle: "Your chests",
+    body: "Checking, savings, and a Shark Card - open products and inspect a real cent-based ledger.",
+    accent: "#2d8f83",
+  },
+  {
+    title: "Signed deposits",
+    subtitle: "Cheque catch",
+    body: "Issue a one-time HMAC-signed cheque, deposit it, and watch pending turn into credited.",
+    accent: "#c43c3c",
+  },
+  {
+    title: "P2P & bills",
+    subtitle: "Bottle drops",
+    body: "Send money behind a security question, or pay demo billers straight from the ledger.",
+    accent: "#5ec8e8",
+  },
+];
+
 const FEATURES = [
   {
     title: "Accounts",
     subtitle: "Your chests",
-    body: "Checking, savings, and a Shark Card - balances you can open and inspect.",
+    body: "Checking, savings, and a Shark Card with rules for what you can open.",
     accent: "#2d8f83",
   },
   {
     title: "Transfers",
     subtitle: "Swim between pockets",
-    body: "Move money between your own accounts in a few clicks.",
+    body: "Move money between your own accounts with double-entry ledger writes.",
     accent: "#e0aa2c",
   },
   {
@@ -34,23 +56,41 @@ const FEATURES = [
     body: "Send funds locked behind a security question the recipient must answer.",
     accent: "#5ec8e8",
   },
+  {
+    title: "Bill pay",
+    subtitle: "Reef vendors",
+    body: "Pay fictional utilities and merchants - every payment hits the ledger.",
+    accent: "#2f6f9f",
+  },
+  {
+    title: "Cheque deposit",
+    subtitle: "Signed catch",
+    body: "Server-issued cheques with ID, payee check, HMAC signature, and one-time clear.",
+    accent: "#c43c3c",
+  },
+  {
+    title: "Alerts & history",
+    subtitle: "Tide log",
+    body: "Notification inbox plus capped histories you can dismiss or clear - balances stay.",
+    accent: "#c2b280",
+  },
 ];
 
 const STEPS = [
   {
     n: "1",
     title: "Open the demo",
-    body: "One click loads a seeded account with sample money.",
+    body: "One click loads a seeded reef with sample money and accounts.",
   },
   {
     n: "2",
-    title: "Browse your accounts",
-    body: "Check balances and the transaction history (tide log).",
+    title: "Browse the hub",
+    body: "Jump into transfers, P2P, bills, cheque deposit, or open another account.",
   },
   {
     n: "3",
-    title: "Try a transfer",
-    body: "Move funds internally, or send a P2P transfer with a riddle.",
+    title: "Follow the money",
+    body: "Watch notifications and account history update as the ledger moves.",
   },
 ];
 
@@ -113,8 +153,8 @@ export default async function Home() {
                 {SITE_NAME}
               </h1>
               <p className="max-w-xl text-base leading-relaxed text-white/90 sm:text-lg">
-                A ocean-pixel-style banking demo you can click through - accounts,
-                transfers, and P2P on a real ledger.
+                An ocean-pixel banking demo you can click through - real ledger,
+                signed cheque deposits, P2P, and bill pay.
               </p>
             </div>
 
@@ -137,7 +177,7 @@ export default async function Home() {
               </div>
 
               <ul className="ff-in ff-in-2 m-0 grid list-none gap-3 p-0 sm:grid-cols-3 lg:grid-cols-1 xl:grid-cols-3">
-                {FEATURES.map((item, index) => (
+                {HERO_FEATURES.map((item, index) => (
                   <li
                     key={`hero-${item.title}`}
                     className="ff-surface ff-in flex flex-col justify-between gap-3 bg-[var(--ff-bg-panel)]/95 p-4"
@@ -179,11 +219,12 @@ export default async function Home() {
                 What you can do
               </h2>
               <p className="text-sm text-[var(--ff-muted)] sm:text-base">
-                Three clear features - same ocean vibe, plain banking actions.
+                Full demo banking loop - same ocean vibe, plain actions on a
+                real ledger.
               </p>
             </div>
 
-            <ul className="m-0 grid list-none gap-4 p-0 sm:grid-cols-3">
+            <ul className="m-0 grid list-none gap-4 p-0 sm:grid-cols-2 lg:grid-cols-3">
               {FEATURES.map((item) => (
                 <li key={item.title} className="ff-surface space-y-3 p-5">
                   <div
@@ -259,13 +300,14 @@ export default async function Home() {
                 Try it now
               </h2>
               <p className="text-sm leading-relaxed text-[var(--ff-muted)]">
-                The demo opens a ready-made account so you can explore transfers
-                and P2P without signing up.
+                The demo opens a ready-made account so you can explore the full
+                flow without signing up.
               </p>
               <ul className="m-0 space-y-2 border-y-2 border-black/40 py-4 pl-5 text-sm text-[var(--ff-muted)]">
                 <li>Real ledger (amounts stored in cents)</li>
-                <li>Internal transfers between your accounts</li>
-                <li>P2P transfers with a security question</li>
+                <li>Internal transfers, P2P, and bill pay</li>
+                <li>HMAC-signed, one-time cheque deposits</li>
+                <li>Notifications and capped history you can clear</li>
               </ul>
               <DemoButton className="ff-btn w-full" label="Try the demo" />
               <Link
