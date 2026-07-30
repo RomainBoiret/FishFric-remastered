@@ -1,8 +1,39 @@
 # Fish&Fric (remastered)
 
-Full-stack remaster of **Fish&Fric**, an ocean-themed online banking demo originally built as an ÉTS integrator project (2024). Rebuilt as a public portfolio app recruiters can explore live.
+<p align="center">
+  <img src="docs/assets/banner.svg" alt="Fish&Fric - ocean banking demo remastered" width="960" />
+</p>
 
-> **Fictional data only.** Fish&Fric is a demo product for portfolio and hiring purposes. All users, balances, transfers, and transactions are fake. Do not enter real banking credentials or personal financial information.
+Full-stack remaster of **Fish&Fric**, an ocean-themed online banking demo. Recruiters can explore it live: accounts, transfers, P2P, bill pay, and **HMAC-signed cheque deposits** on a real cent-based ledger.
+
+> **Fictional data only.** All users, balances, transfers, and transactions are fake. Do not enter real banking credentials or personal financial information.
+
+## Story
+
+| | |
+|---|---|
+| **2024** | Original **ÉTS integrator team project** — [FishFric-Bank](https://github.com/RomainBoiret/FishFric-Bank) |
+| **2026** | Solo remaster for portfolio review — this repo |
+| **Now** | Live demo with a stricter domain layer, notifications, and one-time cheque clearing |
+
+## Highlights
+
+| Feature | What it does |
+|---------|----------------|
+| Accounts | Checking, savings, Shark Card (open rules enforced) |
+| Transfers | Double-entry ledger writes between your own accounts |
+| P2P | Send funds locked behind a security question |
+| Bill pay | Demo payees → `BILL_PAYMENT` ledger entries |
+| Cheque deposit | Server-issued SVG, payee + HMAC + one-time clear |
+| Alerts & history | Capped inbox / histories: dismiss one or clear all |
+
+### Signed cheque (illustration)
+
+<p align="center">
+  <img src="docs/assets/demo-cheque.svg" alt="Sample Fish&Fric signed demo cheque for $120.00" width="720" />
+</p>
+
+Issue → download to your PC → deposit once. Re-uploading the same file is rejected.
 
 ## Stack
 
@@ -10,18 +41,6 @@ Full-stack remaster of **Fish&Fric**, an ocean-themed online banking demo origin
 - **PostgreSQL** (Neon) + **Prisma**
 - **Auth.js** (credentials + JWT sessions)
 - Lightweight domain layer (`src/domain`) with an **immutable ledger**
-
-## Features
-
-- Bank products: checking, savings, and Shark Card (credit)
-- Open additional accounts (rules-enforced: 1 checking, up to 3 savings, 1 Shark Card)
-- Internal transfers (double-entry ledger writes)
-- P2P transfers with a security question / answer
-- Bill payments to demo payees (ledger `BILL_PAYMENT`)
-- Mobile cheque deposit (simulated pending → credited, `MOBILE_DEPOSIT`)
-- Notification center for P2P alerts (read / unread)
-- Recruiter demo mode (`demo@fishfric.app`)
-- Ledger integrity check: `balanceCents` is a cache derived from `LedgerEntry`, and we prove it stays in sync
 
 ## Local setup
 
@@ -35,12 +54,16 @@ npm run db:seed
 npm run dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000).
+Open [http://localhost:3000](http://localhost:3000) — or read the in-app story at `/docs`.
+
+### Demo credentials
 
 | Account | Email | Password |
 |---------|-------|----------|
 | Demo | `demo@fishfric.app` | `Demo-FishFric-2026!` |
-| Friend (P2P) | `ami@fishfric.app` | same password |
+| Friend (P2P) | `ami@fishfric.app` | `Demo-FishFric-2026!` |
+
+One-click demo from the landing page logs in as the Demo account.
 
 ## Ledger integrity
 
@@ -70,24 +93,29 @@ The verify script exits non-zero if any cached balance drifts from the ledger su
 
 ## Quality gate (Lighthouse)
 
-`.github/workflows/lighthouse.yml` audits the public routes (`/`, `/login`, `/signup`) with [Lighthouse CI](https://github.com/GoogleChrome/lighthouse-ci):
+`.github/workflows/lighthouse.yml` audits the public routes (`/`, `/login`, `/signup`, `/docs`) with [Lighthouse CI](https://github.com/GoogleChrome/lighthouse-ci):
 
 - On PRs, it waits for the Vercel preview deployment and audits that URL.
 - On pushes to `main`, on a weekly schedule, and on manual dispatch, it audits production.
 - Thresholds live in [`.lighthouserc.json`](./.lighthouserc.json): accessibility, best practices, and SEO must score ≥ 90 (build fails otherwise); performance warns below 80.
-- Reports are uploaded to Lighthouse's temporary public storage and summarized on the workflow run.
 
 ## Project layout
 
 ```
+docs/assets/      # README illustrations (banner, sample cheque)
 prisma/           # schema, migrations, seed
 scripts/          # migrate + ledger verify helpers
 src/
-  app/            # Next.js routes
+  app/            # Next.js routes (incl. /docs)
   domain/         # pure business rules (+ ledger integrity)
-  features/       # auth, accounts, transfers, p2p
+  features/       # auth, accounts, transfers, p2p, deposits, bills…
   lib/            # prisma, auth, shared utils
 ```
+
+## Links
+
+- Remaster (this repo): https://github.com/RomainBoiret/FishFric-remastered
+- Original team project: https://github.com/RomainBoiret/FishFric-Bank
 
 ## License
 

@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 280" role="img" data-ff-amount-cents="12000" data-ff-cheque-id="cdocsstorycheque01">
+  <title>Fish&amp;Fric demo cheque 120.00</title>
+  <desc>Fictional demo cheque for README - not a real banking instrument.</desc>
+  <defs>
+    <pattern id="grid" width="16" height="16" patternUnits="userSpaceOnUse">
+      <path d="M16 0H0V16" fill="none" stroke="#c5d6de" stroke-width="0.6"/>
+    </pattern>
+    <linearGradient id="paper" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#f4f7f8"/>
+      <stop offset="100%" stop-color="#e4eef2"/>
+    </linearGradient>
+  </defs>
+  <rect width="640" height="280" fill="url(#paper)"/>
+  <rect width="640" height="280" fill="url(#grid)" opacity="0.55"/>
+  <rect x="10" y="10" width="620" height="260" fill="none" stroke="#1e3a44" stroke-width="3"/>
+  <rect x="16" y="16" width="608" height="248" fill="none" stroke="#e0aa2c" stroke-width="2"/>
+  <text x="36" y="52" font-family="Georgia, serif" font-size="28" font-weight="700" fill="#0b1a22">Fish&amp;Fric</text>
+  <text x="36" y="74" font-family="Arial, sans-serif" font-size="12" fill="#2f6f9f" letter-spacing="1.5">OCEAN BANK - DEMO CHEQUE</text>
+  <text x="36" y="92" font-family="Courier New, monospace" font-size="10" fill="#2d8f83">ID cdocsstorycheque01 · SIGNED · ONE-TIME</text>
+  <text x="470" y="48" font-family="Courier New, monospace" font-size="14" fill="#1e3a44">No. QUE01</text>
+  <text x="470" y="68" font-family="Arial, sans-serif" font-size="11" fill="#5a7a86">Jul 29, 2026</text>
+  <text x="36" y="118" font-family="Arial, sans-serif" font-size="11" fill="#5a7a86">PAY TO THE ORDER OF</text>
+  <line x1="36" y1="144" x2="420" y2="144" stroke="#1e3a44" stroke-width="1.5"/>
+  <text x="40" y="138" font-family="Georgia, serif" font-size="18" fill="#0b1a22">Aqua Recruiter</text>
+  <rect x="450" y="106" width="154" height="42" fill="#fff" stroke="#1e3a44" stroke-width="2"/>
+  <text x="462" y="134" font-family="Courier New, monospace" font-size="20" font-weight="700" fill="#0b1a22">$120.00</text>
+  <text x="36" y="168" font-family="Arial, sans-serif" font-size="11" fill="#5a7a86">AMOUNT</text>
+  <line x1="36" y1="192" x2="500" y2="192" stroke="#1e3a44" stroke-width="1.5"/>
+  <text x="40" y="186" font-family="Georgia, serif" font-size="14" font-style="italic" fill="#0b1a22">120 dollars and 00/100</text>
+  <text x="510" y="186" font-family="Arial, sans-serif" font-size="12" fill="#1e3a44">DOLLARS</text>
+  <text x="36" y="220" font-family="Arial, sans-serif" font-size="11" fill="#5a7a86">MEMO</text>
+  <line x1="80" y1="222" x2="280" y2="222" stroke="#1e3a44" stroke-width="1"/>
+  <text x="86" y="218" font-family="Georgia, serif" font-size="13" fill="#2d8f83">Portfolio demo cheque</text>
+  <text x="36" y="248" font-family="Courier New, monospace" font-size="13" fill="#1e3a44">001234567  987654321  QUE01</text>
+  <text x="400" y="220" font-family="Arial, sans-serif" font-size="11" fill="#5a7a86">AUTHORIZED SIGNATURE</text>
+  <path d="M410 248 C430 228, 460 258, 490 236 C510 222, 540 250, 560 238" fill="none" stroke="#0b1a22" stroke-width="2"/>
+  <line x1="400" y1="252" x2="580" y2="252" stroke="#1e3a44" stroke-width="1"/>
+  <g transform="translate(590 34)">
+    <ellipse cx="0" cy="0" rx="14" ry="8" fill="#2d8f83"/>
+    <polygon points="12,0 22,-7 22,7" fill="#2d8f83"/>
+    <circle cx="-5" cy="-2" r="1.5" fill="#0b1a22"/>
+  </g>
+</svg>

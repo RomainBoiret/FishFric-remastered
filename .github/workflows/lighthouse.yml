@@ -55,6 +55,7 @@ jobs:
             ${{ steps.target.outputs.url }}/
             ${{ steps.target.outputs.url }}/login
             ${{ steps.target.outputs.url }}/signup
+            ${{ steps.target.outputs.url }}/docs
           configPath: ./.lighthouserc.json
           uploadArtifacts: true
           temporaryPublicStorage: true

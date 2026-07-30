@@ -34,11 +34,18 @@ export function SiteFooter({
           </p>
         </div>
 
-        <p className="text-xs text-[var(--ff-muted)]">
-          <span aria-hidden="true">© </span>
-          <span className="ff-sr-only">Copyright </span>
-          {YEAR} {SITE_NAME}. Made by {SITE_AUTHOR}. All rights reserved.
-        </p>
+        <nav
+          aria-label="Footer"
+          className={`flex flex-wrap items-center gap-x-4 gap-y-2 text-xs font-bold uppercase tracking-wide ${
+            compact ? "justify-center" : ""
+          }`}
+        >
+          <p className="font-normal normal-case tracking-normal text-[var(--ff-muted)]">
+            <span aria-hidden="true">© </span>
+            <span className="ff-sr-only">Copyright </span>
+            {YEAR} {SITE_NAME}. Made by {SITE_AUTHOR}.
+          </p>
+        </nav>
       </div>
     </footer>
   );

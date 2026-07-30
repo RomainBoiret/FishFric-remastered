@@ -35,6 +35,12 @@ export function AppHeader({ showLogout = true }: { showLogout?: boolean }) {
           <span className="ff-sr-only"> - home</span>
         </Link>
         <nav aria-label="Account" className="flex items-center gap-2">
+          <Link
+            href="/docs"
+            className="px-2 text-xs font-bold uppercase tracking-wide text-[var(--ff-muted)] hover:text-[var(--ff-gold)]"
+          >
+            Docs
+          </Link>
           <GitHubHeaderLink />
           {showLogout ? (
             <form action={logoutAction}>

@@ -7,7 +7,12 @@ import { GitHubHeaderLink } from "@/components/brand/GitHubLink";
 import { SiteFooter } from "@/components/brand/SiteFooter";
 import { DemoButton } from "@/features/auth/DemoButton";
 import { auth } from "@/lib/auth";
-import { SITE_NAME, SITE_TAGLINE } from "@/lib/site";
+import {
+  DEMO_CREDENTIALS,
+  SITE_GITHUB_ORIGINAL,
+  SITE_NAME,
+  SITE_TAGLINE,
+} from "@/lib/site";
 
 export const metadata: Metadata = {
   title: { absolute: `${SITE_NAME} - Ocean banking demo` },
@@ -115,6 +120,14 @@ export default async function Home() {
           <nav aria-label="Primary">
             <ul className="m-0 flex list-none items-center gap-2 p-0">
               <li>
+                <Link
+                  href="/docs"
+                  className="px-2 text-xs font-bold uppercase tracking-wide text-[var(--ff-muted)] hover:text-[var(--ff-gold)]"
+                >
+                  Docs
+                </Link>
+              </li>
+              <li>
                 <GitHubHeaderLink />
               </li>
               <li>
@@ -154,7 +167,26 @@ export default async function Home() {
               </h1>
               <p className="max-w-xl text-base leading-relaxed text-white/90 sm:text-lg">
                 An ocean-pixel banking demo you can click through - real ledger,
-                signed cheque deposits, P2P, and bill pay.
+                signed cheque deposits, P2P, and bill pay. Remastered from an
+                ÉTS team project into a solo portfolio build.
+              </p>
+              <p className="text-sm text-[var(--ff-muted)]">
+                <Link
+                  href="/docs"
+                  className="font-bold text-[var(--ff-gold)] hover:text-[var(--ff-gold-hi)]"
+                >
+                  Read the story
+                  <span aria-hidden="true"> ›</span>
+                </Link>
+                <span aria-hidden="true"> · </span>
+                <a
+                  href={SITE_GITHUB_ORIGINAL}
+                  className="hover:text-white"
+                  rel="noopener noreferrer"
+                  target="_blank"
+                >
+                  Original team repo
+                </a>
               </p>
             </div>
 
@@ -300,16 +332,43 @@ export default async function Home() {
                 Try it now
               </h2>
               <p className="text-sm leading-relaxed text-[var(--ff-muted)]">
-                The demo opens a ready-made account so you can explore the full
-                flow without signing up.
+                One click opens the seeded reef - or sign in with these
+                fictional accounts.
               </p>
+
+              <ul className="m-0 grid list-none gap-2 p-0">
+                {DEMO_CREDENTIALS.map((account) => (
+                  <li
+                    key={account.email}
+                    className="border-2 border-black/50 bg-black/25 px-3 py-2.5"
+                  >
+                    <p className="text-[10px] font-bold uppercase tracking-wide text-[var(--ff-gold)]">
+                      {account.label}
+                    </p>
+                    <p className="mt-1 break-all font-mono text-xs text-white">
+                      {account.email}
+                    </p>
+                    <p className="mt-0.5 break-all font-mono text-xs text-[var(--ff-muted)]">
+                      {account.password}
+                    </p>
+                  </li>
+                ))}
+              </ul>
+
               <ul className="m-0 space-y-2 border-y-2 border-black/40 py-4 pl-5 text-sm text-[var(--ff-muted)]">
                 <li>Real ledger (amounts stored in cents)</li>
-                <li>Internal transfers, P2P, and bill pay</li>
                 <li>HMAC-signed, one-time cheque deposits</li>
-                <li>Notifications and capped history you can clear</li>
+                <li>P2P, bills, notifications, tidy history</li>
               </ul>
+
               <DemoButton className="ff-btn w-full" label="Try the demo" />
+              <Link
+                href="/docs"
+                className="block text-center text-xs font-bold uppercase tracking-wide text-[var(--ff-gold)] hover:text-[var(--ff-gold-hi)]"
+              >
+                Story &amp; feature tour
+                <span aria-hidden="true"> →</span>
+              </Link>
               <Link
                 href="/login"
                 className="block text-center text-xs font-bold uppercase tracking-wide text-[var(--ff-muted)] hover:text-white"
