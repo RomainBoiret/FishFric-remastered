@@ -1,7 +1,7 @@
 # Fish&Fric (remastered)
 
 <p align="center">
-  <img src="docs/assets/banner.svg" alt="Fish&Fric - ocean banking demo remastered" width="960" />
+  <img src="./docs/assets/banner.png" alt="Fish&Fric - ocean banking demo remastered" width="960" />
 </p>
 
 Full-stack remaster of **Fish&Fric**, an ocean-themed online banking demo. Recruiters can explore it live: accounts, transfers, P2P, bill pay, and **HMAC-signed cheque deposits** on a real cent-based ledger.
@@ -12,8 +12,8 @@ Full-stack remaster of **Fish&Fric**, an ocean-themed online banking demo. Recru
 
 | | |
 |---|---|
-| **2024** | Original **ÉTS integrator team project** — [FishFric-Bank](https://github.com/RomainBoiret/FishFric-Bank) |
-| **2026** | Solo remaster for portfolio review — this repo |
+| **2024** | Original **ÉTS integrator team project** - [FishFric-Bank](https://github.com/RomainBoiret/FishFric-Bank) |
+| **2026** | Solo remaster for portfolio review - this repo |
 | **Now** | Live demo with a stricter domain layer, notifications, and one-time cheque clearing |
 
 ## Highlights
@@ -30,7 +30,7 @@ Full-stack remaster of **Fish&Fric**, an ocean-themed online banking demo. Recru
 ### Signed cheque (illustration)
 
 <p align="center">
-  <img src="docs/assets/demo-cheque.svg" alt="Sample Fish&Fric signed demo cheque for $120.00" width="720" />
+  <img src="./docs/assets/demo-cheque.png" alt="Sample Fish&Fric signed demo cheque for $120.00" width="720" />
 </p>
 
 Issue → download to your PC → deposit once. Re-uploading the same file is rejected.
@@ -54,7 +54,7 @@ npm run db:seed
 npm run dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) — or read the in-app story at `/docs`.
+Open [http://localhost:3000](http://localhost:3000) - or read the in-app story at `/docs`.
 
 ### Demo credentials
 
@@ -102,7 +102,7 @@ The verify script exits non-zero if any cached balance drifts from the ledger su
 ## Project layout
 
 ```
-docs/assets/      # README illustrations (banner, sample cheque)
+docs/assets/      # README illustrations (banner, sample cheque PNGs)
 prisma/           # schema, migrations, seed
 scripts/          # migrate + ledger verify helpers
 src/

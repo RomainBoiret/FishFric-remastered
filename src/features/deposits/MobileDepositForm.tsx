@@ -416,7 +416,7 @@ export function MobileDepositForm({
                 ? ` · ID …${uploadChequeId.slice(-8)}`
                 : ""}
               {amountCents != null && uploadFaceCents !== amountCents
-                ? " — does not match the form amount; submit will be rejected."
+                ? " - does not match the form amount; submit will be rejected."
                 : uploadChequeId
                   ? ". Signature and payee will be verified on submit."
                   : ". Deposit amount must match."}

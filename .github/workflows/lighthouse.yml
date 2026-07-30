@@ -68,7 +68,7 @@ jobs:
         with:
           script: |
             const manifest = JSON.parse(process.env.LHCI_MANIFEST || "[]");
-            const pct = (n) => (n == null ? "—" : Math.round(n * 100));
+            const pct = (n) => (n == null ? "-" : Math.round(n * 100));
             const rows = manifest
               .filter((run) => run.isRepresentativeRun)
               .map((run) => {
