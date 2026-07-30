@@ -1,6 +1,7 @@
 "use client";
 
 import { useActionState, useId } from "react";
+import { useActionToast } from "@/components/ui/toast";
 import { formatMoney } from "@/domain/money";
 import { createP2PAction } from "@/features/p2p/actions";
 import type { P2PActionState } from "@/features/p2p/schemas";
@@ -21,6 +22,7 @@ export function SendP2PForm({
   defaultRecipient?: string;
 }) {
   const [state, formAction, pending] = useActionState(createP2PAction, initial);
+  useActionToast(state, pending);
   const fromId = useId();
   const emailId = useId();
   const amountId = useId();
@@ -115,11 +117,6 @@ export function SendP2PForm({
           role="alert"
         >
           {state.error}
-        </p>
-      ) : null}
-      {state.success ? (
-        <p id={statusId} className="text-sm text-[var(--ff-ok)]" role="status">
-          {state.success}
         </p>
       ) : null}
 

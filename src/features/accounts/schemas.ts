@@ -13,4 +13,5 @@ export const openAccountSchema = z.object({
 export type OpenAccountActionState = {
   error?: string;
   success?: string;
+  accountId?: string;
 };

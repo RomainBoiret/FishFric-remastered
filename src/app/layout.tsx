@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Noto_Sans, Pixelify_Sans } from "next/font/google";
 import { SkipLink } from "@/components/a11y/SkipLink";
 import { JsonLd } from "@/components/seo/JsonLd";
+import { ToastProvider } from "@/components/ui/toast";
 import { SITE_AUTHOR, SITE_NAME, SITE_TAGLINE, getSiteUrl } from "@/lib/site";
 import "./globals.css";
 
@@ -84,9 +85,11 @@ export default function RootLayout({
       className={`${pixel.variable} ${sans.variable} h-full antialiased`}
     >
       <body className="flex min-h-full flex-col font-sans">
-        <SkipLink />
-        <JsonLd />
-        {children}
+        <ToastProvider>
+          <SkipLink />
+          <JsonLd />
+          {children}
+        </ToastProvider>
       </body>
     </html>
   );

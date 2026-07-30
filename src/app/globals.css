@@ -476,6 +476,82 @@ button:disabled,
   animation: ff-shimmer 5s ease-in-out infinite;
 }
 
+/* -- Toasts -- */
+.ff-toast-viewport {
+  position: fixed;
+  right: 1rem;
+  bottom: 1rem;
+  z-index: 80;
+  display: flex;
+  width: min(22rem, calc(100vw - 2rem));
+  flex-direction: column;
+  gap: 0.65rem;
+  pointer-events: none;
+}
+
+.ff-toast {
+  pointer-events: auto;
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+  padding: 0.85rem 0.95rem;
+  border: 3px solid #071218;
+  border-radius: 0;
+  background: var(--ff-bg-panel);
+  box-shadow:
+    inset 0 0 0 2px #4a6a78,
+    4px 4px 0 rgba(0, 0, 0, 0.45);
+  animation: ff-toast-in 0.35s var(--ff-ease) both;
+}
+
+.ff-toast-success {
+  box-shadow:
+    inset 0 0 0 2px var(--ff-ok),
+    4px 4px 0 rgba(0, 0, 0, 0.45);
+}
+
+.ff-toast-error {
+  box-shadow:
+    inset 0 0 0 2px var(--ff-danger),
+    4px 4px 0 rgba(0, 0, 0, 0.45);
+}
+
+.ff-toast-message {
+  margin: 0;
+  flex: 1;
+  font-size: 0.9rem;
+  font-weight: 700;
+  line-height: 1.35;
+  color: var(--ff-ink);
+}
+
+.ff-toast-dismiss {
+  flex-shrink: 0;
+  margin: -0.15rem -0.2rem 0 0;
+  border: none;
+  background: transparent;
+  color: var(--ff-muted);
+  cursor: pointer;
+  font-size: 1.25rem;
+  line-height: 1;
+  padding: 0.15rem 0.35rem;
+}
+
+.ff-toast-dismiss:hover {
+  color: var(--ff-ink);
+}
+
+@keyframes ff-toast-in {
+  from {
+    opacity: 0;
+    transform: translateY(0.6rem);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
 .ff-nav a,
 .ff-nav button {
   transition:
@@ -494,7 +570,8 @@ button:disabled,
   .ff-sway,
   .ff-shimmer,
   .ff-fish-right,
-  .ff-fish-left {
+  .ff-fish-left,
+  .ff-toast {
     animation: none !important;
   }
 

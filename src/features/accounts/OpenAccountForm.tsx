@@ -1,11 +1,13 @@
 "use client";
 
-import { useActionState, useId } from "react";
+import { useActionState, useEffect, useId } from "react";
+import { useRouter } from "next/navigation";
 import type { AccountType } from "@/domain/accounts";
 import { ACCOUNT_TYPE_LABELS } from "@/domain/labels";
 import { ACCOUNT_RULES, formatMoney } from "@/domain/money";
 import { openAccountAction } from "@/features/accounts/actions";
 import type { OpenAccountActionState } from "@/features/accounts/schemas";
+import { useActionToast } from "@/components/ui/toast";
 
 const initial: OpenAccountActionState = {};
 
@@ -20,13 +22,22 @@ export function OpenAccountForm({
 }: {
   openableTypes: AccountType[];
 }) {
+  const router = useRouter();
   const [state, formAction, pending] = useActionState(
     openAccountAction,
     initial,
   );
+  useActionToast(state, pending);
   const typeId = useId();
   const labelId = useId();
   const statusId = useId();
+
+  useEffect(() => {
+    if (state.accountId) {
+      router.push(`/app/accounts/${state.accountId}`);
+      router.refresh();
+    }
+  }, [state.accountId, router]);
 
   if (openableTypes.length === 0) {
     return (
@@ -83,9 +94,7 @@ export function OpenAccountForm({
           maxLength={40}
           placeholder="e.g. Reef savings"
           className="ff-input"
-          aria-describedby={
-            state.error || state.success ? statusId : undefined
-          }
+          aria-describedby={state.error ? statusId : undefined}
           aria-invalid={state.error ? true : undefined}
         />
       </label>

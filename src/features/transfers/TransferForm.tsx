@@ -1,6 +1,7 @@
 "use client";
 
 import { useActionState, useId } from "react";
+import { useActionToast } from "@/components/ui/toast";
 import { formatMoney } from "@/domain/money";
 import { transferInternalAction } from "@/features/transfers/actions";
 import type { TransferActionState } from "@/features/transfers/schemas";
@@ -25,6 +26,7 @@ export function TransferForm({
     transferInternalAction,
     initial,
   );
+  useActionToast(state, pending);
   const fromId = useId();
   const toId = useId();
   const amountId = useId();
@@ -95,9 +97,7 @@ export function TransferForm({
           placeholder="50.00"
           required
           className="ff-input"
-          aria-describedby={
-            state.error || state.success ? statusId : undefined
-          }
+          aria-describedby={state.error ? statusId : undefined}
           aria-invalid={state.error ? true : undefined}
         />
       </label>
@@ -109,12 +109,6 @@ export function TransferForm({
           role="alert"
         >
           {state.error}
-        </p>
-      ) : null}
-
-      {state.success ? (
-        <p id={statusId} className="text-sm text-[var(--ff-ok)]" role="status">
-          {state.success}
         </p>
       ) : null}
 

@@ -1,7 +1,6 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
-import { redirect } from "next/navigation";
 import {
   canOpenAccount,
   defaultAccountLabel,
@@ -38,9 +37,10 @@ export async function openAccountAction(
   const userId = session.user.id;
 
   let accountId: string;
+  let label: string;
 
   try {
-    accountId = await prisma.$transaction(async (tx) => {
+    const created = await prisma.$transaction(async (tx) => {
       const accounts = await tx.bankAccount.findMany({
         where: { userId, status: "ACTIVE" },
         select: { type: true },
@@ -59,14 +59,14 @@ export async function openAccountAction(
         throw new Error(validation.reason ?? "Cannot open this account.");
       }
 
-      const label =
+      const resolvedLabel =
         customLabel ?? defaultAccountLabel(type, savingsCount);
 
       const account = await tx.bankAccount.create({
         data: {
           userId,
           type,
-          label,
+          label: resolvedLabel,
           balanceCents: 0,
           interestBps: ACCOUNT_RULES.interestBps[type],
           creditLimitCents:
@@ -76,8 +76,11 @@ export async function openAccountAction(
         },
       });
 
-      return account.id;
+      return { id: account.id, label: resolvedLabel };
     });
+
+    accountId = created.id;
+    label = created.label;
   } catch (error) {
     const message =
       error instanceof Error ? error.message : "Could not open account.";
@@ -86,5 +89,10 @@ export async function openAccountAction(
 
   revalidatePath("/app");
   revalidatePath("/app/accounts/open");
-  redirect(`/app/accounts/${accountId}`);
+  revalidatePath(`/app/accounts/${accountId}`);
+
+  return {
+    success: `${label} opened.`,
+    accountId,
+  };
 }

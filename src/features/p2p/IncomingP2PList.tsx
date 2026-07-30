@@ -1,6 +1,7 @@
 "use client";
 
 import { useActionState, useId } from "react";
+import { useActionToast } from "@/components/ui/toast";
 import { formatMoney } from "@/domain/money";
 import { formatDateTime } from "@/domain/labels";
 import {
@@ -21,6 +22,7 @@ const initial: P2PActionState = {};
 
 function AcceptForm({ p2p }: { p2p: IncomingP2P }) {
   const [state, formAction, pending] = useActionState(acceptP2PAction, initial);
+  useActionToast(state, pending);
   const answerId = useId();
   const statusId = useId();
 
@@ -41,7 +43,7 @@ function AcceptForm({ p2p }: { p2p: IncomingP2P }) {
           className="ff-input"
           autoComplete="off"
           aria-invalid={state.error ? true : undefined}
-          aria-describedby={state.error || state.success ? statusId : undefined}
+          aria-describedby={state.error ? statusId : undefined}
         />
       </label>
       {state.error ? (
@@ -51,11 +53,6 @@ function AcceptForm({ p2p }: { p2p: IncomingP2P }) {
           role="alert"
         >
           {state.error}
-        </p>
-      ) : null}
-      {state.success ? (
-        <p id={statusId} className="text-sm text-[var(--ff-ok)]" role="status">
-          {state.success}
         </p>
       ) : null}
       <button
@@ -79,6 +76,7 @@ function RejectForm({
   senderName: string;
 }) {
   const [state, formAction, pending] = useActionState(rejectP2PAction, initial);
+  useActionToast(state, pending);
 
   return (
     <form
