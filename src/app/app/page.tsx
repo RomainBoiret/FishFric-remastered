@@ -4,6 +4,7 @@ import { redirect } from "next/navigation";
 import { AppHeader, AppShell } from "@/components/brand/AppShell";
 import { ACCOUNT_TYPE_LABELS } from "@/domain/labels";
 import { formatMoney } from "@/domain/money";
+import { NotificationBell } from "@/features/notifications/NotificationBell";
 import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/db";
 
@@ -31,9 +32,12 @@ export default async function AppHubPage() {
         className="mx-auto flex w-full max-w-3xl flex-1 flex-col gap-8 px-4 py-8 sm:px-6"
       >
         <div className="ff-in space-y-2">
-          <h1 className="ff-display text-2xl sm:text-3xl">
-            Hello, {session.user.name?.split(" ")[0] ?? "there"}
-          </h1>
+          <div className="flex items-center justify-between gap-3">
+            <h1 className="ff-display min-w-0 text-2xl sm:text-3xl">
+              Hello, {session.user.name?.split(" ")[0] ?? "there"}
+            </h1>
+            <NotificationBell />
+          </div>
           <p className="text-sm text-[var(--ff-muted)]">
             Your accounts.
             {session.user.isDemo

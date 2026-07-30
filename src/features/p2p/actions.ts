@@ -22,6 +22,8 @@ import { prisma } from "@/lib/db";
 function revalidateP2P(extra: string[] = []) {
   revalidatePath("/app");
   revalidatePath("/app/p2p");
+  revalidatePath("/app/notifications");
+  revalidatePath("/app", "layout");
   for (const path of extra) revalidatePath(path);
 }
 

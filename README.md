@@ -17,6 +17,7 @@ Full-stack remaster of **Fish&Fric**, an ocean-themed online banking demo origin
 - Open additional accounts (rules-enforced: 1 checking, up to 3 savings, 1 Shark Card)
 - Internal transfers (double-entry ledger writes)
 - P2P transfers with a security question / answer
+- Notification center for P2P alerts (read / unread)
 - Recruiter demo mode (`demo@fishfric.app`)
 - Ledger integrity check: `balanceCents` is a cache derived from `LedgerEntry`, and we prove it stays in sync
 

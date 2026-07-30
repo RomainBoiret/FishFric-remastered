@@ -189,6 +189,19 @@ html {
   transform: translateY(1px);
 }
 
+.ff-btn-icon {
+  width: 2.25rem;
+  height: 2.25rem;
+  min-width: 2.25rem;
+  padding: 0;
+  gap: 0;
+}
+
+.ff-btn-icon svg {
+  display: block;
+  flex-shrink: 0;
+}
+
 .ff-surface-step {
   clip-path: polygon(
     0 12px,
