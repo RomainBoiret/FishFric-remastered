@@ -73,24 +73,22 @@ export default async function Home() {
             <span>{SITE_NAME}</span>
           </Link>
           <nav aria-label="Primary">
-            <ul className="m-0 flex list-none items-center gap-2 p-0 sm:gap-3">
+            <ul className="m-0 flex list-none items-center gap-2 p-0">
               <li>
                 <GitHubHeaderLink />
               </li>
-              <li className="hidden sm:block">
+              <li>
                 <Link
                   href="/signup"
-                  className="text-xs font-bold uppercase tracking-wide text-[var(--ff-muted)] hover:text-white focus-visible:text-white"
+                  className="ff-btn ff-btn-sm ff-btn-sand"
                 >
                   Create account
                 </Link>
               </li>
               <li>
-                <Link
-                  href="/login"
-                  className="ff-btn ff-btn-ghost px-3 py-2 text-xs sm:text-sm"
-                >
+                <Link href="/login" className="ff-btn ff-btn-sm">
                   Sign in
+                  <span aria-hidden="true"> ›</span>
                 </Link>
               </li>
             </ul>

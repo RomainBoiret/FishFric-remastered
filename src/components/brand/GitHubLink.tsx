@@ -20,10 +20,11 @@ export function GitHubHeaderLink({ className = "" }: { className?: string }) {
       href={SITE_GITHUB}
       target="_blank"
       rel="noopener noreferrer"
-      className={`inline-flex h-9 w-9 items-center justify-center text-[var(--ff-muted)] transition-colors hover:text-white focus-visible:text-white ${className}`}
+      className={`ff-btn ff-btn-sm ff-btn-ghost ff-btn-icon ${className}`.trim()}
       aria-label="GitHub repository (opens in a new tab)"
+      title="GitHub"
     >
-      <GitHubIcon size={22} />
+      <GitHubIcon size={16} />
     </a>
   );
 }

@@ -34,13 +34,13 @@ export function AppHeader({ showLogout = true }: { showLogout?: boolean }) {
           <span>{SITE_NAME}</span>
           <span className="ff-sr-only"> - home</span>
         </Link>
-        <nav aria-label="Account" className="flex items-center gap-2 sm:gap-3">
+        <nav aria-label="Account" className="flex items-center gap-2">
           <GitHubHeaderLink />
           {showLogout ? (
             <form action={logoutAction}>
               <button
                 type="submit"
-                className="ff-btn ff-btn-ghost px-3 py-2 text-xs"
+                className="ff-btn ff-btn-sm ff-btn-ghost"
               >
                 Sign out
               </button>
