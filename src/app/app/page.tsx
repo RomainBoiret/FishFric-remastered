@@ -48,7 +48,7 @@ export default async function AppHubPage() {
 
         <nav
           aria-label="Quick actions"
-          className="ff-in ff-in-1 grid gap-2 sm:grid-cols-2"
+          className="ff-in ff-in-1 grid gap-2 sm:grid-cols-2 lg:grid-cols-3"
         >
           <Link href="/app/transfer" className="ff-btn ff-btn-sm w-full">
             New transfer
@@ -66,6 +66,13 @@ export default async function AppHubPage() {
             className="ff-btn ff-btn-sm ff-btn-stone w-full"
           >
             Pay a bill
+            <span aria-hidden="true"> ›</span>
+          </Link>
+          <Link
+            href="/app/deposit"
+            className="ff-btn ff-btn-sm ff-btn-ghost w-full"
+          >
+            Mobile deposit
             <span aria-hidden="true"> ›</span>
           </Link>
           <Link

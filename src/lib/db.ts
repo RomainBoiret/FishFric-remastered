@@ -18,8 +18,38 @@ function createPrismaClient() {
   return new PrismaClient({ adapter });
 }
 
-export const prisma = globalForPrisma.prisma ?? createPrismaClient();
-
-if (process.env.NODE_ENV !== "production") {
-  globalForPrisma.prisma = prisma;
+function hasMobileDeposit(client: PrismaClient): boolean {
+  return typeof (client as { mobileDeposit?: unknown }).mobileDeposit !== "undefined";
 }
+
+function getPrismaClient(): PrismaClient {
+  const cached = globalForPrisma.prisma;
+
+  // After `prisma generate`, Turbopack / HMR can keep a stale global client
+  // that predates new models (e.g. mobileDeposit).
+  if (cached && hasMobileDeposit(cached)) {
+    return cached;
+  }
+
+  if (cached) {
+    void cached.$disconnect().catch(() => undefined);
+  }
+
+  const client = createPrismaClient();
+  if (process.env.NODE_ENV !== "production") {
+    globalForPrisma.prisma = client;
+  }
+  return client;
+}
+
+/**
+ * Proxy so callers always hit a client that matches the generated schema,
+ * even if this module was evaluated before a regenerate.
+ */
+export const prisma = new Proxy({} as PrismaClient, {
+  get(_target, prop, receiver) {
+    const client = getPrismaClient();
+    const value = Reflect.get(client, prop, receiver);
+    return typeof value === "function" ? value.bind(client) : value;
+  },
+});

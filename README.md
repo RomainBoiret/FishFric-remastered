@@ -18,6 +18,7 @@ Full-stack remaster of **Fish&Fric**, an ocean-themed online banking demo origin
 - Internal transfers (double-entry ledger writes)
 - P2P transfers with a security question / answer
 - Bill payments to demo payees (ledger `BILL_PAYMENT`)
+- Mobile cheque deposit (simulated pending → credited, `MOBILE_DEPOSIT`)
 - Notification center for P2P alerts (read / unread)
 - Recruiter demo mode (`demo@fishfric.app`)
 - Ledger integrity check: `balanceCents` is a cache derived from `LedgerEntry`, and we prove it stays in sync

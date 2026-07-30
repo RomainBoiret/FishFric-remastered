@@ -37,6 +37,12 @@ enum P2PStatus {
   CANCELLED
 }
 
+enum MobileDepositStatus {
+  PENDING
+  CREDITED
+  REJECTED
+}
+
 model User {
   id           String   @id @default(cuid())
   email        String   @unique
@@ -46,10 +52,11 @@ model User {
   isDemo       Boolean  @default(false)
   createdAt    DateTime @default(now())
 
-  accounts      BankAccount[]
-  notifications Notification[]
-  sentP2P       P2PTransfer[] @relation("P2PSender")
-  receivedP2P   P2PTransfer[] @relation("P2PRecipient")
+  accounts       BankAccount[]
+  notifications  Notification[]
+  sentP2P        P2PTransfer[]  @relation("P2PSender")
+  receivedP2P    P2PTransfer[]  @relation("P2PRecipient")
+  mobileDeposits MobileDeposit[]
 }
 
 model BankAccount {
@@ -68,8 +75,9 @@ model BankAccount {
   openedAt         DateTime      @default(now())
   closedAt         DateTime?
 
-  entries     LedgerEntry[]
-  p2pAsSource P2PTransfer[] @relation("P2PSource")
+  entries        LedgerEntry[]
+  p2pAsSource    P2PTransfer[]  @relation("P2PSource")
+  mobileDeposits MobileDeposit[]
 
   @@index([userId, status])
 }
@@ -85,10 +93,13 @@ model LedgerEntry {
   transferGroupId String?
   p2pTransferId   String?
   p2pTransfer     P2PTransfer? @relation(fields: [p2pTransferId], references: [id], onDelete: SetNull)
+  mobileDepositId String?
+  mobileDeposit   MobileDeposit? @relation(fields: [mobileDepositId], references: [id], onDelete: SetNull)
   createdAt       DateTime    @default(now())
 
   @@index([accountId, createdAt])
   @@index([transferGroupId])
+  @@index([mobileDepositId])
 }
 
 model P2PTransfer {
@@ -113,6 +124,25 @@ model P2PTransfer {
 
   @@index([recipientEmail, status])
   @@index([senderUserId, status])
+}
+
+model MobileDeposit {
+  id          String              @id @default(cuid())
+  userId      String
+  user        User                @relation(fields: [userId], references: [id], onDelete: Cascade)
+  accountId   String
+  account     BankAccount         @relation(fields: [accountId], references: [id], onDelete: Cascade)
+  amountCents Int
+  status      MobileDepositStatus @default(PENDING)
+  /// Demo only: uploaded filename or sample cheque label (no binary stored)
+  imageLabel  String?
+  createdAt   DateTime            @default(now())
+  resolvedAt  DateTime?
+
+  entries LedgerEntry[]
+
+  @@index([userId, createdAt])
+  @@index([accountId, status])
 }
 
 model Notification {

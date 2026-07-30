@@ -37,6 +37,7 @@ async function wipeUserBanking(userId: string) {
   await prisma.ledgerEntry.deleteMany({
     where: { account: { userId } },
   });
+  await prisma.mobileDeposit.deleteMany({ where: { userId } });
   await prisma.p2PTransfer.deleteMany({
     where: {
       OR: [{ senderUserId: userId }, { recipientUserId: userId }],
