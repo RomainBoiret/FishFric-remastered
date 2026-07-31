@@ -314,7 +314,7 @@ export default async function Home() {
             </div>
 
             <aside
-              className="ff-surface ff-crane-cargo relative space-y-5 p-5 sm:p-6"
+              className="ff-surface ff-crane-cargo relative flex flex-col gap-5 p-5 sm:p-6"
               aria-labelledby="try-now-heading"
             >
               <div className="ff-crane-hook-wrap" aria-hidden>
@@ -348,12 +348,6 @@ export default async function Home() {
                     </p>
                   </li>
                 ))}
-              </ul>
-
-              <ul className="m-0 space-y-2 border-y-2 border-black/40 py-4 pl-5 text-sm text-[var(--ff-muted)]">
-                <li>Real ledger (amounts stored in cents)</li>
-                <li>HMAC-signed, one-time cheque deposits</li>
-                <li>P2P, bills, notifications, tidy history</li>
               </ul>
 
               <DemoButton className="ff-btn w-full" label="Try the demo" />

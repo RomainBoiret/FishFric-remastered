@@ -1,9 +1,13 @@
 import { PixelFish } from "@/components/brand/PixelFish";
 import { HeroParallax } from "@/components/brand/HeroParallax";
+import {
+  EggBannerPlane,
+  EggBoatHit,
+  EggStarfish,
+} from "@/components/brand/EasterEggs";
 import { TreasureChest } from "@/components/brand/TreasureChest";
 import {
   Bubble,
-  BannerPlane,
   Coral,
   Crab,
   FishingBoat,
@@ -100,7 +104,6 @@ export function Atmosphere({ variant = "app" }: AtmosphereProps) {
           <>
             <SkyClouds />
             <SeagullsFront />
-            <BannerPlane />
             <SurfaceWaves />
             <FishingBoat />
           </>
@@ -193,7 +196,6 @@ export function Atmosphere({ variant = "app" }: AtmosphereProps) {
           <PixelKelp key={k.left} {...k} />
         ))}
 
-        <Starfish left="34%" bottom={FLOOR} />
         <Starfish left="70%" bottom={FLOOR} color="#f2a63a" />
         {rich ? <Starfish left="16%" bottom={FLOOR} color="#e05a9a" /> : null}
         <Crab left="30%" bottom={FLOOR} delay="0s" dir="right" />
@@ -204,8 +206,14 @@ export function Atmosphere({ variant = "app" }: AtmosphereProps) {
         <div className="absolute inset-x-0 top-0 h-14 bg-gradient-to-b from-black/12 to-transparent" />
       </div>
 
-      {/* Above page content so clicks reach the easter egg; below site header (z-20). */}
-      <div className="pointer-events-none absolute inset-0 z-[15] overflow-hidden">
+      {/* Above page content so clicks reach easter eggs; below site header (z-20). */}
+      <div
+        data-ff-atmosphere
+        className="pointer-events-none absolute inset-0 z-[15] overflow-hidden"
+      >
+        {rich ? <EggBannerPlane /> : null}
+        {rich ? <EggBoatHit /> : null}
+        <EggStarfish left="34%" bottom={FLOOR} />
         <TreasureChest left={rich ? "47%" : "14%"} bottom={FLOOR} />
       </div>
     </>

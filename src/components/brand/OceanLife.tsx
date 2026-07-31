@@ -360,37 +360,28 @@ export function YellowSubmarine({
           transform: dir === "left" ? "scaleX(-1)" : undefined,
         }}
       >
-        {/* Hull */}
         <rect x="6" y="8" width="28" height="8" fill="#e0aa2c" />
         <rect x="8" y="7" width="24" height="2" fill="#f0c040" />
         <rect x="8" y="15" width="24" height="2" fill="#b8860b" />
         <rect x="10" y="16" width="20" height="1" fill="#8a6810" />
-        {/* Nose */}
         <rect x="34" y="9" width="5" height="6" fill="#e0aa2c" />
         <rect x="38" y="10" width="3" height="4" fill="#f0c040" />
-        {/* Conning tower */}
         <rect x="16" y="3" width="10" height="5" fill="#e0aa2c" />
         <rect x="17" y="2" width="8" height="2" fill="#f0c040" />
-        {/* Periscope */}
         <rect x="22" y="0" width="2" height="3" fill="#5a6570" />
         <rect x="20" y="0" width="4" height="1" fill="#3a454f" />
-        {/* Windows / portholes */}
         <rect x="12" y="10" width="3" height="3" fill="#5ec8e8" />
         <rect x="13" y="11" width="1" height="1" fill="#b8ecff" />
         <rect x="18" y="10" width="3" height="3" fill="#2f6f9f" />
         <rect x="19" y="11" width="1" height="1" fill="#5ec8e8" />
         <rect x="24" y="10" width="3" height="3" fill="#5ec8e8" />
         <rect x="25" y="11" width="1" height="1" fill="#b8ecff" />
-        {/* Propeller */}
         <rect x="2" y="9" width="4" height="5" fill="#6a7580" />
         <rect x="1" y="8" width="2" height="2" fill="#8a95a0" />
         <rect x="1" y="13" width="2" height="2" fill="#8a95a0" />
         <rect x="0" y="10" width="2" height="3" fill="#4a5560" />
-        {/* Fin */}
         <rect x="28" y="5" width="4" height="3" fill="#b8860b" />
-        {/* Gold band */}
         <rect x="8" y="12" width="24" height="1" fill="#ffe08a" />
-        {/* Tiny bubble trail */}
         <rect x="3" y="6" width="1" height="1" fill="#ffffff" opacity="0.45" />
         <rect x="1" y="4" width="1" height="1" fill="#ffffff" opacity="0.3" />
       </svg>
@@ -509,7 +500,10 @@ export function Bubble({
  */
 export function Seabed() {
   return (
-    <div className="absolute inset-x-0 bottom-0 z-[1] h-[4.25rem]">
+    <div
+      data-ff-gem-sand
+      className="absolute inset-x-0 bottom-0 z-[1] h-[4.25rem]"
+    >
       {/* Bright sand surface (top) */}
       <div className="flex h-4 w-full">
         {Array.from({ length: 32 }).map((_, i) => (

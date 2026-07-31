@@ -1020,6 +1020,497 @@ button:disabled {
   animation: ff-chest-coin-fall 1.4s linear infinite;
 }
 
+/* ---- Easter-egg hit targets + FX ---- */
+.ff-egg-hit {
+  position: absolute;
+  inset: -0.75rem -1rem;
+  padding: 0;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  pointer-events: auto;
+  z-index: 2;
+}
+
+.ff-tow-plane-tilt:has(.ff-egg-hit:hover) {
+  filter: drop-shadow(0 0 10px rgba(255, 224, 138, 0.55));
+}
+
+.ff-egg-hit:focus-visible,
+.ff-egg-boat:focus-visible,
+.ff-egg-starfish:focus-visible {
+  outline: 3px solid var(--ff-gold-hi);
+  outline-offset: 4px;
+}
+
+.ff-egg-boat {
+  padding: 0;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  pointer-events: auto;
+  color: transparent;
+}
+
+.ff-egg-starfish {
+  padding: 0.35rem;
+  margin: -0.35rem;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  pointer-events: auto;
+  line-height: 0;
+  transition: filter 0.25s var(--ff-ease), transform 0.2s var(--ff-ease);
+}
+
+.ff-egg-starfish:hover {
+  filter: drop-shadow(0 0 8px rgba(255, 143, 112, 0.7));
+  transform: scale(1.12);
+}
+
+.ff-egg-spark {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  z-index: 4;
+  border-radius: 1px;
+  box-shadow: 0 0 0 1px #071218;
+  pointer-events: none;
+  animation: ff-egg-spark 0.95s var(--ff-ease) forwards;
+}
+
+@keyframes ff-egg-spark {
+  0% {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(0.4) rotate(0deg);
+  }
+  100% {
+    opacity: 0;
+    transform: translate(
+        calc(-50% + var(--ff-spark-x)),
+        calc(-50% + var(--ff-spark-y))
+      )
+      scale(1)
+      rotate(var(--ff-spark-rot));
+  }
+}
+
+/* Plane tip / dip */
+.ff-tow-lane.is-egg-hailed .ff-tow-plane-tilt {
+  animation: ff-egg-plane-tip 1.1s var(--ff-ease) both;
+  filter: drop-shadow(0 0 14px rgba(255, 224, 138, 0.75));
+}
+
+.ff-tow-lane.is-egg-hailed .ff-tow-banner {
+  animation: ff-egg-banner-flap 1.1s var(--ff-ease) both;
+}
+
+@keyframes ff-egg-plane-tip {
+  0% {
+    transform: rotate(0deg) translateY(0);
+  }
+  30% {
+    transform: rotate(-18deg) translateY(6px);
+  }
+  55% {
+    transform: rotate(10deg) translateY(-4px);
+  }
+  100% {
+    transform: rotate(0deg) translateY(0);
+  }
+}
+
+@keyframes ff-egg-banner-flap {
+  0%,
+  100% {
+    transform: translateY(0) rotate(0deg);
+  }
+  40% {
+    transform: translateY(4px) rotate(-2deg);
+  }
+  70% {
+    transform: translateY(-2px) rotate(1.5deg);
+  }
+}
+
+/* Boat hail: tip visual boat + ripples on hit layer */
+body.ff-egg-boat-hail .ff-boat-float {
+  animation: ff-egg-boat-tip 1.2s var(--ff-ease) both;
+}
+
+@keyframes ff-egg-boat-tip {
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0) rotate(-0.45deg);
+  }
+  35% {
+    transform: translate3d(0, -6px, 0) rotate(-3deg);
+  }
+  60% {
+    transform: translate3d(0, 2px, 0) rotate(2.5deg);
+  }
+}
+
+.ff-egg-ripple {
+  position: absolute;
+  left: 50%;
+  top: 72%;
+  width: 2.5rem;
+  height: 0.7rem;
+  border: 2px solid rgba(94, 200, 232, 0.85);
+  border-radius: 50%;
+  opacity: 0;
+  pointer-events: none;
+  transform: translate(-50%, -50%) scale(0.4);
+}
+
+.ff-egg-boat.is-egg-hailed .ff-egg-ripple-a {
+  animation: ff-egg-ripple 1.2s var(--ff-ease) both;
+}
+
+.ff-egg-boat.is-egg-hailed .ff-egg-ripple-b {
+  animation: ff-egg-ripple 1.2s var(--ff-ease) 0.18s both;
+}
+
+@keyframes ff-egg-ripple {
+  0% {
+    opacity: 0.9;
+    transform: translate(-50%, -50%) scale(0.35);
+  }
+  100% {
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(2.4);
+  }
+}
+
+.ff-egg-horn {
+  position: absolute;
+  left: 50%;
+  top: 8%;
+  z-index: 3;
+  margin: 0;
+  padding: 0.2rem 0.45rem;
+  border: 2px solid #071218;
+  background: rgba(255, 255, 255, 0.92);
+  box-shadow: 2px 2px 0 rgba(0, 0, 0, 0.25);
+  color: #8a6810;
+  font-family: var(--font-pixel), ui-monospace, monospace;
+  font-size: 0.7rem;
+  letter-spacing: 0.04em;
+  text-transform: lowercase;
+  opacity: 0;
+  pointer-events: none;
+  transform: translate(-50%, 6px);
+}
+
+.ff-egg-boat.is-egg-hailed .ff-egg-horn {
+  animation: ff-egg-horn-pop 1.3s var(--ff-ease) both;
+}
+
+@keyframes ff-egg-horn-pop {
+  0% {
+    opacity: 0;
+    transform: translate(-50%, 8px) scale(0.7);
+  }
+  25% {
+    opacity: 1;
+    transform: translate(-50%, -4px) scale(1.08);
+  }
+  70% {
+    opacity: 1;
+    transform: translate(-50%, -10px) scale(1);
+  }
+  100% {
+    opacity: 0;
+    transform: translate(-50%, -18px) scale(0.95);
+  }
+}
+
+/* Starfish wish */
+.ff-egg-starfish.is-wishing {
+  animation: ff-egg-star-spin 1.1s var(--ff-ease) both;
+  filter: drop-shadow(0 0 10px rgba(255, 143, 112, 0.9));
+}
+
+@keyframes ff-egg-star-spin {
+  0% {
+    transform: scale(1) rotate(0deg);
+  }
+  40% {
+    transform: scale(1.35) rotate(180deg);
+  }
+  100% {
+    transform: scale(1) rotate(360deg);
+  }
+}
+
+.ff-egg-wish {
+  position: absolute;
+  left: 50%;
+  top: -0.35rem;
+  z-index: 5;
+  color: #ffe08a;
+  font-family: var(--font-pixel), ui-monospace, monospace;
+  font-size: 0.85rem;
+  text-shadow: 0 1px 0 #071218;
+  pointer-events: none;
+  animation: ff-egg-wish-float 1.2s var(--ff-ease) both;
+}
+
+@keyframes ff-egg-wish-float {
+  0% {
+    opacity: 0;
+    transform: translate(-50%, 6px);
+  }
+  30% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+    transform: translate(-50%, -28px);
+  }
+}
+
+/* Brand blink */
+.ff-egg-brand-blink {
+  animation: ff-egg-brand-wiggle 0.9s var(--ff-ease) both;
+}
+
+.ff-egg-brand-blink svg {
+  animation: ff-egg-brand-eye 0.9s steps(2) both;
+}
+
+@keyframes ff-egg-brand-wiggle {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  25% {
+    transform: translateY(-3px) rotate(-4deg);
+  }
+  50% {
+    transform: translateY(1px) rotate(3deg);
+  }
+  75% {
+    transform: translateY(-2px) rotate(-2deg);
+  }
+}
+
+@keyframes ff-egg-brand-eye {
+  0%,
+  100% {
+    filter: none;
+  }
+  40%,
+  55% {
+    filter: brightness(1.35) saturate(1.2);
+  }
+}
+
+/* Gem rain in Atmosphere page-space: sky → seabed sand (like the crane cable) */
+.ff-egg-rain {
+  position: absolute;
+  inset: 0;
+  z-index: 18;
+  overflow: hidden;
+  pointer-events: none;
+  container-type: size;
+}
+
+.ff-egg-rain-gem {
+  position: absolute;
+  top: 0;
+  left: 0;
+  display: grid;
+  place-items: center;
+  animation-name: ff-egg-gem-fall;
+  animation-timing-function: cubic-bezier(0.37, 0.01, 0.55, 1);
+  animation-fill-mode: both;
+  will-change: transform, opacity;
+  filter: drop-shadow(0 0 6px var(--ff-gem-glow));
+}
+
+.ff-egg-rain-gem-facet {
+  position: relative;
+  display: block;
+  width: 100%;
+  height: 100%;
+  box-shadow:
+    inset -2px -2px 0 rgba(7, 18, 24, 0.28),
+    inset 2px 2px 0 rgba(255, 255, 255, 0.45),
+    0 0 0 1px #071218;
+  animation:
+    ff-egg-gem-drift var(--ff-gem-duration, 3.2s) ease-in-out both,
+    ff-egg-gem-twinkle 1.4s ease-in-out infinite;
+  animation-delay: var(--ff-gem-delay, 0s), var(--ff-gem-delay, 0s);
+  image-rendering: pixelated;
+  transform-origin: center;
+}
+
+.ff-egg-rain-gem-facet.is-diamond {
+  border-radius: 1px;
+  animation:
+    ff-egg-gem-drift-diamond var(--ff-gem-duration, 3.2s) ease-in-out both,
+    ff-egg-gem-twinkle 1.4s ease-in-out infinite;
+  animation-delay: var(--ff-gem-delay, 0s), var(--ff-gem-delay, 0s);
+}
+
+.ff-egg-rain-gem-facet.is-hex {
+  clip-path: polygon(50% 0%, 95% 25%, 95% 75%, 50% 100%, 5% 75%, 5% 25%);
+  box-shadow: 0 0 0 1px #071218;
+}
+
+.ff-egg-rain-gem-facet.is-cut {
+  clip-path: polygon(50% 0%, 100% 38%, 82% 100%, 18% 100%, 0% 38%);
+  box-shadow: 0 0 0 1px #071218;
+}
+
+.ff-egg-rain-gem-facet::after {
+  content: "";
+  position: absolute;
+  left: 22%;
+  right: 36%;
+  top: 16%;
+  height: 26%;
+  border-radius: 1px;
+  background: rgba(255, 255, 255, 0.55);
+}
+
+@keyframes ff-egg-gem-twinkle {
+  0%,
+  100% {
+    filter: brightness(1);
+  }
+  50% {
+    filter: brightness(1.22);
+  }
+}
+
+/* From above the sky band down onto the sand shelf (FLOOR = 4.25rem) */
+@keyframes ff-egg-gem-fall {
+  0% {
+    opacity: 1;
+    transform: translate3d(0, -2.5rem, 0);
+  }
+  78% {
+    opacity: 1;
+    transform: translate3d(0, calc(100cqh - 4.75rem), 0);
+  }
+  84% {
+    opacity: 1;
+    transform: translate3d(0, calc(100cqh - 5.45rem), 0);
+  }
+  90% {
+    opacity: 1;
+    transform: translate3d(0, calc(100cqh - 4.85rem), 0);
+  }
+  100% {
+    opacity: 0;
+    transform: translate3d(0, calc(100cqh - 4.85rem), 0);
+  }
+}
+
+@keyframes ff-egg-gem-drift {
+  0% {
+    transform: translate3d(0, 0, 0) rotate(0deg);
+  }
+  25% {
+    transform: translate3d(calc(var(--ff-gem-sway) * 0.55), 0, 0)
+      rotate(calc(90deg * var(--ff-gem-spin)));
+  }
+  50% {
+    transform: translate3d(calc(var(--ff-gem-sway) * -0.35), 0, 0)
+      rotate(calc(180deg * var(--ff-gem-spin)));
+  }
+  75% {
+    transform: translate3d(calc(var(--ff-gem-sway) * 0.4), 0, 0)
+      rotate(calc(270deg * var(--ff-gem-spin)));
+  }
+  100% {
+    transform: translate3d(calc(var(--ff-gem-sway) * -0.15), 0, 0)
+      rotate(calc(360deg * var(--ff-gem-spin)));
+  }
+}
+
+@keyframes ff-egg-gem-drift-diamond {
+  0% {
+    transform: translate3d(0, 0, 0) rotate(45deg) scale(0.78);
+  }
+  25% {
+    transform: translate3d(calc(var(--ff-gem-sway) * 0.55), 0, 0)
+      rotate(calc(45deg + 90deg * var(--ff-gem-spin))) scale(0.78);
+  }
+  50% {
+    transform: translate3d(calc(var(--ff-gem-sway) * -0.35), 0, 0)
+      rotate(calc(45deg + 180deg * var(--ff-gem-spin))) scale(0.78);
+  }
+  75% {
+    transform: translate3d(calc(var(--ff-gem-sway) * 0.4), 0, 0)
+      rotate(calc(45deg + 270deg * var(--ff-gem-spin))) scale(0.78);
+  }
+  100% {
+    transform: translate3d(calc(var(--ff-gem-sway) * -0.15), 0, 0)
+      rotate(calc(45deg + 360deg * var(--ff-gem-spin))) scale(0.78);
+  }
+}
+
+@keyframes ff-egg-konami-flash {
+  0%,
+  100% {
+    filter: none;
+  }
+  35% {
+    filter: sepia(0.4) saturate(1.5) hue-rotate(-12deg) brightness(1.05);
+  }
+}
+
+body.ff-egg-konami {
+  animation: ff-egg-konami-flash 1.6s var(--ff-ease) both;
+}
+
+@keyframes ff-egg-word-wash {
+  0%,
+  100% {
+    filter: none;
+  }
+  40% {
+    filter: saturate(1.25) brightness(1.04);
+  }
+}
+
+body.ff-egg-word-gold {
+  animation: ff-egg-word-wash 1.4s var(--ff-ease) both;
+}
+
+@keyframes ff-egg-word-teal {
+  0%,
+  100% {
+    filter: none;
+  }
+  40% {
+    filter: hue-rotate(12deg) saturate(1.2) brightness(1.03);
+  }
+}
+
+body.ff-egg-word-teal {
+  animation: ff-egg-word-teal 1.4s var(--ff-ease) both;
+}
+
+body.ff-egg-word-coral {
+  animation: ff-egg-word-coral 1.4s var(--ff-ease) both;
+}
+
+@keyframes ff-egg-word-coral {
+  0%,
+  100% {
+    filter: none;
+  }
+  40% {
+    filter: hue-rotate(-18deg) saturate(1.25) brightness(1.04);
+  }
+}
+
+
 @keyframes ff-chest-coin-fall {
   0% {
     transform: translateY(-8px) rotate(0deg);
@@ -1690,6 +2181,25 @@ button:disabled {
   .ff-fish-right,
   .ff-fish-left,
   .ff-toast {
+    animation: none !important;
+  }
+
+  .ff-egg-spark,
+  .ff-egg-rain-gem,
+  .ff-egg-rain-gem-facet,
+  .ff-egg-horn,
+  .ff-egg-wish,
+  .ff-egg-ripple,
+  .ff-egg-brand-blink,
+  .ff-egg-brand-blink svg,
+  .ff-egg-starfish.is-wishing,
+  .ff-tow-lane.is-egg-hailed .ff-tow-plane-tilt,
+  .ff-tow-lane.is-egg-hailed .ff-tow-banner,
+  body.ff-egg-boat-hail .ff-boat-float,
+  body.ff-egg-konami,
+  body.ff-egg-word-gold,
+  body.ff-egg-word-teal,
+  body.ff-egg-word-coral {
     animation: none !important;
   }
 

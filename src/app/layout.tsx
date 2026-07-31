@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Noto_Sans, Pixelify_Sans } from "next/font/google";
 import { SkipLink } from "@/components/a11y/SkipLink";
+import { EasterEggsHost } from "@/components/brand/EasterEggs";
 import { JsonLd } from "@/components/seo/JsonLd";
 import { ToastProvider } from "@/components/ui/toast";
 import { SITE_AUTHOR, SITE_NAME, SITE_TAGLINE, getSiteUrl } from "@/lib/site";
@@ -89,6 +90,7 @@ export default function RootLayout({
           <SkipLink />
           <JsonLd />
           {children}
+          <EasterEggsHost />
         </ToastProvider>
       </body>
     </html>
