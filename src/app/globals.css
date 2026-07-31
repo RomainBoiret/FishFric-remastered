@@ -1,7 +1,6 @@
 @import "tailwindcss";
 
 :root {
-  /* Minecraft ocean biome + golden CTAs */
   --ff-bg: #0b1a22;
   --ff-bg-panel: #1e3a44;
   --ff-bg-panel-2: #274854;
@@ -508,8 +507,187 @@ button:disabled {
 }
 
 .ff-nav {
-  background: #071218;
-  border-bottom: 3px solid #000;
+  background: transparent;
+  border: none;
+  box-shadow: none;
+}
+
+/* Marketing / sky — floats in the atmosphere, no slab */
+.ff-nav-sky {
+  background: transparent;
+}
+
+/* App / deep water — soft depth veil only */
+.ff-nav-deep {
+  background: linear-gradient(
+    180deg,
+    rgba(6, 28, 40, 0.55) 0%,
+    rgba(12, 48, 64, 0.22) 55%,
+    transparent 100%
+  );
+  backdrop-filter: blur(10px) saturate(1.15);
+  -webkit-backdrop-filter: blur(10px) saturate(1.15);
+}
+
+.ff-nav-link {
+  display: inline-block;
+  padding: 0.5rem;
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  transition: color 0.25s var(--ff-ease);
+}
+
+.ff-nav-deep .ff-brand {
+  text-shadow:
+    2px 2px 0 rgba(0, 0, 0, 0.65),
+    0 0 14px rgba(0, 0, 0, 0.35);
+}
+
+.ff-nav-deep .ff-nav-link {
+  color: #e8f4f8;
+  text-shadow:
+    0 1px 0 rgba(7, 18, 24, 0.7),
+    0 0 10px rgba(7, 18, 24, 0.35);
+}
+
+.ff-nav-deep .ff-nav-link:hover,
+.ff-nav-deep .ff-nav-link[aria-current="page"] {
+  color: var(--ff-gold-hi);
+}
+
+.ff-nav-sky .ff-brand {
+  color: #123a4e;
+  text-shadow:
+    1px 1px 0 rgba(255, 255, 255, 0.75),
+    0 0 12px rgba(255, 255, 255, 0.45);
+}
+
+.ff-nav-sky .ff-nav-link {
+  color: #1a4a5e;
+  text-shadow: 0 1px 0 rgba(255, 255, 255, 0.65);
+}
+
+.ff-nav-sky .ff-nav-link:hover,
+.ff-nav-sky .ff-nav-link[aria-current="page"] {
+  color: #8a6810;
+}
+
+/* Header CTAs: crisp pixel blocks that stay readable on bright sky */
+.ff-nav .ff-btn-sm {
+  font-size: 0.75rem;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  padding: 0.62rem 1rem;
+}
+
+.ff-nav-sky .ff-btn {
+  border-color: #071218;
+  box-shadow:
+    inset 0 2px 0 rgba(255, 255, 255, 0.35),
+    inset 0 -3px 0 rgba(0, 0, 0, 0.22),
+    0 2px 0 #071218,
+    0 0 0 1px rgba(255, 255, 255, 0.55);
+}
+
+.ff-nav-sky .ff-btn:hover:not(:disabled) {
+  box-shadow:
+    inset 0 2px 0 rgba(255, 255, 255, 0.4),
+    inset 0 -3px 0 rgba(0, 0, 0, 0.2),
+    0 3px 0 #071218,
+    0 0 0 1px rgba(255, 255, 255, 0.65);
+}
+
+.ff-nav-sky .ff-btn:active:not(:disabled) {
+  box-shadow:
+    inset 0 2px 0 rgba(255, 255, 255, 0.2),
+    inset 0 -2px 0 rgba(0, 0, 0, 0.25),
+    0 1px 0 #071218,
+    0 0 0 1px rgba(255, 255, 255, 0.45);
+}
+
+.ff-nav-sky .ff-btn:not(.ff-btn-ghost):not(.ff-btn-prismarine) {
+  background: #f0c040;
+  color: #1a1408;
+}
+
+.ff-nav-sky .ff-btn-prismarine {
+  background: #1f7a6e;
+  color: #fff;
+  text-shadow: 0 1px 0 rgba(0, 0, 0, 0.35);
+}
+
+.ff-nav-sky .ff-btn-prismarine:hover:not(:disabled) {
+  background: #279688;
+}
+
+.ff-nav-sky .ff-btn-ghost {
+  background: #fff;
+  color: #123a4e;
+  border-color: #071218;
+  box-shadow:
+    inset 0 2px 0 rgba(255, 255, 255, 0.95),
+    inset 0 -2px 0 rgba(0, 0, 0, 0.08),
+    0 2px 0 #071218,
+    0 0 0 1px rgba(255, 255, 255, 0.7);
+}
+
+.ff-nav-sky .ff-btn-ghost:hover:not(:disabled) {
+  background: #ffe08a;
+  color: #1a1408;
+  box-shadow:
+    inset 0 2px 0 rgba(255, 255, 255, 0.85),
+    inset 0 -2px 0 rgba(0, 0, 0, 0.1),
+    0 3px 0 #071218,
+    0 0 0 1px rgba(255, 255, 255, 0.75);
+}
+
+/* Account header: solid CTAs that read on deep water */
+.ff-nav-deep .ff-btn {
+  border-color: #071218;
+  box-shadow:
+    inset 0 2px 0 rgba(255, 255, 255, 0.28),
+    inset 0 -3px 0 rgba(0, 0, 0, 0.28),
+    0 2px 0 #040a0e;
+}
+
+.ff-nav-deep .ff-btn:hover:not(:disabled) {
+  box-shadow:
+    inset 0 2px 0 rgba(255, 255, 255, 0.32),
+    inset 0 -3px 0 rgba(0, 0, 0, 0.24),
+    0 3px 0 #040a0e;
+}
+
+.ff-nav-deep .ff-btn:active:not(:disabled) {
+  box-shadow:
+    inset 0 2px 0 rgba(255, 255, 255, 0.16),
+    inset 0 -2px 0 rgba(0, 0, 0, 0.3),
+    0 1px 0 #040a0e;
+}
+
+.ff-nav-deep .ff-btn:not(.ff-btn-ghost) {
+  background: #f0c040;
+  color: #1a1408;
+}
+
+.ff-nav-deep .ff-btn-ghost {
+  background: rgba(255, 255, 255, 0.94);
+  color: #123a4e;
+  border-color: #071218;
+  box-shadow:
+    inset 0 2px 0 rgba(255, 255, 255, 0.95),
+    inset 0 -2px 0 rgba(0, 0, 0, 0.1),
+    0 2px 0 #040a0e;
+}
+
+.ff-nav-deep .ff-btn-ghost:hover:not(:disabled) {
+  background: #ffe08a;
+  color: #1a1408;
+  box-shadow:
+    inset 0 2px 0 rgba(255, 255, 255, 0.85),
+    inset 0 -2px 0 rgba(0, 0, 0, 0.12),
+    0 3px 0 #040a0e;
 }
 
 @keyframes ff-swim-right {

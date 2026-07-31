@@ -23,7 +23,7 @@ export function AppShell({ children }: AppShellProps) {
 
 export function AppHeader() {
   return (
-    <header className="ff-nav relative z-20">
+    <header className="ff-nav ff-nav-deep relative z-20">
       <div className="mx-auto flex w-full max-w-4xl items-center justify-between gap-2 px-4 py-3 sm:gap-4 sm:px-6">
         <Link
           href="/app"
@@ -37,15 +37,12 @@ export function AppHeader() {
           aria-label="Account"
           className="flex shrink-0 flex-wrap items-center justify-end gap-1.5 sm:gap-2"
         >
-          <Link
-            href="/docs"
-            className="inline-block px-2 py-2 text-xs font-bold uppercase tracking-wide text-[var(--ff-muted)] hover:text-[var(--ff-gold)]"
-          >
+          <Link href="/docs" className="ff-nav-link">
             Docs
           </Link>
           <GitHubHeaderLink />
           <form action={logoutAction}>
-            <button type="submit" className="ff-btn ff-btn-sm ff-btn-ghost">
+            <button type="submit" className="ff-btn ff-btn-sm">
               Sign out
             </button>
           </form>
