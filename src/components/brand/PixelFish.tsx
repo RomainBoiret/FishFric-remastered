@@ -4,13 +4,11 @@ export function PixelFish({
   fin = "#e85d4c",
   size = 24,
   facing = "right",
-  className = "",
 }: {
   color?: string;
   fin?: string;
   size?: number;
   facing?: "left" | "right";
-  className?: string;
 }) {
   return (
     <svg
@@ -19,7 +17,6 @@ export function PixelFish({
       viewBox="0 0 12 8"
       shapeRendering="crispEdges"
       aria-hidden
-      className={className}
       style={{
         imageRendering: "pixelated",
         transform: facing === "left" ? "scaleX(-1)" : undefined,

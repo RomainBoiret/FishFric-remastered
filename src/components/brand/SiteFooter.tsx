@@ -4,6 +4,16 @@ import { SITE_AUTHOR, SITE_NAME } from "@/lib/site";
 
 const YEAR = new Date().getFullYear();
 
+function CopyrightLine() {
+  return (
+    <p className="ff-footer-copy text-xs font-semibold">
+      <span aria-hidden="true">© </span>
+      <span className="ff-sr-only">Copyright </span>
+      {YEAR} {SITE_NAME}. Made by {SITE_AUTHOR}.
+    </p>
+  );
+}
+
 export function SiteFooter({
   compact = false,
 }: {
@@ -11,42 +21,47 @@ export function SiteFooter({
 }) {
   return (
     <footer
-      className="relative z-10 mt-auto border-t-2 border-black bg-black/50 px-4 py-6 sm:px-8"
+      className={`pointer-events-none relative z-20 mt-auto px-4 sm:px-8 ${
+        compact
+          ? "pt-4 pb-[5.75rem] sm:pt-3 sm:pb-[5.5rem]"
+          : "pt-8 pb-[7.5rem] sm:pt-7 sm:pb-[6.75rem]"
+      }`}
       role="contentinfo"
     >
-      <div
-        className={`mx-auto flex w-full max-w-5xl flex-col gap-4 ${
-          compact
-            ? "items-center text-center"
-            : "sm:flex-row sm:items-center sm:justify-between"
-        }`}
-      >
-        <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:gap-3">
+      {compact ? (
+        <div className="pointer-events-auto mx-auto flex w-full max-w-5xl flex-col items-center gap-1 text-center">
           <Link
             href="/"
-            className="ff-brand inline-flex items-center justify-center gap-2 text-sm sm:justify-start"
+            className="ff-brand ff-footer-copy inline-flex items-center justify-center gap-2 text-sm"
           >
-            <BrandMark size={20} className="text-[var(--ff-gold)]" />
+            <BrandMark
+              size={18}
+              className="text-[var(--ff-gold)] drop-shadow-[0_1px_2px_rgba(0,0,0,0.9)]"
+            />
             {SITE_NAME}
           </Link>
-          <p className="text-xs text-[var(--ff-muted)]">
-            Ocean-themed banking demo by {SITE_AUTHOR}
-          </p>
+          <CopyrightLine />
         </div>
-
-        <nav
-          aria-label="Footer"
-          className={`flex flex-wrap items-center gap-x-4 gap-y-2 text-xs font-bold uppercase tracking-wide ${
-            compact ? "justify-center" : ""
-          }`}
-        >
-          <p className="font-normal normal-case tracking-normal text-[var(--ff-muted)]">
-            <span aria-hidden="true">© </span>
-            <span className="ff-sr-only">Copyright </span>
-            {YEAR} {SITE_NAME}. Made by {SITE_AUTHOR}.
-          </p>
-        </nav>
-      </div>
+      ) : (
+        <div className="pointer-events-auto mx-auto flex w-full max-w-5xl flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+          <div className="flex flex-col items-start gap-2 sm:flex-row sm:items-center sm:gap-3">
+            <Link
+              href="/"
+              className="ff-brand ff-footer-copy inline-flex items-center justify-start gap-2 text-sm"
+            >
+              <BrandMark
+                size={20}
+                className="text-[var(--ff-gold)] drop-shadow-[0_1px_2px_rgba(0,0,0,0.9)]"
+              />
+              {SITE_NAME}
+            </Link>
+            <p className="ff-footer-copy text-xs font-semibold">
+              Ocean-themed banking demo by {SITE_AUTHOR}
+            </p>
+          </div>
+          <CopyrightLine />
+        </div>
+      )}
     </footer>
   );
 }

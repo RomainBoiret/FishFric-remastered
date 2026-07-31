@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { Atmosphere } from "@/components/brand/Atmosphere";
+import { CraneCable } from "@/components/brand/CraneCable";
+import { CraneHook } from "@/components/brand/CraneHook";
 import { PixelFish } from "@/components/brand/PixelFish";
 import { SiteFooter } from "@/components/brand/SiteFooter";
 import { SiteHeader } from "@/components/brand/SiteHeader";
@@ -19,182 +21,97 @@ import {
 
 export const metadata: Metadata = {
   title: "Docs",
-  description: `The story of ${SITE_NAME} - from an ÉTS team integrator project to a solo remaster with signed cheque deposits.`,
+  description: `Dive into the story of ${SITE_NAME} - from an ÉTS team integrator project to a solo remaster with signed cheque deposits.`,
   alternates: { canonical: "/docs" },
 };
 
 const TIMELINE = [
   {
     year: "2024",
+    depth: "Surface",
     title: "ÉTS team integrator",
     body: "Fish&Fric began as a school banking demo built with a team - ocean theme, accounts, and the first clickable ledger.",
-    accent: "#2f6f9f",
+    accent: "#5ec8e8",
+    fish: { color: "#5ec8e8", fin: "#2f6f9f" },
   },
   {
     year: "2026",
+    depth: "Mid reef",
     title: "Solo remaster",
-    body: "Rebuilt from scratch for portfolio review: Next.js, Prisma, Auth.js, and a stricter domain layer you can audit.",
+    body: "Rebuilt from scratch: Next.js, Prisma, Auth.js, and a stricter domain layer you can audit.",
     accent: "#2d8f83",
+    fish: { color: "#7ed957", fin: "#2d6b1a" },
   },
   {
     year: "Now",
+    depth: "Deep water",
     title: "Live demo reef",
     body: "Recruiters can sign in, move money, deposit signed cheques, and watch every cent hit an immutable ledger.",
     accent: "#e0aa2c",
+    fish: { color: "#f2a63a", fin: "#c87820" },
   },
-];
+] as const;
 
 const CHEQUE_FLOW = [
   {
-    title: "Issue",
-    body: "The server creates a unique instrument bound to your payee, amount, and expiry.",
+    title: "Cast",
+    body: "The server issues a unique instrument bound to your payee, amount, and expiry.",
+    accent: "#7ec8e8",
   },
   {
-    title: "Sign",
+    title: "Seal",
     body: "An HMAC seals the cheque. Tampering the SVG breaks the signature check.",
+    accent: "#f0c040",
   },
   {
-    title: "Deposit once",
-    body: "Pending → credited on the ledger. The same file cannot be cashed twice.",
+    title: "Catch once",
+    body: "Pending becomes credited on the ledger. The same file cannot be cashed twice.",
+    accent: "#ff8f8f",
   },
-];
+] as const;
 
-function LedgerIllustration() {
-  return (
-    <div
-      className="relative overflow-hidden border-2 border-black bg-gradient-to-b from-[#164554] to-[#0d2832] p-5"
-      aria-hidden="true"
-    >
-      <div
-        className="pointer-events-none absolute inset-x-0 top-0 h-1 bg-[var(--ff-gold)]"
-        aria-hidden="true"
-      />
-      <div className="mb-4 flex items-center justify-between gap-3">
-        <div>
-          <p className="text-[10px] font-bold uppercase tracking-widest text-[var(--ff-gold)]">
-            Tide log
-          </p>
-          <p className="ff-display text-base text-white">Ledger entries</p>
-        </div>
-        <span className="border-2 border-black bg-black/40 px-2 py-1 text-[10px] font-bold uppercase tracking-wide text-[var(--ff-muted)]">
-          cents
-        </span>
-      </div>
-      <ul className="m-0 space-y-2 p-0">
-        {[
-          { label: "Transfer out", amount: "−4,500", ok: false },
-          { label: "P2P received", amount: "+12,000", ok: true },
-          { label: "Cheque deposit", amount: "+12,000", ok: true },
-          { label: "Bill · TideNet", amount: "−3,299", ok: false },
-        ].map((row) => (
-          <li
-            key={row.label}
-            className="flex items-center justify-between gap-3 border-2 border-black bg-black/35 px-3 py-2.5 text-xs"
-          >
-            <span className="text-[var(--ff-muted)]">{row.label}</span>
-            <span
-              className={`ff-display tabular-nums ${
-                row.ok ? "text-[var(--ff-ok)]" : "text-white"
-              }`}
-            >
-              {row.amount}
-            </span>
-          </li>
-        ))}
-      </ul>
-      <p className="mt-4 border-t-2 border-black/50 pt-3 text-center text-[10px] uppercase tracking-wide text-[var(--ff-gold)]">
-        balanceCents = Σ entries
-      </p>
-    </div>
-  );
-}
-
-function P2PIllustration() {
-  return (
-    <div
-      className="relative flex min-h-48 flex-col justify-between overflow-hidden border-2 border-black bg-gradient-to-br from-[#1a4a58] to-[#0f2c36] p-5"
-      aria-hidden="true"
-    >
-      <div
-        className="pointer-events-none absolute -right-4 -top-4 h-24 w-24 rounded-full bg-[var(--ff-prismarine)]/20"
-        aria-hidden="true"
-      />
-      <div className="relative flex items-start justify-between gap-3">
-        <div className="space-y-2">
-          <p className="text-[10px] font-bold uppercase tracking-widest text-[var(--ff-gold)]">
-            Bottle drop
-          </p>
-          <p className="ff-display text-lg text-white">Security question</p>
-          <p className="max-w-[14rem] text-sm text-[var(--ff-muted)]">
-            Favorite reef fish?
-          </p>
-        </div>
-        <div className="border-2 border-black bg-black/30 p-2">
-          <PixelFish size={32} color="#5ec8e8" fin="#2f6f9f" />
-        </div>
-      </div>
-      <div className="relative mt-5 border-2 border-[var(--ff-prismarine)] bg-[var(--ff-prismarine)]/15 px-3 py-3 text-center text-xs font-bold uppercase tracking-wide text-white">
-        Funds held until the answer clears
-      </div>
-    </div>
-  );
-}
-
-function AlertsIllustration() {
-  return (
-    <div
-      className="relative overflow-hidden border-2 border-black bg-gradient-to-b from-[#164554] to-[#0d2832] p-5"
-      aria-hidden="true"
-    >
-      <div className="mb-4 flex items-center justify-between gap-3">
-        <div>
-          <p className="text-[10px] font-bold uppercase tracking-widest text-[var(--ff-gold)]">
-            Inbox
-          </p>
-          <p className="ff-display text-base text-white">Alerts</p>
-        </div>
-        <span className="border-2 border-[var(--ff-gold)] bg-black/30 px-2 py-1 text-[10px] font-bold uppercase tracking-wide text-[var(--ff-gold)]">
-          Clear all
-        </span>
-      </div>
-      <ul className="m-0 space-y-2 p-0">
-        {[
-          { title: "Mobile deposit credited", unread: true },
-          { title: "P2P transfer received", unread: false },
-          { title: "Bill payment sent", unread: false },
-        ].map((item) => (
-          <li
-            key={item.title}
-            className={`flex items-start gap-3 border-2 border-black px-3 py-2.5 ${
-              item.unread ? "bg-black/45" : "bg-black/25"
-            }`}
-          >
-            <span
-              className={`mt-1.5 h-2.5 w-2.5 shrink-0 ${
-                item.unread ? "bg-[var(--ff-gold)]" : "bg-[var(--ff-muted)]/40"
-              }`}
-            />
-            <div className="min-w-0 flex-1">
-              <p className="truncate text-xs font-bold text-white">
-                {item.title}
-              </p>
-              <p className="mt-1 text-[10px] font-bold uppercase tracking-wide text-[var(--ff-gold)]">
-                Dismiss
-              </p>
-            </div>
-          </li>
-        ))}
-      </ul>
-    </div>
-  );
-}
+const REEF = [
+  {
+    title: "Immutable tide log",
+    subtitle: "Source of truth",
+    body: "Transfers, bills, P2P, and deposits write signed cent entries. The on-screen balance is a cache we can prove against the log.",
+    accent: "#3db8a8",
+    bullets: [
+      "Double-entry cent writes",
+      "Balance = Σ ledger entries",
+      "Auditable history",
+    ],
+  },
+  {
+    title: "P2P bottle drops",
+    subtitle: "Locked send",
+    body: "Send money locked behind a security question. Accept unlocks the flow; decline returns funds on the ledger.",
+    accent: "#7ec8e8",
+    bullets: [
+      "Question-gated transfer",
+      "Accept or decline",
+      "Funds held until clear",
+    ],
+  },
+  {
+    title: "Alerts & tidy history",
+    subtitle: "Keep the deck clear",
+    body: "Notifications and histories share one management model. Clearing never rewrites balances.",
+    accent: "#d4c08a",
+    bullets: [
+      "Dismiss one or clear all",
+      "Auto-capped lists",
+      "Balances stay put",
+    ],
+  },
+] as const;
 
 export default function DocsPage() {
   const chequeSrc = chequeSvgDataUri(
     buildDemoChequeSvg({
       amountCents: 12_000,
       payeeName: "Aqua Recruiter",
-      memo: "Portfolio demo cheque",
+      memo: "Ocean demo cheque",
       chequeId: "cdocsstorycheque01",
       payeeUserId: "docs-preview",
       signature: "a1b2c3d4e5f6789012345678abcdef01",
@@ -206,65 +123,116 @@ export default function DocsPage() {
   return (
     <div className="relative flex min-h-full flex-1 flex-col">
       <Atmosphere variant="hero" />
+      <div
+        className="pointer-events-none absolute inset-x-0 top-0 z-[5] h-full min-h-full overflow-visible"
+        aria-hidden
+      >
+        <CraneCable />
+      </div>
 
       <SiteHeader current="docs" />
 
       <main id="main-content" className="relative z-10 flex flex-1 flex-col">
+        {/* Hero - left-aligned like home, boat space on the right */}
         <section
-          className="mx-auto w-full max-w-5xl px-4 py-14 sm:px-8 lg:px-12"
+          className="mx-auto flex w-full max-w-5xl flex-col px-4 sm:px-8 lg:px-12"
           aria-labelledby="docs-heading"
         >
-          <div className="ff-in max-w-2xl space-y-5">
-            <p className="ff-display text-xs uppercase tracking-widest text-[var(--ff-gold)]">
-              Story · features · illustrations
-            </p>
-            <h1
-              id="docs-heading"
-              className="ff-brand text-4xl leading-tight sm:text-5xl md:text-6xl"
-            >
-              {SITE_NAME}
-            </h1>
-            <p className="text-base leading-relaxed text-white/90 sm:text-lg">
-              From a team school project to a solo remaster you can click
-              through - with a real ledger and a few favorite tricks.
-            </p>
+          <div
+            className="ff-hero-sky ff-in relative z-[6] grid items-center gap-4 pb-8 pt-14 md:grid-cols-[minmax(0,1fr)_minmax(12rem,34%)] md:gap-10 md:pb-10 md:pt-16"
+            style={{ minHeight: "calc(var(--ff-waterline) - 4rem)" }}
+          >
+            <div className="ff-px-title flex max-w-xl flex-col justify-center gap-4">
+              <p className="ff-display text-xs uppercase tracking-widest text-[var(--ff-gold)]">
+                {SITE_NAME} · remastered by {SITE_AUTHOR}
+              </p>
+              <h1
+                id="docs-heading"
+                className="ff-display text-4xl leading-tight text-white sm:text-5xl"
+                style={{ textShadow: "0 2px 0 rgba(15,48,68,0.4)" }}
+              >
+                Captain&apos;s log
+              </h1>
+              <p className="ff-docs-lead [text-shadow:0_1px_2px_rgba(15,48,68,0.5)]">
+                How this ocean-pixel bank grew from a team school project - plus
+                the signed cheque catch and the rest of the reef.
+              </p>
+              <nav
+                aria-label="Log sections"
+                className="flex flex-wrap gap-x-1 gap-y-2 pt-1 text-base font-bold"
+              >
+                {[
+                  { href: "#history-heading", label: "History" },
+                  { href: "#cheque-heading", label: "Cheque catch" },
+                  { href: "#reef-heading", label: "Reef notes" },
+                  { href: "#dive-heading", label: "Dive in" },
+                ].map((link, i) => (
+                  <span key={link.href} className="inline-flex items-center">
+                    {i > 0 ? (
+                      <span className="mx-2 text-white/40" aria-hidden>
+                        ·
+                      </span>
+                    ) : null}
+                    <a
+                      href={link.href}
+                      className={
+                        i === 0
+                          ? "text-[var(--ff-gold)] hover:text-[var(--ff-gold-hi)]"
+                          : "text-white hover:text-[var(--ff-gold-hi)]"
+                      }
+                    >
+                      {link.label}
+                    </a>
+                  </span>
+                ))}
+              </nav>
+            </div>
+
+            {/* Desktop: reserves right column so copy never sits under the boat */}
+            <div
+              className="pointer-events-none relative hidden md:block"
+              aria-hidden
+            />
           </div>
         </section>
 
+        {/* History timeline */}
         <section
-          className="border-t-4 border-black bg-[#0a222c] px-4 py-14 sm:px-8 lg:px-12"
+          className="px-4 pb-12 pt-16 sm:px-8 sm:pt-20 lg:px-12"
           aria-labelledby="history-heading"
         >
-          <div className="mx-auto grid w-full max-w-5xl gap-10 lg:grid-cols-[minmax(0,0.95fr)_minmax(0,1.15fr)] lg:items-start">
-            <div className="space-y-5">
+          <div className="mx-auto grid w-full max-w-5xl gap-10 lg:grid-cols-[minmax(0,18rem)_minmax(0,1fr)] lg:gap-12">
+            <div className="space-y-6">
               <div className="space-y-3">
+                <p className="ff-display text-xs uppercase tracking-widest text-[var(--ff-gold)]">
+                  01 · Descent
+                </p>
                 <h2
                   id="history-heading"
-                  className="ff-display text-2xl text-white sm:text-3xl"
+                  className="ff-display text-3xl text-white sm:text-4xl"
                 >
-                  A short history
+                  Project history
                 </h2>
-                <p className="text-sm leading-relaxed text-[var(--ff-muted)] sm:text-base">
-                  Remastered by {SITE_AUTHOR}. All balances and users are
-                  fictional - this is a portfolio demo, not a bank.
+                <p className="ff-docs-copy">
+                  Three depths from the first ÉTS build to the reef online now.
+                  All balances and users stay fictional.
                 </p>
               </div>
 
-              <aside className="ff-surface ff-surface-accent space-y-3 p-5">
-                <p className="text-[10px] font-bold uppercase tracking-widest text-[var(--ff-gold)]">
+              <aside className="ff-docs-panel space-y-3 p-5">
+                <p className="text-xs font-bold uppercase tracking-widest text-[var(--ff-gold)]">
                   Original team repo
                 </p>
-                <p className="text-sm leading-relaxed text-[var(--ff-muted)]">
+                <p className="ff-docs-copy text-base">
                   The first Fish&amp;Fric was an{" "}
                   <strong className="font-bold text-white">
                     ÉTS integrator team project
                   </strong>{" "}
-                  (2024). This remastered app is a solo rebuild for portfolio
-                  review - same spirit, new stack.
+                  (2024). This remaster keeps the ocean spirit.
                 </p>
                 <a
                   href={SITE_GITHUB_ORIGINAL}
-                  className="ff-btn ff-btn-sm ff-btn-stone inline-flex"
+                  className="inline-flex text-base font-bold text-[var(--ff-gold)] hover:text-[var(--ff-gold-hi)]"
                   rel="noopener noreferrer"
                   target="_blank"
                 >
@@ -274,269 +242,279 @@ export default function DocsPage() {
               </aside>
             </div>
 
-            <ol className="relative m-0 space-y-0 p-0">
+            <ol className="relative m-0 list-none space-y-5 p-0">
               <div
-                className="absolute bottom-4 left-[1.15rem] top-4 w-0.5 bg-[var(--ff-gold)]/40"
-                aria-hidden="true"
+                className="absolute bottom-6 left-[1.15rem] top-6 w-0.5 bg-gradient-to-b from-[#5ec8e8] via-[#2d8f83] to-[#e0aa2c]"
+                aria-hidden
               />
               {TIMELINE.map((item, index) => (
-                <li key={item.year} className="relative flex gap-4 pb-4 last:pb-0">
-                  <span
-                    className="relative z-10 mt-4 flex h-9 w-9 shrink-0 items-center justify-center border-2 border-black text-[10px] font-extrabold text-black"
-                    style={{ background: item.accent }}
-                    aria-hidden="true"
-                  >
-                    {index + 1}
-                  </span>
-                  <div className="ff-surface min-w-0 flex-1 space-y-2 p-4 sm:p-5">
+                <li key={item.year} className="relative flex gap-4">
+                  <div className="relative z-10 flex w-9 shrink-0 justify-center pt-4">
+                    <span
+                      className="flex h-9 w-9 items-center justify-center border-2 border-black text-sm font-extrabold text-black shadow-[2px_2px_0_#000]"
+                      style={{ background: item.accent }}
+                      aria-hidden
+                    >
+                      {index + 1}
+                    </span>
+                  </div>
+                  <article className="ff-docs-panel min-w-0 flex-1 p-5 sm:p-6">
                     <div className="flex flex-wrap items-baseline gap-x-3 gap-y-1">
-                      <span className="ff-display text-sm text-[var(--ff-gold)]">
+                      <p
+                        className="text-xs font-extrabold uppercase tracking-[0.14em]"
+                        style={{ color: item.accent }}
+                      >
+                        {item.depth}
+                      </p>
+                      <span className="ff-display text-base text-[var(--ff-gold)]">
                         {item.year}
                       </span>
-                      <h3 className="font-bold text-white">{item.title}</h3>
                     </div>
-                    <p className="text-sm leading-relaxed text-[var(--ff-muted)]">
-                      {item.body}
-                    </p>
-                  </div>
+                    <div className="mt-2 flex items-start justify-between gap-4">
+                      <div className="min-w-0 space-y-2">
+                        <h3 className="text-lg font-bold text-white sm:text-xl">
+                          {item.title}
+                        </h3>
+                        <p className="ff-docs-copy">{item.body}</p>
+                      </div>
+                      <div
+                        className="ff-bob hidden shrink-0 sm:block"
+                        style={{ animationDelay: `${index * 0.35}s` }}
+                        aria-hidden
+                      >
+                        <PixelFish
+                          size={24}
+                          color={item.fish.color}
+                          fin={item.fish.fin}
+                          facing={index % 2 === 0 ? "right" : "left"}
+                        />
+                      </div>
+                    </div>
+                  </article>
                 </li>
               ))}
             </ol>
           </div>
         </section>
 
+        {/* Cheque */}
         <section
-          className="border-t-4 border-black bg-[#071218] px-4 py-14 sm:px-8 lg:px-12"
+          className="px-4 py-14 sm:px-8 sm:py-16 lg:px-12"
           aria-labelledby="cheque-heading"
         >
-          <div className="mx-auto flex w-full max-w-5xl flex-col gap-8">
+          <div className="mx-auto w-full max-w-5xl space-y-8">
             <div className="max-w-2xl space-y-3">
-              <p className="inline-block border-2 border-[var(--ff-danger)] bg-[var(--ff-danger)]/15 px-2 py-1 text-[10px] font-extrabold uppercase tracking-widest text-[#ff8f8f]">
-                Favorite feature
+              <p className="ff-display text-xs uppercase tracking-widest text-[#ff8f8f]">
+                02 · Trophy catch
               </p>
               <h2
                 id="cheque-heading"
-                className="ff-display text-2xl text-white sm:text-3xl"
+                className="ff-display text-3xl text-white sm:text-4xl"
               >
                 Signed cheque deposit
               </h2>
-              <p className="text-sm leading-relaxed text-[var(--ff-muted)] sm:text-base">
-                The remaster&apos;s showpiece: issue a demo cheque to your PC,
-                then deposit it like a mobile capture - with anti-fraud rules
-                that actually fire.
+              <p className="ff-docs-copy">
+                The remaster&apos;s showpiece: issue a demo cheque, deposit it
+                like a mobile capture, and let anti-fraud rules fire underwater.
               </p>
             </div>
 
-            <figure className="ff-in relative m-0">
-              <div
-                className="absolute -inset-1 border-2 border-[var(--ff-gold)]/50"
-                aria-hidden="true"
-              />
-              <div className="relative overflow-hidden border-2 border-black bg-[#d7e4ea] shadow-[8px_8px_0_#000]">
-                {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img
-                  src={chequeSrc}
-                  alt="Sample Fish&Fric demo cheque for $120.00 payable to Aqua Recruiter"
-                  className="h-auto w-full"
+            <div className="grid items-start gap-8 lg:grid-cols-[minmax(0,1.15fr)_minmax(0,0.85fr)] lg:gap-10">
+              <figure className="relative m-0">
+                <div
+                  className="absolute -inset-1 border-2 border-[var(--ff-gold)]/50"
+                  aria-hidden
                 />
-                <figcaption className="flex flex-wrap items-center justify-between gap-2 border-t-2 border-black bg-[#0b1a22] px-4 py-3 text-xs text-[var(--ff-muted)]">
-                  <span>
-                    Server-issued preview - unique ID, payee line, HMAC metadata.
-                  </span>
+                <div className="relative overflow-hidden border-2 border-black bg-[#d7e4ea] shadow-[6px_6px_0_#000]">
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img
+                    src={chequeSrc}
+                    alt="Sample Fish&Fric demo cheque for $120.00 payable to Aqua Recruiter"
+                    className="h-auto w-full"
+                  />
+                </div>
+                <figcaption className="ff-docs-copy mt-3 flex flex-wrap justify-between gap-2 text-sm">
+                  <span>Unique ID · payee · HMAC metadata</span>
                   <span className="font-bold uppercase tracking-wide text-[var(--ff-gold)]">
                     One-time clear
                   </span>
                 </figcaption>
-              </div>
-            </figure>
+              </figure>
 
-            <ul className="m-0 grid list-none gap-3 p-0 sm:grid-cols-3">
-              {CHEQUE_FLOW.map((step, index) => (
-                <li
-                  key={step.title}
-                  className="ff-surface relative space-y-3 overflow-hidden p-5"
+              <div className="flex flex-col gap-4">
+                <ol className="ff-docs-panel m-0 list-none space-y-0 p-2 sm:p-3">
+                  {CHEQUE_FLOW.map((step, index) => (
+                    <li
+                      key={step.title}
+                      className="flex gap-4 border-b border-white/15 px-3 py-5 last:border-b-0 sm:px-4"
+                    >
+                      <span
+                        className="ff-display w-9 shrink-0 text-base"
+                        style={{ color: step.accent }}
+                      >
+                        0{index + 1}
+                      </span>
+                      <div className="space-y-1.5">
+                        <h3 className="text-lg font-bold text-white">
+                          {step.title}
+                        </h3>
+                        <p className="ff-docs-copy text-base">{step.body}</p>
+                      </div>
+                    </li>
+                  ))}
+                </ol>
+                <Link
+                  href="/login"
+                  className="ff-btn ff-btn-danger inline-flex w-full justify-center sm:w-auto"
                 >
-                  <div
-                    className="absolute left-0 top-0 h-full w-1 bg-[var(--ff-danger)]"
-                    aria-hidden="true"
-                  />
-                  <p className="ff-display text-3xl text-[var(--ff-gold)]/35">
-                    0{index + 1}
-                  </p>
-                  <div className="space-y-1">
-                    <p className="ff-display text-base text-white">
-                      {step.title}
-                    </p>
-                    <p className="text-sm leading-relaxed text-[var(--ff-muted)]">
-                      {step.body}
-                    </p>
-                  </div>
-                </li>
-              ))}
-            </ul>
-
-            <div>
-              <Link href="/login" className="ff-btn ff-btn-danger inline-flex">
-                Try cheque deposit
-                <span aria-hidden="true"> ›</span>
-              </Link>
+                  Try cheque deposit
+                  <span aria-hidden="true"> ›</span>
+                </Link>
+              </div>
             </div>
           </div>
         </section>
 
+        {/* Reef notes */}
         <section
-          className="border-t-4 border-black bg-[#0a222c] px-4 py-14 sm:px-8 lg:px-12"
-          aria-labelledby="more-heading"
+          className="px-4 py-14 sm:px-8 sm:py-16 lg:px-12"
+          aria-labelledby="reef-heading"
         >
-          <div className="mx-auto w-full max-w-5xl space-y-12">
-            <div className="max-w-xl space-y-2">
+          <div className="mx-auto w-full max-w-5xl space-y-8">
+            <div className="max-w-2xl space-y-3">
+              <p className="ff-display text-xs uppercase tracking-widest text-[var(--ff-gold)]">
+                03 · Reef notes
+              </p>
               <h2
-                id="more-heading"
-                className="ff-display text-2xl text-white sm:text-3xl"
+                id="reef-heading"
+                className="ff-display text-3xl text-white sm:text-4xl"
               >
-                Other highlights
+                What else is swimming
               </h2>
-              <p className="text-sm text-[var(--ff-muted)] sm:text-base">
-                Same ocean vibe - a few more pieces worth clicking.
+              <p className="ff-docs-copy">
+                A few more pieces worth knowing before you open the demo.
               </p>
             </div>
 
-            <article className="grid items-center gap-6 lg:grid-cols-2 lg:gap-10">
-              <LedgerIllustration />
-              <div className="space-y-3">
-                <p className="text-[10px] font-bold uppercase tracking-widest text-[var(--ff-gold)]">
-                  Source of truth
-                </p>
-                <h3 className="ff-display text-xl text-white sm:text-2xl">
-                  Immutable ledger
-                </h3>
-                <p className="text-sm leading-relaxed text-[var(--ff-muted)] sm:text-base">
-                  Transfers, bills, P2P, and deposits all write signed cent
-                  entries. The on-screen balance is a cache - we can prove it
-                  still matches the sum of the tide log.
-                </p>
-              </div>
-            </article>
-
-            <article className="grid items-center gap-6 lg:grid-cols-2 lg:gap-10">
-              <div className="order-2 space-y-3 lg:order-1">
-                <p className="text-[10px] font-bold uppercase tracking-widest text-[var(--ff-prismarine)]">
-                  Locked send
-                </p>
-                <h3 className="ff-display text-xl text-white sm:text-2xl">
-                  P2P bottle drops
-                </h3>
-                <p className="text-sm leading-relaxed text-[var(--ff-muted)] sm:text-base">
-                  Send money locked behind a security question. Accept or
-                  decline unlocks the flow - decline returns the funds on the
-                  ledger.
-                </p>
-              </div>
-              <div className="order-1 lg:order-2">
-                <P2PIllustration />
-              </div>
-            </article>
-
-            <article className="grid items-center gap-6 lg:grid-cols-2 lg:gap-10">
-              <AlertsIllustration />
-              <div className="space-y-3">
-                <p className="text-[10px] font-bold uppercase tracking-widest text-[var(--ff-sand)]">
-                  Keep it tidy
-                </p>
-                <h3 className="ff-display text-xl text-white sm:text-2xl">
-                  Alerts & tidy history
-                </h3>
-                <p className="text-sm leading-relaxed text-[var(--ff-muted)] sm:text-base">
-                  Notifications, deposit history, and account history share the
-                  same management model: dismiss one, clear all, auto-cap.
-                  Clearing never rewrites balances.
-                </p>
-              </div>
-            </article>
-          </div>
-        </section>
-
-        <section
-          className="border-t-4 border-black bg-[#071218] px-4 py-14 sm:px-8 lg:px-12"
-          aria-labelledby="try-heading"
-        >
-          <div className="mx-auto w-full max-w-3xl">
-            <div className="relative overflow-hidden border-2 border-black bg-[#12323c]">
-              <div
-                className="absolute inset-x-0 top-0 h-1 bg-[var(--ff-gold)]"
-                aria-hidden="true"
-              />
-              <div className="space-y-6 p-6 sm:p-8">
-                <div className="space-y-3">
-                  <p className="text-[10px] font-bold uppercase tracking-widest text-[var(--ff-gold)]">
-                    Ready when you are
-                  </p>
-                  <h2
-                    id="try-heading"
-                    className="ff-display text-2xl text-white sm:text-3xl"
-                  >
-                    Dive in
-                  </h2>
-                  <p className="max-w-lg text-sm leading-relaxed text-[var(--ff-muted)] sm:text-base">
-                    Jump into the pre-loaded demo reef - no signup needed. Prefer
-                    the source? Grab the remaster or the original team project.
-                  </p>
-                </div>
-
-                <DemoButton className="ff-btn w-full" label="Try the demo" />
-
-                <div className="space-y-3 border-t-2 border-black/50 pt-5">
-                  <p className="text-[10px] font-bold uppercase tracking-widest text-[var(--ff-gold)]">
-                    Demo credentials
-                  </p>
-                  <p className="text-xs text-[var(--ff-muted)]">
-                    Fictional accounts only - never use real banking passwords.
-                  </p>
-                  <ul className="m-0 grid list-none gap-2 p-0 sm:grid-cols-2">
-                    {DEMO_CREDENTIALS.map((account) => (
+            <ul className="m-0 grid list-none gap-5 p-0 lg:grid-cols-3">
+              {REEF.map((item) => (
+                <li
+                  key={item.title}
+                  className="ff-docs-panel flex flex-col gap-4 p-5 sm:p-6"
+                >
+                  <div
+                    className="h-2 w-10"
+                    style={{ background: item.accent }}
+                    aria-hidden
+                  />
+                  <div className="space-y-1">
+                    <h3 className="text-xl font-bold text-white">{item.title}</h3>
+                    <p className="text-xs font-bold uppercase tracking-wide text-[var(--ff-gold)]">
+                      {item.subtitle}
+                    </p>
+                  </div>
+                  <p className="ff-docs-copy text-base">{item.body}</p>
+                  <ul className="m-0 mt-auto space-y-2.5 border-t border-white/15 pt-4 pl-0">
+                    {item.bullets.map((bullet) => (
                       <li
-                        key={account.email}
-                        className="border-2 border-black bg-black/30 px-3 py-3"
+                        key={bullet}
+                        className="flex list-none items-start gap-2.5 text-base text-[#e4eef2]"
                       >
-                        <p className="text-[10px] font-bold uppercase tracking-wide text-[var(--ff-gold)]">
-                          {account.label}
-                        </p>
-                        <p className="mt-1 break-all font-mono text-xs text-white">
-                          {account.email}
-                        </p>
-                        <p className="mt-1 break-all font-mono text-xs text-[var(--ff-muted)]">
-                          {account.password}
-                        </p>
-                        <p className="mt-2 text-[10px] text-[var(--ff-muted)]">
-                          {account.note}
-                        </p>
+                        <span
+                          className="mt-2 h-2 w-2 shrink-0"
+                          style={{ background: item.accent }}
+                          aria-hidden
+                        />
+                        {bullet}
                       </li>
                     ))}
                   </ul>
-                </div>
+                </li>
+              ))}
+            </ul>
+          </div>
+        </section>
 
-                <div className="grid gap-3 border-t-2 border-black/50 pt-5 sm:grid-cols-2">
-                  <a
-                    href={SITE_GITHUB}
-                    className="ff-btn ff-btn-prismarine inline-flex w-full justify-center"
-                    rel="noopener noreferrer"
-                    target="_blank"
-                  >
-                    Remaster repo
-                    <span aria-hidden="true"> ›</span>
-                  </a>
-                  <a
-                    href={SITE_GITHUB_ORIGINAL}
-                    className="ff-btn ff-btn-stone inline-flex w-full justify-center"
-                    rel="noopener noreferrer"
-                    target="_blank"
-                  >
-                    Original team repo
-                    <span aria-hidden="true"> ›</span>
-                  </a>
-                </div>
+        {/* Dive in — hung from the boat crane */}
+        <section
+          className="px-4 pb-20 pt-8 sm:px-8 sm:pb-24 lg:px-12"
+          aria-labelledby="dive-heading"
+        >
+          <div className="mx-auto grid w-full max-w-5xl gap-8 border-t-2 border-white/15 pt-14 lg:grid-cols-[minmax(0,1fr)_minmax(16rem,20rem)] lg:gap-10">
+            <div className="ff-docs-panel ff-crane-cargo relative space-y-5 p-6 sm:p-8">
+              <div className="ff-crane-hook-wrap" aria-hidden>
+                <CraneHook />
               </div>
+              <p className="ff-display text-xs uppercase tracking-widest text-[var(--ff-gold)]">
+                04 · Dive in
+              </p>
+              <h2
+                id="dive-heading"
+                className="ff-display text-3xl text-white sm:text-4xl"
+              >
+                The reef is open
+              </h2>
+              <p className="ff-docs-copy max-w-lg">
+                One click loads the seeded demo. Prefer source? Open the remaster
+                or the original team project.
+              </p>
+              <div className="flex flex-col gap-3 sm:flex-row sm:flex-wrap">
+                <DemoButton className="ff-btn" label="Try the demo" />
+                <a
+                  href={SITE_GITHUB}
+                  className="ff-btn ff-btn-prismarine inline-flex justify-center"
+                  rel="noopener noreferrer"
+                  target="_blank"
+                >
+                  Remaster repo
+                  <span aria-hidden="true"> ›</span>
+                </a>
+                <a
+                  href={SITE_GITHUB_ORIGINAL}
+                  className="ff-btn ff-btn-stone inline-flex justify-center"
+                  rel="noopener noreferrer"
+                  target="_blank"
+                >
+                  Original repo
+                  <span aria-hidden="true"> ›</span>
+                </a>
+              </div>
+              <p className="text-base">
+                <Link
+                  href="/"
+                  className="font-bold text-white hover:text-[var(--ff-gold-hi)]"
+                >
+                  ← Back to home
+                </Link>
+              </p>
             </div>
+
+            <aside className="ff-docs-panel-soft space-y-4 p-5 sm:p-6">
+              <p className="text-xs font-bold uppercase tracking-widest text-[var(--ff-gold)]">
+                Demo credentials
+              </p>
+              <ul className="m-0 space-y-5 p-0">
+                {DEMO_CREDENTIALS.map((account) => (
+                  <li
+                    key={account.email}
+                    className="list-none border-l-2 border-[var(--ff-gold)] pl-3"
+                  >
+                    <p className="text-xs font-bold uppercase tracking-wide text-[var(--ff-gold)]">
+                      {account.label}
+                    </p>
+                    <p className="mt-1.5 break-all font-mono text-sm text-white">
+                      {account.email}
+                    </p>
+                    <p className="mt-1 break-all font-mono text-sm text-[#d5e4ea]">
+                      {account.password}
+                    </p>
+                  </li>
+                ))}
+              </ul>
+              <p className="text-sm leading-relaxed text-[#d5e4ea]">
+                Fictional accounts only. Never reuse real banking passwords.
+              </p>
+            </aside>
           </div>
         </section>
       </main>

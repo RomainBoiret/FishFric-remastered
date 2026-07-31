@@ -9,7 +9,7 @@ Full-stack remaster of **Fish&Fric**, an ocean-themed online banking demo. Recru
 | | |
 |---|---|
 | **2024** | Original **ÉTS integrator team project** - [FishFric-Bank](https://github.com/RomainBoiret/FishFric-Bank) |
-| **2026** | Solo remaster for portfolio review - this repo |
+| **2026** | Solo remaster - this repo |
 | **Now** | Live demo with a stricter domain layer, notifications, and one-time cheque clearing |
 
 ## Highlights

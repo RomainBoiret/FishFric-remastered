@@ -12,17 +12,16 @@ type AppShellProps = {
 
 export function AppShell({ children }: AppShellProps) {
   return (
-    <div className="relative flex min-h-full flex-1 flex-col text-[var(--ff-ink)]">
+    <div className="relative flex min-h-dvh flex-1 flex-col text-[var(--ff-ink)]">
       <Atmosphere variant="app" />
-      <div className="relative z-10 flex min-h-full flex-1 flex-col">
-        {children}
-        <SiteFooter compact />
-      </div>
+      <div className="relative z-10 flex min-h-0 flex-1 flex-col">{children}</div>
+      {/* Sibling of Atmosphere so z-20 beats the chest (z-15); padding stays click-through. */}
+      <SiteFooter compact />
     </div>
   );
 }
 
-export function AppHeader({ showLogout = true }: { showLogout?: boolean }) {
+export function AppHeader() {
   return (
     <header className="ff-nav relative z-20">
       <div className="mx-auto flex w-full max-w-4xl items-center justify-between gap-2 px-4 py-3 sm:gap-4 sm:px-6">
@@ -45,16 +44,11 @@ export function AppHeader({ showLogout = true }: { showLogout?: boolean }) {
             Docs
           </Link>
           <GitHubHeaderLink />
-          {showLogout ? (
-            <form action={logoutAction}>
-              <button
-                type="submit"
-                className="ff-btn ff-btn-sm ff-btn-ghost"
-              >
-                Sign out
-              </button>
-            </form>
-          ) : null}
+          <form action={logoutAction}>
+            <button type="submit" className="ff-btn ff-btn-sm ff-btn-ghost">
+              Sign out
+            </button>
+          </form>
         </nav>
       </div>
     </header>

@@ -48,7 +48,7 @@ export function SiteHeader({ current = "home" }: SiteHeaderProps) {
               <li className="hidden sm:block">
                 <Link
                   href="/signup"
-                  className="ff-btn ff-btn-sm ff-btn-sand"
+                  className="ff-btn ff-btn-sm ff-btn-prismarine"
                 >
                   Create account
                 </Link>

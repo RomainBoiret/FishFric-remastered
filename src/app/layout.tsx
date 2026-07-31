@@ -33,7 +33,7 @@ export const metadata: Metadata = {
   keywords: [
     "Fish&Fric",
     "banking demo",
-    "portfolio",
+    "online bank",
     "Next.js",
     "ledger",
     "P2P transfer",

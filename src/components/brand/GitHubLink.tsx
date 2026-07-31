@@ -1,6 +1,6 @@
 import { SITE_GITHUB } from "@/lib/site";
 
-export function GitHubIcon({ size = 20 }: { size?: number }) {
+function GitHubIcon({ size = 20 }: { size?: number }) {
   return (
     <svg
       width={size}
@@ -14,13 +14,13 @@ export function GitHubIcon({ size = 20 }: { size?: number }) {
   );
 }
 
-export function GitHubHeaderLink({ className = "" }: { className?: string }) {
+export function GitHubHeaderLink() {
   return (
     <a
       href={SITE_GITHUB}
       target="_blank"
       rel="noopener noreferrer"
-      className={`ff-btn ff-btn-sm ff-btn-ghost ff-btn-icon ${className}`.trim()}
+      className="ff-btn ff-btn-sm ff-btn-ghost ff-btn-icon"
       aria-label="GitHub repository (opens in a new tab)"
       title="GitHub"
     >

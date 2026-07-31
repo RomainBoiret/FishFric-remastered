@@ -2,12 +2,15 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import { Atmosphere } from "@/components/brand/Atmosphere";
+import { CraneCable } from "@/components/brand/CraneCable";
+import { CraneHook } from "@/components/brand/CraneHook";
 import { SiteFooter } from "@/components/brand/SiteFooter";
 import { SiteHeader } from "@/components/brand/SiteHeader";
 import { DemoButton } from "@/features/auth/DemoButton";
 import { auth } from "@/lib/auth";
 import {
   DEMO_CREDENTIALS,
+  SITE_AUTHOR,
   SITE_GITHUB_ORIGINAL,
   SITE_NAME,
   SITE_TAGLINE,
@@ -105,6 +108,13 @@ export default async function Home() {
   return (
     <div className="relative flex min-h-full flex-1 flex-col">
       <Atmosphere variant="hero" />
+      {/* Under main (z-10): cable peeks through ocean, slips behind cards */}
+      <div
+        className="pointer-events-none absolute inset-x-0 top-0 z-[5] h-full min-h-full overflow-visible"
+        aria-hidden
+      >
+        <CraneCable />
+      </div>
 
       <SiteHeader current="home" />
 
@@ -113,92 +123,115 @@ export default async function Home() {
           className="flex flex-col md:min-h-[calc(100svh-56px)]"
           aria-labelledby="home-heading"
         >
-          <div className="mx-auto flex w-full max-w-5xl flex-1 flex-col justify-center gap-6 px-4 py-10 sm:gap-8 sm:px-8 sm:py-12 lg:px-12">
-            <div className="ff-in max-w-2xl space-y-4">
-              <p className="ff-display text-xs uppercase tracking-widest text-[var(--ff-gold)]">
-                Portfolio demo · ocean bank
-              </p>
-              <h1
-                id="home-heading"
-                className="ff-brand text-4xl leading-tight sm:text-5xl md:text-6xl"
-              >
-                {SITE_NAME}
-              </h1>
-              <p className="max-w-xl text-base leading-relaxed text-white/90 sm:text-lg">
-                An ocean-pixel banking demo you can click through - real ledger,
-                signed cheque deposits, P2P, and bill pay. Remastered from an
-                ÉTS team project into a solo portfolio build.
-              </p>
-              <p className="text-sm text-[var(--ff-muted)]">
-                <Link
-                  href="/docs"
-                  className="font-bold text-[var(--ff-gold)] hover:text-[var(--ff-gold-hi)]"
-                >
-                  Read the story
-                  <span aria-hidden="true"> ›</span>
-                </Link>
-                <span aria-hidden="true"> · </span>
-                <a
-                  href={SITE_GITHUB_ORIGINAL}
-                  className="hover:text-white"
-                  rel="noopener noreferrer"
-                  target="_blank"
-                >
-                  Original team repo
-                </a>
-              </p>
-            </div>
-
-            <div className="grid items-stretch gap-5 lg:grid-cols-[minmax(0,22rem)_1fr]">
-              <div className="ff-in ff-in-1 ff-surface ff-surface-step ff-surface-accent w-full space-y-4 p-5 sm:p-6">
-                <h2 className="ff-display text-xl text-white sm:text-2xl">
-                  Start exploring
-                </h2>
-                <p className="text-sm leading-relaxed text-[var(--ff-muted)]">
-                  Use the demo reef (pre-loaded data) or create your own
-                  account.
+          <div className="mx-auto flex w-full max-w-5xl flex-1 flex-col px-4 sm:px-8 lg:px-12">
+            {/*
+              Sky band: 2-col on desktop (copy left / boat space right).
+              Boat itself is decorative in Atmosphere, aligned to the waterline.
+            */}
+            <div
+              className="ff-hero-sky ff-in relative z-[6] grid items-center gap-4 pb-8 pt-14 md:grid-cols-[minmax(0,1fr)_minmax(12rem,34%)] md:gap-10 md:pb-10 md:pt-16"
+              style={{ minHeight: "calc(var(--ff-waterline) - 4rem)" }}
+            >
+              <div className="ff-px-title flex max-w-xl flex-col justify-center gap-4">
+                <p className="ff-display text-xs uppercase tracking-widest text-[var(--ff-gold)]">
+                  Ocean bank · remastered by {SITE_AUTHOR}
                 </p>
-                <div className="flex flex-col gap-3">
-                  <DemoButton className="ff-btn w-full" label="Try the demo" />
-                  <Link href="/signup" className="ff-btn ff-btn-stone w-full">
-                    Create an account
-                    <span aria-hidden="true"> ›</span>
+                <h1
+                  id="home-heading"
+                  className="ff-display text-4xl leading-tight text-white sm:text-5xl md:text-6xl"
+                  style={{ textShadow: "0 2px 0 rgba(15,48,68,0.4)" }}
+                >
+                  {SITE_NAME}
+                </h1>
+                <p className="ff-docs-lead [text-shadow:0_1px_2px_rgba(15,48,68,0.5)]">
+                  An ocean-pixel online bank you can click through - real ledger,
+                  signed cheque deposits, P2P, and bill pay. Remastered from an
+                  ÉTS team project with the same spirit and a new stack.
+                </p>
+                <nav
+                  aria-label="Home links"
+                  className="flex flex-wrap gap-x-1 gap-y-2 pt-1 text-base font-bold"
+                >
+                  <Link
+                    href="/docs"
+                    className="text-[var(--ff-gold)] hover:text-[var(--ff-gold-hi)]"
+                  >
+                    Read the story
                   </Link>
-                </div>
+                  <span className="mx-2 text-white/40" aria-hidden>
+                    ·
+                  </span>
+                  <a
+                    href={SITE_GITHUB_ORIGINAL}
+                    className="text-white hover:text-[var(--ff-gold-hi)]"
+                    rel="noopener noreferrer"
+                    target="_blank"
+                  >
+                    Original team repo
+                  </a>
+                </nav>
               </div>
 
-              <ul className="ff-in ff-in-2 m-0 hidden list-none gap-3 p-0 sm:grid sm:grid-cols-3 lg:grid-cols-1 xl:grid-cols-3">
-                {HERO_FEATURES.map((item, index) => (
-                  <li
-                    key={`hero-${item.title}`}
-                    className="ff-surface ff-in flex flex-col justify-between gap-3 bg-[var(--ff-bg-panel)]/95 p-4"
-                    style={{ animationDelay: `${0.22 + index * 0.08}s` }}
-                  >
-                    <div
-                      className="h-2 w-10"
-                      style={{ background: item.accent }}
-                      aria-hidden="true"
-                    />
-                    <div className="space-y-1">
-                      <h3 className="ff-display text-base text-white">
-                        {item.title}
-                      </h3>
-                      <p className="text-[10px] font-bold uppercase tracking-wide text-[var(--ff-gold)]">
-                        {item.subtitle}
+              {/* Desktop: reserves right column so copy never sits under the boat */}
+              <div
+                className="pointer-events-none relative hidden md:block"
+                aria-hidden
+              />
+            </div>
+
+            {/* Underwater: feature cards */}
+            <div className="flex flex-1 flex-col gap-6 pb-12 pt-14 sm:gap-8 sm:pb-14 sm:pt-16">
+              <div className="grid items-stretch gap-5 lg:grid-cols-[minmax(0,22rem)_1fr]">
+                <div className="ff-in ff-in-1 ff-surface ff-surface-step ff-surface-accent w-full space-y-4 p-5 sm:p-6">
+                  <h2 className="ff-display text-xl text-white sm:text-2xl">
+                    Start exploring
+                  </h2>
+                  <p className="text-sm leading-relaxed text-[var(--ff-muted)]">
+                    Use the demo reef (pre-loaded data) or create your own
+                    account.
+                  </p>
+                  <div className="flex flex-col gap-3">
+                    <DemoButton className="ff-btn w-full" label="Try the demo" />
+                    <Link href="/signup" className="ff-btn ff-btn-stone w-full">
+                      Create an account
+                      <span aria-hidden="true"> ›</span>
+                    </Link>
+                  </div>
+                </div>
+
+                <ul className="ff-in ff-in-2 m-0 grid list-none grid-cols-1 gap-3 p-0 sm:grid-cols-3">
+                  {HERO_FEATURES.map((item, index) => (
+                    <li
+                      key={`hero-${item.title}`}
+                      className="ff-surface ff-in flex flex-col justify-between gap-3 bg-[var(--ff-bg-panel)]/95 p-4"
+                      style={{ animationDelay: `${0.22 + index * 0.08}s` }}
+                    >
+                      <div
+                        className="h-2 w-10"
+                        style={{ background: item.accent }}
+                        aria-hidden="true"
+                      />
+                      <div className="space-y-1">
+                        <h3 className="ff-display text-base text-white">
+                          {item.title}
+                        </h3>
+                        <p className="text-[10px] font-bold uppercase tracking-wide text-[var(--ff-gold)]">
+                          {item.subtitle}
+                        </p>
+                      </div>
+                      <p className="text-xs leading-relaxed text-[var(--ff-muted)] sm:text-sm">
+                        {item.body}
                       </p>
-                    </div>
-                    <p className="text-xs leading-relaxed text-[var(--ff-muted)] sm:text-sm">
-                      {item.body}
-                    </p>
-                  </li>
-                ))}
-              </ul>
+                    </li>
+                  ))}
+                </ul>
+              </div>
             </div>
           </div>
         </section>
 
         <section
-          className="border-t-4 border-black bg-[#0a222c] px-4 py-14 sm:px-8 lg:px-12"
+          className="px-4 py-14 sm:px-8 lg:px-12"
           aria-labelledby="features-heading"
         >
           <div className="mx-auto w-full max-w-5xl space-y-8">
@@ -241,7 +274,7 @@ export default async function Home() {
         </section>
 
         <section
-          className="border-t-4 border-black bg-[#071218] px-4 py-14 sm:px-8 lg:px-12"
+          className="px-4 py-14 sm:px-8 lg:px-12"
           aria-labelledby="howto-heading"
         >
           <div className="mx-auto grid w-full max-w-5xl gap-10 lg:grid-cols-2 lg:items-start">
@@ -281,9 +314,12 @@ export default async function Home() {
             </div>
 
             <aside
-              className="ff-surface space-y-5 p-5 sm:p-6"
+              className="ff-surface ff-crane-cargo relative space-y-5 p-5 sm:p-6"
               aria-labelledby="try-now-heading"
             >
+              <div className="ff-crane-hook-wrap" aria-hidden>
+                <CraneHook />
+              </div>
               <h2
                 id="try-now-heading"
                 className="ff-display text-xl text-white"

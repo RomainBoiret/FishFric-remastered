@@ -7,20 +7,16 @@
   --ff-bg-panel-2: #274854;
   --ff-ink: #ffffff;
   --ff-muted: #a8c0c9;
-  --ff-line: #071218;
   --ff-gold: #e0aa2c;
   --ff-gold-hi: #f0c040;
-  --ff-gold-lo: #b8860b;
   --ff-gold-edge: #8a6810;
   --ff-prismarine: #2d8f83;
-  --ff-water: #2f6f9f;
   --ff-sand: #c2b280;
   --ff-danger: #c43c3c;
   --ff-ok: #5ea83a;
-  --ff-sky-top: #6eb8ff;
-  --ff-sky-bot: #87ceeb;
   --ff-ease: cubic-bezier(0.22, 1, 0.36, 1);
-  --ff-ease-soft: cubic-bezier(0.4, 0, 0.2, 1);
+  /* Horizon: roomy sky for plane / gulls / clouds; cards begin underwater */
+  --ff-waterline: clamp(26rem, 58vh, 40rem);
 
   --background: var(--ff-bg);
   --foreground: var(--ff-ink);
@@ -170,6 +166,13 @@ body {
   cursor: not-allowed;
 }
 
+.ff-footer-copy {
+  color: #fff;
+  text-shadow:
+    0 1px 0 #000,
+    0 0 8px rgba(0, 0, 0, 0.9);
+}
+
 .ff-btn-ghost {
   background: transparent;
   color: #fff;
@@ -297,24 +300,6 @@ body {
     0 3px 0 #071218;
 }
 
-.ff-scroll {
-  scrollbar-width: thin;
-  scrollbar-color: var(--ff-gold-edge) transparent;
-}
-
-.ff-scroll::-webkit-scrollbar {
-  width: 8px;
-}
-
-.ff-scroll::-webkit-scrollbar-track {
-  background: transparent;
-}
-
-.ff-scroll::-webkit-scrollbar-thumb {
-  background: var(--ff-gold-edge);
-  border: 2px solid transparent;
-}
-
 .ff-surface-step {
   clip-path: polygon(
     0 12px,
@@ -389,6 +374,32 @@ body {
   line-height: 1.25;
 }
 
+/* Docs reading surface - clearer contrast over the ocean wash */
+.ff-docs-copy {
+  color: #d5e4ea;
+  font-size: 1.05rem;
+  line-height: 1.7;
+}
+
+.ff-docs-lead {
+  color: #eef6f9;
+  font-size: 1.125rem;
+  line-height: 1.65;
+}
+
+.ff-docs-panel {
+  background: rgba(14, 36, 46, 0.92);
+  border: 2px solid #071218;
+  box-shadow:
+    inset 0 0 0 1px rgba(74, 106, 120, 0.45),
+    4px 4px 0 rgba(0, 0, 0, 0.35);
+}
+
+.ff-docs-panel-soft {
+  background: rgba(20, 48, 58, 0.88);
+  border: 2px solid rgba(7, 18, 24, 0.85);
+}
+
 .ff-brand {
   font-family: var(--font-pixel), ui-monospace, monospace;
   letter-spacing: 0.02em;
@@ -438,36 +449,62 @@ label[for] {
   cursor: pointer;
 }
 
-button:disabled,
-.ff-btn:disabled {
+button:disabled {
   cursor: not-allowed;
 }
 
 /* -- Ocean biome atmosphere -- */
 .ff-hero-wash {
+  /* Sky → shallow band → deep sea */
   background: linear-gradient(
     180deg,
-    var(--ff-sky-top) 0%,
-    var(--ff-sky-bot) 22%,
-    #4aa3c7 22.2%,
-    #2f7ea8 38%,
-    #1a5a7a 55%,
-    #0f3d52 72%,
-    #0b1a22 100%
+    #9ad4f5 0,
+    #87ceeb calc(var(--ff-waterline) * 0.68),
+    #79b6e4 calc(var(--ff-waterline) - 2px),
+    #3d8fbc var(--ff-waterline),
+    #2f7eac calc(var(--ff-waterline) + 1.4rem),
+    #246992 calc(var(--ff-waterline) + 8vh),
+    #1a5478 42%,
+    #123e5c 58%,
+    #0c2c44 74%,
+    #081c2c 88%,
+    #050d14 100%
   );
 }
 
 .ff-app-wash {
   background:
-    radial-gradient(ellipse 80% 45% at 50% 0%, rgba(74, 163, 199, 0.22), transparent 55%),
-    linear-gradient(180deg, #123040 0%, #0b1a22 100%);
+    radial-gradient(ellipse 90% 40% at 50% -5%, rgba(94, 184, 216, 0.22), transparent 55%),
+    radial-gradient(ellipse 50% 30% at 20% 70%, rgba(45, 143, 131, 0.1), transparent 60%),
+    linear-gradient(
+      180deg,
+      #164554 0%,
+      #123040 30%,
+      #0d2832 58%,
+      #0b1a22 80%,
+      #050d14 100%
+    );
 }
 
 .ff-pixel-grid {
   background-image:
-    linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
-  background-size: 16px 16px;
+    linear-gradient(rgba(255, 255, 255, 0.018) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.018) 1px, transparent 1px);
+  background-size: 20px 20px;
+}
+
+.ff-rays {
+  background: repeating-linear-gradient(
+    105deg,
+    transparent 0,
+    transparent 8%,
+    rgba(255, 255, 255, 0.025) 9%,
+    transparent 11%,
+    transparent 18%,
+    rgba(190, 230, 255, 0.035) 19%,
+    transparent 22%
+  );
+  mask-image: linear-gradient(180deg, rgba(0, 0, 0, 0.55), transparent 85%);
 }
 
 .ff-nav {
@@ -532,15 +569,6 @@ button:disabled,
   }
 }
 
-@keyframes ff-fade {
-  from {
-    opacity: 0;
-  }
-  to {
-    opacity: 1;
-  }
-}
-
 @keyframes ff-bob {
   0%,
   100% {
@@ -561,13 +589,277 @@ button:disabled,
   }
 }
 
-@keyframes ff-shimmer {
+@keyframes ff-bubble {
+  0% {
+    transform: translate3d(0, 0, 0);
+    opacity: 0;
+  }
+  12% {
+    opacity: 0.7;
+  }
+  100% {
+    transform: translate3d(12px, -72vh, 0);
+    opacity: 0;
+  }
+}
+
+@keyframes ff-jelly {
   0%,
   100% {
-    opacity: 0.28;
+    transform: translateY(0) rotate(-2deg);
   }
   50% {
-    opacity: 0.55;
+    transform: translateY(-14px) rotate(2deg);
+  }
+}
+
+@keyframes ff-chest-glow {
+  0%,
+  100% {
+    filter: drop-shadow(0 0 0 transparent);
+  }
+  50% {
+    filter: drop-shadow(0 0 10px rgba(240, 192, 64, 0.55));
+  }
+}
+
+.ff-chest-hit {
+  pointer-events: auto;
+  display: block;
+  margin: 0;
+  padding: 0.25rem;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  line-height: 0;
+  transform-origin: 50% 90%;
+}
+
+.ff-chest-hit:focus-visible {
+  outline: 2px solid var(--ff-gold);
+  outline-offset: 3px;
+}
+
+.ff-chest-glow {
+  animation: ff-chest-glow 3.8s ease-in-out infinite;
+}
+
+.ff-chest-is-closed .ff-chest-glow,
+.ff-chest-is-closed {
+  filter: drop-shadow(0 0 6px rgba(240, 192, 64, 0.35));
+}
+
+@keyframes ff-chest-pop {
+  0% {
+    transform: translateY(0) scale(1) rotate(0deg);
+  }
+  30% {
+    transform: translateY(-10px) scale(1.12) rotate(-3deg);
+  }
+  55% {
+    transform: translateY(-4px) scale(1.06) rotate(2deg);
+  }
+  100% {
+    transform: translateY(0) scale(1) rotate(0deg);
+  }
+}
+
+.ff-chest-pop {
+  animation:
+    ff-chest-pop 0.55s var(--ff-ease) both,
+    ff-chest-glow 3.8s ease-in-out infinite;
+}
+
+@keyframes ff-chest-spark {
+  0% {
+    opacity: 1;
+    transform: translate3d(0, 0, 0) rotate(0deg) scale(1);
+  }
+  100% {
+    opacity: 0;
+    transform: translate3d(var(--ff-spark-x, 0), var(--ff-spark-y, -24px), 0)
+      rotate(var(--ff-spark-rot, 12deg)) scale(0.35);
+  }
+}
+
+.ff-chest-spark {
+  pointer-events: none;
+  position: absolute;
+  left: 50%;
+  top: 0.2rem;
+  margin-left: -3px;
+  box-shadow: 0 0 0 1px #071218;
+  animation: ff-chest-spark 1s var(--ff-ease) forwards;
+  image-rendering: pixelated;
+}
+
+.ff-chest-spark-coin {
+  border-radius: 1px;
+}
+
+.ff-chest-spark-gem {
+  transform: rotate(45deg);
+  border-radius: 0;
+}
+
+.ff-chest-spark-star {
+  clip-path: polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%);
+  box-shadow: none;
+}
+
+.ff-chest-combo {
+  pointer-events: none;
+  position: absolute;
+  right: -0.35rem;
+  top: -0.55rem;
+  z-index: 3;
+  padding: 0.15rem 0.35rem;
+  border: 2px solid #071218;
+  background: var(--ff-gold);
+  color: #071218;
+  font-family: var(--font-pixel), ui-monospace, monospace;
+  font-size: 0.7rem;
+  line-height: 1;
+  box-shadow: 2px 2px 0 rgba(0, 0, 0, 0.45);
+  animation: ff-chest-combo-pop 0.35s var(--ff-ease) both;
+}
+
+@keyframes ff-chest-combo-pop {
+  from {
+    opacity: 0;
+    transform: scale(0.6) translateY(4px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+.ff-chest-loot {
+  pointer-events: none;
+  position: absolute;
+  left: 50%;
+  bottom: calc(100% + 0.65rem);
+  z-index: 4;
+  width: max-content;
+  max-width: min(17rem, 78vw);
+  margin: 0;
+  padding: 0.55rem 0.7rem;
+  border: 2px solid #071218;
+  background: rgba(14, 36, 46, 0.96);
+  color: var(--ff-ink);
+  text-align: center;
+  box-shadow:
+    inset 0 0 0 1px rgba(74, 106, 120, 0.5),
+    4px 4px 0 rgba(0, 0, 0, 0.45);
+  transform: translateX(-50%);
+  animation: ff-chest-loot-in 0.35s var(--ff-ease) both;
+}
+
+.ff-chest-loot-title {
+  margin: 0;
+  font-family: var(--font-pixel), ui-monospace, monospace;
+  font-size: 0.85rem;
+  color: var(--ff-gold);
+  line-height: 1.25;
+}
+
+.ff-chest-loot-body {
+  margin: 0.35rem 0 0;
+  font-size: 0.8rem;
+  font-weight: 600;
+  line-height: 1.4;
+  color: #d5e4ea;
+}
+
+@keyframes ff-chest-loot-in {
+  from {
+    opacity: 0;
+    transform: translateX(-50%) translateY(8px) scale(0.96);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0) scale(1);
+  }
+}
+
+.ff-chest-jackpot {
+  position: fixed;
+  inset: 0;
+  z-index: 90;
+  display: grid;
+  place-items: center;
+  padding: 1.25rem;
+}
+
+.ff-chest-jackpot-backdrop {
+  position: absolute;
+  inset: 0;
+  border: none;
+  background: rgba(5, 14, 20, 0.72);
+  cursor: pointer;
+}
+
+.ff-chest-jackpot-card {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  width: min(24rem, 100%);
+  flex-direction: column;
+  gap: 0.85rem;
+  padding: 1.35rem 1.25rem 1.25rem;
+  border: 3px solid #071218;
+  background: rgba(14, 36, 46, 0.97);
+  box-shadow:
+    inset 0 0 0 2px rgba(224, 170, 44, 0.35),
+    6px 6px 0 rgba(0, 0, 0, 0.5);
+  animation: ff-chest-jackpot-in 0.4s var(--ff-ease) both;
+}
+
+@keyframes ff-chest-jackpot-in {
+  from {
+    opacity: 0;
+    transform: translateY(12px) scale(0.96);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.ff-chest-jackpot-coins {
+  position: relative;
+  height: 2.5rem;
+  overflow: hidden;
+}
+
+.ff-chest-jackpot-coin {
+  position: absolute;
+  top: -0.4rem;
+  width: 10px;
+  height: 10px;
+  box-shadow: 0 0 0 1px #071218;
+  animation: ff-chest-coin-fall 1.4s linear infinite;
+}
+
+@keyframes ff-chest-coin-fall {
+  0% {
+    transform: translateY(-8px) rotate(0deg);
+    opacity: 0;
+  }
+  15% {
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(44px) rotate(180deg);
+    opacity: 0.2;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ff-chest-jackpot-coin,
+  .ff-chest-combo {
+    animation: none;
   }
 }
 
@@ -581,16 +873,171 @@ button:disabled,
 .ff-in-2 {
   animation-delay: 0.2s;
 }
-.ff-in-3 {
-  animation-delay: 0.32s;
-}
-
-.ff-fade {
-  animation: ff-fade 0.6s var(--ff-ease-soft) both;
-}
 
 .ff-bob {
   animation: ff-bob 3.2s ease-in-out infinite;
+}
+
+/* Room for centered boat under copy on small screens */
+@media (max-width: 767px) {
+  .ff-hero-sky {
+    padding-bottom: clamp(6rem, 32vw, 9rem);
+  }
+}
+.ff-cloud-layer {
+  top: 0;
+  height: calc(var(--ff-waterline) - 1rem);
+}
+
+.ff-cloud-slot {
+  max-width: min(20rem, 58vw);
+}
+
+@keyframes ff-cloud-bob {
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0);
+  }
+  50% {
+    transform: translate3d(0, -5px, 0);
+  }
+}
+
+.ff-cloud-bob {
+  animation: ff-cloud-bob 8s ease-in-out infinite;
+  will-change: transform;
+}
+
+.ff-cloud {
+  display: block;
+  opacity: 1;
+  filter: drop-shadow(0 2px 0 rgba(47, 111, 159, 0.2));
+}
+
+.ff-cloud svg {
+  display: block;
+  image-rendering: pixelated;
+  image-rendering: crisp-edges;
+}
+
+@keyframes ff-tow-bob {
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0);
+  }
+  50% {
+    transform: translate3d(0, -3px, 0);
+  }
+}
+
+@keyframes ff-tow-banner-bob {
+  0%,
+  100% {
+    transform: translate3d(0, 1px, 0);
+  }
+  50% {
+    transform: translate3d(0, -2px, 0);
+  }
+}
+
+@keyframes ff-tow-tilt {
+  0%,
+  100% {
+    transform: rotate(-0.6deg);
+  }
+  50% {
+    transform: rotate(0.5deg);
+  }
+}
+
+@keyframes ff-tow-prop {
+  0%,
+  100% {
+    transform: scaleX(1);
+    opacity: 0.95;
+  }
+  50% {
+    transform: scaleX(0.15);
+    opacity: 0.7;
+  }
+}
+
+/* Full-width left → right cruise (loops by re-entering from the left) */
+@keyframes ff-tow-cruise {
+  0% {
+    transform: translate3d(-45vw, -50%, 0);
+  }
+  100% {
+    transform: translate3d(105vw, -50%, 0);
+  }
+}
+
+.ff-tow-lane {
+  overflow: visible;
+}
+
+.ff-tow-cruise {
+  position: absolute;
+  left: 0;
+  top: 50%;
+  width: max-content;
+  animation: ff-tow-cruise 36s linear infinite;
+  will-change: transform;
+}
+
+.ff-tow-compose {
+  display: flex;
+  align-items: center;
+  gap: 0;
+}
+
+.ff-tow-banner {
+  animation: ff-tow-banner-bob 3.8s ease-in-out infinite;
+  animation-delay: 0.2s;
+  will-change: transform;
+  transform-origin: right center;
+}
+
+.ff-tow-plane {
+  margin-left: -0.35rem;
+  animation: ff-tow-bob 3.2s ease-in-out infinite;
+  will-change: transform;
+}
+
+.ff-tow-plane-tilt {
+  position: relative;
+  animation: ff-tow-tilt 6s ease-in-out infinite;
+  transform-origin: 40% 60%;
+  will-change: transform;
+}
+
+.ff-tow-banner-sprite,
+.ff-tow-plane-sprite {
+  display: block;
+  height: clamp(2.1rem, 5.5vw, 3rem);
+  width: auto;
+  max-width: min(48vw, 24rem);
+  image-rendering: pixelated;
+  image-rendering: crisp-edges;
+}
+
+.ff-tow-plane-sprite {
+  max-width: none;
+}
+
+.ff-tow-prop {
+  position: absolute;
+  right: 0.12rem;
+  top: 42%;
+  width: 0.42rem;
+  height: 0.42rem;
+  margin-top: -0.21rem;
+  border-radius: 1px;
+  background: #f0c040;
+  box-shadow: 0 0 0 1px #c89020;
+  animation: ff-tow-prop 0.14s steps(2) infinite;
+  will-change: transform, opacity;
+  pointer-events: none;
 }
 
 .ff-sway {
@@ -598,8 +1045,357 @@ button:disabled,
   transform-origin: bottom center;
 }
 
-.ff-shimmer {
-  animation: ff-shimmer 5s ease-in-out infinite;
+.ff-bubble {
+  animation-name: ff-bubble;
+  animation-timing-function: linear;
+  animation-iteration-count: infinite;
+}
+
+.ff-jelly {
+  animation: ff-jelly 5.5s ease-in-out infinite;
+}
+
+/* ---- Fixed fishing boat (right / waterline) ---- */
+@keyframes ff-boat-float {
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0) rotate(-0.45deg);
+  }
+  50% {
+    transform: translate3d(0, -2.5px, 0) rotate(0.45deg);
+  }
+}
+
+.ff-boat-anchor {
+  /* Keep fully inside viewport + aligned with content column */
+  right: max(2rem, calc((100vw - 64rem) / 2 + 2.5rem));
+  top: var(--ff-waterline);
+  width: max(12rem, min(26vw, 20rem));
+  transform: translate3d(0, -88%, 0);
+  max-width: calc(100vw - 4rem);
+}
+
+@media (max-width: 767px) {
+  .ff-boat-anchor {
+    right: auto;
+    left: 50%;
+    width: min(68vw, 16rem);
+    max-width: calc(100vw - 2rem);
+    transform: translate3d(-50%, -88%, 0);
+  }
+}
+
+.ff-boat-float {
+  animation: ff-boat-float 4.6s ease-in-out infinite;
+  transform-origin: 50% 85%;
+  will-change: transform;
+}
+
+.ff-boat-sprite {
+  display: block;
+  width: 100%;
+  height: auto;
+  image-rendering: pixelated;
+  image-rendering: crisp-edges;
+}
+
+.ff-boat-crane {
+  /* Foredeck — boom clears the cabin and hangs over open water */
+  position: absolute;
+  left: 2%;
+  bottom: 38%;
+  width: 52%;
+  max-width: 7rem;
+  pointer-events: none;
+  z-index: 2;
+}
+
+.ff-boat-crane-svg {
+  display: block;
+  width: 100%;
+  height: auto;
+  overflow: visible;
+  image-rendering: pixelated;
+  image-rendering: crisp-edges;
+  filter: drop-shadow(0 1px 0 rgba(7, 18, 24, 0.35));
+}
+
+.ff-boat-crane-tip {
+  /* Center of the short rope stub under the raised pulley */
+  position: absolute;
+  left: 13.9%;
+  top: 38%;
+  width: 2px;
+  height: 2px;
+  margin: -1px 0 0 -1px;
+}
+
+.ff-crane-cargo {
+  position: relative;
+  z-index: 2;
+  margin-top: 0.85rem;
+  animation: ff-crane-sway 5.2s ease-in-out infinite;
+  transform-origin: 50% 0%;
+}
+
+.ff-crane-hook-wrap {
+  position: absolute;
+  left: 50%;
+  top: 0;
+  z-index: 3;
+  transform: translate(-50%, -86%);
+  line-height: 0;
+  pointer-events: none;
+}
+
+.ff-crane-hook {
+  display: block;
+  image-rendering: pixelated;
+  image-rendering: crisp-edges;
+  filter: drop-shadow(0 1px 0 rgba(7, 18, 24, 0.45));
+}
+
+@keyframes ff-crane-sway {
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0) rotate(-0.35deg);
+  }
+  50% {
+    transform: translate3d(0, 3px, 0) rotate(0.35deg);
+  }
+}
+
+@media (max-width: 767px) {
+  .ff-boat-crane {
+    left: 0;
+    width: 48%;
+    max-width: 6rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ff-crane-cargo {
+    animation: none;
+  }
+}
+
+/* ---- Pixel-art water surface (Emerald / Terraria crest) ---- */
+.ff-waterline {
+  /* 20px art × 2 for crisp pixels */
+  height: 40px;
+  overflow: hidden;
+}
+
+.ff-water-surface-scroll {
+  position: absolute;
+  inset: 0;
+  width: 200%;
+  animation: ff-water-surface-scroll 56s linear infinite;
+  will-change: transform;
+}
+
+.ff-water-surface-tile {
+  position: absolute;
+  inset: 0;
+  background-image: url("/brand/water-surface-pixel.png?v=5");
+  background-repeat: repeat-x;
+  background-position: left top;
+  /* Exact 2× integer scale — keeps wavelets sharp */
+  background-size: 384px 40px;
+  image-rendering: pixelated;
+  image-rendering: crisp-edges;
+}
+
+@keyframes ff-water-surface-scroll {
+  from {
+    transform: translate3d(0, 0, 0);
+  }
+  to {
+    transform: translate3d(-50%, 0, 0);
+  }
+}
+
+/* ---- Seagulls (right sky, short shuttle) ---- */
+@keyframes ff-gull-shuttle {
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0);
+  }
+  50% {
+    transform: translate3d(3.5vw, -8px, 0);
+  }
+}
+
+@keyframes ff-gull-frames {
+  0%,
+  49% {
+    opacity: 1;
+  }
+  50%,
+  100% {
+    opacity: 0;
+  }
+}
+
+@keyframes ff-gull-frames-b {
+  0%,
+  49% {
+    opacity: 0;
+  }
+  50%,
+  100% {
+    opacity: 1;
+  }
+}
+
+.ff-gull {
+  position: absolute;
+  animation-name: ff-gull-shuttle;
+  animation-timing-function: ease-in-out;
+  animation-iteration-count: infinite;
+  will-change: transform;
+}
+
+.ff-gull-frame {
+  display: block;
+  image-rendering: pixelated;
+  image-rendering: crisp-edges;
+}
+
+.ff-gull-frame-a {
+  animation: ff-gull-frames 0.55s steps(1) infinite;
+}
+
+.ff-gull-frame-b {
+  animation: ff-gull-frames-b 0.55s steps(1) infinite;
+}
+
+.ff-gull-flap {
+  display: inline-block;
+  filter:
+    drop-shadow(0 1px 0 rgba(15, 48, 68, 0.45))
+    drop-shadow(0 0 1px rgba(255, 255, 255, 0.8));
+}
+
+/* ---- Subtle scroll parallax ---- */
+:root {
+  --ff-scroll: 0;
+}
+
+.ff-px-clouds {
+  transform: translate3d(0, calc(var(--ff-scroll) * 0.02px), 0);
+}
+
+.ff-px-gulls-front {
+  transform: translate3d(0, calc(var(--ff-scroll) * 0.04px), 0);
+}
+
+.ff-px-plane {
+  transform: translate3d(0, calc(var(--ff-scroll) * 0.03px), 0);
+}
+
+.ff-px-title {
+  transform: translate3d(0, calc(var(--ff-scroll) * 0.05px), 0);
+}
+
+@media (max-width: 639px) {
+  .ff-tow-banner-sprite {
+    max-width: min(70vw, 16rem);
+    height: clamp(1.65rem, 7vw, 2.1rem);
+  }
+
+  .ff-gull-frame-a,
+  .ff-gull-frame-b {
+    animation-duration: 0.75s;
+  }
+
+  .ff-tow-prop {
+    animation-duration: 0.2s;
+  }
+}
+
+@keyframes ff-crab-right {
+  0%,
+  100% {
+    transform: translateX(0);
+  }
+  10% {
+    transform: translateX(6px) translateY(-1px);
+  }
+  20% {
+    transform: translateX(14px);
+  }
+  30% {
+    transform: translateX(22px) translateY(-1px);
+  }
+  40% {
+    transform: translateX(28px);
+  }
+  50% {
+    transform: translateX(34px) translateY(-1px);
+  }
+  60% {
+    transform: translateX(26px);
+  }
+  70% {
+    transform: translateX(16px) translateY(-1px);
+  }
+  80% {
+    transform: translateX(8px);
+  }
+  90% {
+    transform: translateX(2px) translateY(-1px);
+  }
+}
+
+@keyframes ff-crab-left {
+  0%,
+  100% {
+    transform: translateX(0);
+  }
+  10% {
+    transform: translateX(-6px) translateY(-1px);
+  }
+  20% {
+    transform: translateX(-14px);
+  }
+  30% {
+    transform: translateX(-22px) translateY(-1px);
+  }
+  40% {
+    transform: translateX(-28px);
+  }
+  50% {
+    transform: translateX(-34px) translateY(-1px);
+  }
+  60% {
+    transform: translateX(-26px);
+  }
+  70% {
+    transform: translateX(-16px) translateY(-1px);
+  }
+  80% {
+    transform: translateX(-8px);
+  }
+  90% {
+    transform: translateX(-2px) translateY(-1px);
+  }
+}
+
+.ff-crab {
+  animation-timing-function: linear;
+  animation-iteration-count: infinite;
+  will-change: transform;
+}
+
+.ff-crab-right {
+  animation-name: ff-crab-right;
+  animation-duration: 9s;
+}
+
+.ff-crab-left {
+  animation-name: ff-crab-left;
+  animation-duration: 11s;
 }
 
 /* -- Toasts -- */
@@ -691,14 +1487,52 @@ button:disabled,
 
 @media (prefers-reduced-motion: reduce) {
   .ff-in,
-  .ff-fade,
   .ff-bob,
   .ff-sway,
-  .ff-shimmer,
+  .ff-bubble,
+  .ff-jelly,
+  .ff-chest-glow,
+  .ff-chest-pop,
+  .ff-chest-spark,
+  .ff-chest-loot,
+  .ff-boat-float,
+  .ff-tow-cruise,
+  .ff-tow-banner,
+  .ff-tow-plane,
+  .ff-tow-plane-tilt,
+  .ff-tow-prop,
+  .ff-cloud-bob,
+  .ff-water-surface-scroll,
+  .ff-crab,
+  .ff-crab-right,
+  .ff-crab-left,
+  .ff-gull,
+  .ff-gull-frame-a,
+  .ff-gull-frame-b,
   .ff-fish-right,
   .ff-fish-left,
   .ff-toast {
     animation: none !important;
+  }
+
+  .ff-px-clouds,
+  .ff-px-gulls-front,
+  .ff-px-plane,
+  .ff-px-title {
+    transform: none !important;
+  }
+
+  .ff-tow-cruise {
+    left: 58%;
+    transform: translate3d(-50%, -50%, 0) !important;
+  }
+
+  .ff-gull-frame-b {
+    opacity: 0 !important;
+  }
+
+  .ff-gull-frame-a {
+    opacity: 1 !important;
   }
 
   .ff-btn,
