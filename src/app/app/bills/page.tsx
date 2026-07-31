@@ -10,7 +10,7 @@ import { prisma } from "@/lib/db";
 export const metadata: Metadata = {
   title: "Pay a bill",
   description:
-    "Pay fictional utility and service bills from your Fish&Fric accounts.",
+    "Clear demo utilities and reef services from your Fish&Fric accounts.",
   alternates: { canonical: "/app/bills" },
 };
 
@@ -54,8 +54,8 @@ export default async function BillsPage({ searchParams }: PageProps) {
           </Link>
           <h1 className="ff-display text-2xl">Pay a bill</h1>
           <p className="text-sm text-[var(--ff-muted)]">
-            Send a payment to a demo payee. Debits the ledger as{" "}
-            <span className="text-[var(--ff-ink)]">BILL_PAYMENT</span>.
+            Settle a demo payee from one of your accounts. The ledger logs it as
+            a bill payment - no real invoices, just practice tides.
           </p>
         </div>
 

@@ -70,7 +70,7 @@ export function NotificationList({ items }: { items: NotificationItem[] }) {
   if (items.length === 0) {
     return (
       <p className="text-sm text-[var(--ff-muted)]" role="status">
-        No notifications yet. Activity alerts show up here (max{" "}
+        No tide alerts yet. Activity ripples show up here (max{" "}
         {NOTIFICATION_RULES.maxPerUser} kept).
       </p>
     );

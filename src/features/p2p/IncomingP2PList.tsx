@@ -105,7 +105,7 @@ export function IncomingP2PList({ items }: { items: IncomingP2P[] }) {
   if (items.length === 0) {
     return (
       <p className="text-sm text-[var(--ff-muted)]" role="status">
-        No pending P2P transfers.
+        No bottles washing ashore right now.
       </p>
     );
   }

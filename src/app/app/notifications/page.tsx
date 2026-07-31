@@ -9,7 +9,8 @@ import { auth } from "@/lib/auth";
 
 export const metadata: Metadata = {
   title: "Notifications",
-  description: "Alerts for P2P transfers and account activity on Fish&Fric.",
+  description:
+    "Tide alerts for bottle drops and account activity on Fish&Fric.",
   alternates: { canonical: "/app/notifications" },
 };
 
@@ -45,13 +46,13 @@ export default async function NotificationsPage() {
             <span aria-hidden="true">← </span>
             My accounts
           </Link>
-          <h1 className="ff-display text-2xl">Notifications</h1>
+          <h1 className="ff-display text-2xl">Tide alerts</h1>
           <p className="text-sm text-[var(--ff-muted)]">
             {unread === 0
-              ? `You are up to date. Inbox keeps at most ${NOTIFICATION_RULES.maxPerUser} alerts.`
+              ? `Seas are calm. Inbox keeps at most ${NOTIFICATION_RULES.maxPerUser} alerts.`
               : unread === 1
-                ? "1 unread alert."
-                : `${unread} unread alerts.`}
+                ? "1 unread ripple waiting for you."
+                : `${unread} unread ripples waiting for you.`}
           </p>
         </div>
 

@@ -31,12 +31,50 @@
 html {
   scroll-behavior: smooth;
   overflow-x: clip;
+  /* Firefox */
+  scrollbar-width: thin;
+  scrollbar-color: var(--ff-gold) #0e2430;
 }
 
 body {
   background: var(--ff-bg);
   color: var(--ff-ink);
   overflow-x: clip;
+}
+
+/* Chromium / Safari - chunky reef scrollbar */
+*::-webkit-scrollbar {
+  width: 12px;
+  height: 12px;
+}
+
+*::-webkit-scrollbar-track {
+  background:
+    linear-gradient(90deg, #071218 0 2px, transparent 2px),
+    linear-gradient(#0e2430, #143040);
+  border-left: 2px solid #071218;
+}
+
+*::-webkit-scrollbar-thumb {
+  background:
+    linear-gradient(180deg, var(--ff-gold-hi) 0%, var(--ff-gold) 55%, #c89020 100%);
+  border: 2px solid #071218;
+  box-shadow: inset 0 0 0 1px rgba(255, 224, 138, 0.35);
+  min-height: 2.5rem;
+}
+
+*::-webkit-scrollbar-thumb:hover {
+  background:
+    linear-gradient(180deg, #ffe08a 0%, var(--ff-gold-hi) 45%, var(--ff-gold) 100%);
+}
+
+*::-webkit-scrollbar-thumb:active {
+  background: var(--ff-gold-edge);
+}
+
+*::-webkit-scrollbar-corner {
+  background: #0e2430;
+  border: 2px solid #071218;
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -512,12 +550,12 @@ button:disabled {
   box-shadow: none;
 }
 
-/* Marketing / sky — floats in the atmosphere, no slab */
+/* Marketing / sky - floats in the atmosphere, no slab */
 .ff-nav-sky {
   background: transparent;
 }
 
-/* App / deep water — soft depth veil only */
+/* App / deep water - soft depth veil only */
 .ff-nav-deep {
   background: linear-gradient(
     180deg,
@@ -1768,7 +1806,7 @@ body.ff-egg-word-coral {
   image-rendering: crisp-edges;
 }
 
-/* Pomikit pixel mark — right hull, white plate */
+/* Pomikit pixel mark - right hull, white plate */
 .ff-boat-pomikit {
   position: absolute;
   left: 68%;
@@ -1799,7 +1837,7 @@ body.ff-egg-word-coral {
 }
 
 .ff-boat-crane {
-  /* Foredeck — boom clears the cabin and hangs over open water */
+  /* Foredeck - boom clears the cabin and hangs over open water */
   position: absolute;
   left: 2%;
   bottom: 38%;
@@ -1899,7 +1937,7 @@ body.ff-egg-word-coral {
   background-image: url("/brand/water-surface-pixel.png?v=5");
   background-repeat: repeat-x;
   background-position: left top;
-  /* Exact 2× integer scale — keeps wavelets sharp */
+  /* Exact 2× integer scale - keeps wavelets sharp */
   background-size: 384px 40px;
   image-rendering: pixelated;
   image-rendering: crisp-edges;

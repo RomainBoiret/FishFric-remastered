@@ -435,7 +435,7 @@ export default function DocsPage() {
           </div>
         </section>
 
-        {/* Dive in — hung from the boat crane */}
+        {/* Dive in - hung from the boat crane */}
         <section
           className="px-4 pb-20 pt-8 sm:px-8 sm:pb-24 lg:px-12"
           aria-labelledby="dive-heading"

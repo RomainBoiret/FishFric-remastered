@@ -38,7 +38,7 @@ async function save(c, name) {
 }
 
 /**
- * Polished mini fishing boat — readable silhouette, brand accents, flat keel.
+ * Polished mini fishing boat - readable silhouette, brand accents, flat keel.
  * Bow on the left (faces the title when parked on the right).
  */
 function makeBoat() {
@@ -142,7 +142,7 @@ function makeBoat() {
   return c;
 }
 
-/** Side-view seagull flying left (toward title) — wings up */
+/** Side-view seagull flying left (toward title) - wings up */
 function makeGullUp() {
   const W = 28;
   const H = 18;
@@ -179,7 +179,7 @@ function makeGullUp() {
   return c;
 }
 
-/** Side-view seagull flying left — wings down */
+/** Side-view seagull flying left - wings down */
 function makeGullDown() {
   const W = 28;
   const H = 18;

@@ -9,7 +9,7 @@ import { prisma } from "@/lib/db";
 
 export const metadata: Metadata = {
   title: "Transfer",
-  description: "Move money between your Fish&Fric accounts.",
+  description: "Move doubloons between your Fish&Fric accounts.",
   alternates: { canonical: "/app/transfer" },
 };
 
@@ -51,9 +51,10 @@ export default async function TransferPage({ searchParams }: PageProps) {
             <span aria-hidden="true">← </span>
             My accounts
           </Link>
-          <h1 className="ff-display text-2xl">Transfer</h1>
+          <h1 className="ff-display text-2xl">Between accounts</h1>
           <p className="text-sm text-[var(--ff-muted)]">
-            Move money between your Fish&Fric accounts.
+            Shift funds from one of your pots to another - same reef, instant
+            ledger.
           </p>
         </div>
 

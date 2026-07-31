@@ -13,7 +13,7 @@ import { prisma } from "@/lib/db";
 export const metadata: Metadata = {
   title: "Open an account",
   description:
-    "Open a checking, savings, or Shark Card account on Fish&Fric.",
+    "Open checking, savings, or a Shark Card - new Fish&Fric products start at $0.00.",
   alternates: { canonical: "/app/accounts/open" },
 };
 
@@ -51,8 +51,8 @@ export default async function OpenAccountPage() {
           </Link>
           <h1 className="ff-display text-2xl">Open an account</h1>
           <p className="text-sm text-[var(--ff-muted)]">
-            Add a checking, savings, or Shark Card product. New accounts start
-            at $0.00.
+            Add checking, savings, or a Shark Card to your reef. Fresh accounts
+            launch at $0.00 - fill them when you are ready.
           </p>
         </div>
 

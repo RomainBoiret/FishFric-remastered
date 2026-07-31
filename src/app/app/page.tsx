@@ -10,7 +10,8 @@ import { prisma } from "@/lib/db";
 
 export const metadata: Metadata = {
   title: "My accounts",
-  description: "View your Fish&Fric checking, savings, and Shark Card balances.",
+  description:
+    "Your Fish&Fric reef hub - checking, savings, and Shark Card balances.",
   alternates: { canonical: "/app" },
 };
 
@@ -39,9 +40,9 @@ export default async function AppHubPage() {
             <NotificationBell />
           </div>
           <p className="text-sm text-[var(--ff-muted)]">
-            Your accounts.
+            Welcome back to the reef. Pick an account or a quick action below.
             {session.user.isDemo
-              ? " Demo mode - sample data for visitors."
+              ? " Demo waters - sample balances for visitors."
               : null}
           </p>
         </div>
@@ -127,7 +128,7 @@ export default async function AppHubPage() {
             })}
             {accounts.length === 0 ? (
               <li className="px-5 py-8 text-[var(--ff-muted)]">
-                No accounts yet.
+                No accounts yet - open one to start swimming.
               </li>
             ) : null}
           </ul>

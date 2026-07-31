@@ -160,7 +160,7 @@ export function EasterEggsHost() {
     );
     // eslint-disable-next-line no-console
     console.log(
-      "%cPsst — try the chest, the plane, the boat, a starfish… or type reef.",
+      "%cPsst - try the chest, the plane, the boat, a starfish… or type reef.",
       "color:#5ec8e8;",
     );
   }, []);
@@ -259,7 +259,7 @@ export function EasterEggsHost() {
   );
 }
 
-/** Tow plane — tip + sparks on click. */
+/** Tow plane - tip + sparks on click. */
 export function EggBannerPlane() {
   const [active, setActive] = useState(false);
   const [sparks, setSparks] = useState<EggSpark[]>([]);
@@ -335,7 +335,7 @@ export function EggBannerPlane() {
   );
 }
 
-/** Invisible hit target over the fishing boat — ripples + foghorn. */
+/** Invisible hit target over the fishing boat - ripples + foghorn. */
 export function EggBoatHit() {
   const [active, setActive] = useState(false);
   const timer = useRef<ReturnType<typeof setTimeout> | null>(null);
@@ -381,7 +381,7 @@ export function EggBoatHit() {
   );
 }
 
-/** Clickable starfish — spin + wish sparks. */
+/** Clickable starfish - spin + wish sparks. */
 export function EggStarfish({
   left,
   bottom,
@@ -454,7 +454,7 @@ export function EggStarfish({
 const BRAND_CLICKS = 5;
 const BRAND_WINDOW_MS = 2200;
 
-/** Brand link — blink animation after several quick clicks. */
+/** Brand link - blink animation after several quick clicks. */
 export function EggBrandLink({
   href,
   className,

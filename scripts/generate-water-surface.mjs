@@ -6,7 +6,7 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const brand = path.join(__dirname, "..", "public", "brand");
 
 /**
- * Pixel water surface strip — jagged silhouette filled below the crest
+ * Pixel water surface strip - jagged silhouette filled below the crest
  * (Stardew / Emerald / Terraria), not a thin dashed line.
  * Transparent above crest so sky shows through the wavelets.
  */
@@ -31,9 +31,9 @@ function makeWaterSurface() {
     buf[i + 3] = a;
   }
 
-  // Hill peaks: [centerX, height, halfWidth] — height in px above trough
+  // Hill peaks: [centerX, height, halfWidth] - height in px above trough
   const hills = [
-    // [center, height, halfWidth] — wider = flatter Stardew-like plateaus
+    // [center, height, halfWidth] - wider = flatter Stardew-like plateaus
     [12, 4, 7],
     [32, 6, 8],
     [56, 3, 6],

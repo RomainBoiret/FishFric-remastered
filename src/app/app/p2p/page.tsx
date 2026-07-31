@@ -11,9 +11,9 @@ import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/db";
 
 export const metadata: Metadata = {
-  title: "P2P transfer",
+  title: "Send to a friend",
   description:
-    "Send a Fish&Fric P2P transfer locked behind a security question.",
+    "Ship a Fish&Fric bottle drop - P2P locked behind a security question.",
   alternates: { canonical: "/app/p2p" },
 };
 
@@ -83,18 +83,18 @@ export default async function P2PPage() {
             <span aria-hidden="true">← </span>
             My accounts
           </Link>
-          <h1 className="ff-display text-2xl">P2P transfer</h1>
+          <h1 className="ff-display text-2xl">Bottle drop</h1>
           <p className="max-w-lg text-sm text-[var(--ff-muted)]">
-            Send funds with a security question (bottle drop). The recipient
-            answers to claim the transfer.
+            Send funds in a sealed bottle. The recipient answers your security
+            question to claim the transfer before it expires.
           </p>
           {isDemo ? (
             <p className="text-sm text-[var(--ff-muted)]">
-              Demo tip: send to{" "}
+              Demo tip: address the bottle to{" "}
               <span className="break-all font-bold text-[var(--ff-gold)]">
                 {FRIEND_CREDENTIALS.email}
               </span>
-              , then sign in with that account (same password) to accept.
+              , then sign in as that friend (same password) to open it.
             </p>
           ) : null}
         </div>
@@ -105,7 +105,7 @@ export default async function P2PPage() {
             aria-labelledby="p2p-send-heading"
           >
             <h2 id="p2p-send-heading" className="ff-display text-lg">
-              Send
+              Seal a bottle
             </h2>
             <SendP2PForm
               sources={sources}
@@ -119,7 +119,7 @@ export default async function P2PPage() {
               aria-labelledby="p2p-incoming-heading"
             >
               <h2 id="p2p-incoming-heading" className="ff-display text-lg">
-                Incoming
+                Bottles for you
               </h2>
               <IncomingP2PList items={incomingItems} />
             </section>
@@ -129,11 +129,11 @@ export default async function P2PPage() {
               aria-labelledby="p2p-pending-heading"
             >
               <h2 id="p2p-pending-heading" className="ff-display text-lg">
-                Pending sent
+                Still at sea
               </h2>
               {outgoing.length === 0 ? (
                 <p className="text-sm text-[var(--ff-muted)]" role="status">
-                  No pending sends.
+                  No bottles waiting out there.
                 </p>
               ) : (
                 <ul className="m-0 flex list-none flex-col p-0">

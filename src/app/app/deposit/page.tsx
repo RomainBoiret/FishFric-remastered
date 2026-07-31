@@ -11,9 +11,9 @@ import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/db";
 
 export const metadata: Metadata = {
-  title: "Mobile deposit",
+  title: "Deposit a cheque",
   description:
-    "Simulate a mobile cheque deposit with pending review and ledger credit.",
+    "Drop a signed demo cheque into Fish&Fric - pending review, then credit.",
   alternates: { canonical: "/app/deposit" },
 };
 
@@ -70,12 +70,12 @@ export default async function MobileDepositPage({ searchParams }: PageProps) {
             <span aria-hidden="true">← </span>
             My accounts
           </Link>
-          <h1 className="ff-display text-2xl">Mobile deposit</h1>
+          <h1 className="ff-display text-2xl">Deposit a cheque</h1>
           <p className="max-w-lg text-sm text-[var(--ff-muted)]">
             Issue a signed demo cheque (saved on your PC) or upload a photo.
-            ID, payee, signature and one-time clear are checked, then{" "}
-            <span className="text-[var(--ff-ink)]">pending → credited</span>.
-            History keeps at most {DEPOSIT_HISTORY_RULES.maxPerUser} deposits.
+            We check ID, payee, signature and a one-time clear, then move it
+            from pending to credited. History keeps up to{" "}
+            {DEPOSIT_HISTORY_RULES.maxPerUser} catches.
           </p>
         </div>
 
@@ -85,7 +85,7 @@ export default async function MobileDepositPage({ searchParams }: PageProps) {
             aria-labelledby="deposit-form-heading"
           >
             <h2 id="deposit-form-heading" className="ff-display text-lg">
-              New deposit
+              New catch
             </h2>
             <MobileDepositForm
               accounts={depositAccounts}

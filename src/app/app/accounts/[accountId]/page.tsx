@@ -35,7 +35,7 @@ export async function generateMetadata({
     const title = account.label ?? ACCOUNT_TYPE_LABELS[account.type];
     return {
       title,
-      description: `Fish&Fric ${ACCOUNT_TYPE_LABELS[account.type]} - balance and transaction history.`,
+      description: `${ACCOUNT_TYPE_LABELS[account.type]} on Fish&Fric - balance and tide log.`,
       alternates: { canonical },
     };
   } catch {
@@ -102,11 +102,11 @@ export default async function AccountDetailPage({ params }: PageProps) {
             </p>
             {account.type === "CREDIT" && account.creditLimitCents != null ? (
               <p className="text-sm text-[var(--ff-muted)]">
-                Limit {formatMoney(account.creditLimitCents)}
+                Credit limit {formatMoney(account.creditLimitCents)}
               </p>
             ) : (
               <p className="text-sm text-[var(--ff-muted)]">
-                Interest {(account.interestBps / 100).toFixed(2)}% / year
+                Interest {(account.interestBps / 100).toFixed(2)}% per year
               </p>
             )}
 
@@ -124,7 +124,7 @@ export default async function AccountDetailPage({ params }: PageProps) {
                   href="/app/transfer"
                   className="ff-btn ff-btn-ghost w-full sm:w-auto"
                 >
-                  Pay the card
+                  Pay the Shark Card
                   <span aria-hidden="true"> ›</span>
                 </Link>
               )}
@@ -134,8 +134,8 @@ export default async function AccountDetailPage({ params }: PageProps) {
 
         <section aria-labelledby="history-heading" className="space-y-2">
           <p className="text-sm text-[var(--ff-muted)]">
-            Keeps at most {ACCOUNT_HISTORY_RULES.maxVisiblePerAccount} visible
-            rows. Clearing hides them only - balances stay.
+            Tide log shows up to {ACCOUNT_HISTORY_RULES.maxVisiblePerAccount}{" "}
+            rows. Clearing hides the list only - balances stay put.
           </p>
           <AccountHistoryList accountId={account.id} items={history} />
         </section>

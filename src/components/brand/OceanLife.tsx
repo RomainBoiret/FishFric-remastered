@@ -710,7 +710,7 @@ export function SkyClouds() {
 }
 
 /**
- * Aerial tow — continuous left → right flyby across the sky.
+ * Aerial tow - continuous left → right flyby across the sky.
  */
 export function BannerPlane() {
   return (
@@ -756,7 +756,7 @@ export function BannerPlane() {
   );
 }
 
-/** Pixel-art water surface — irregular crest + sparse sparkles, scroll loop. */
+/** Pixel-art water surface - irregular crest + sparse sparkles, scroll loop. */
 export function SurfaceWaves() {
   return (
     <div
@@ -771,7 +771,7 @@ export function SurfaceWaves() {
   );
 }
 
-/** Belle Isle — hull + deck crane; boom hangs cargo clear of the cabin. */
+/** Belle Isle - hull + deck crane; boom hangs cargo clear of the cabin. */
 export function FishingBoat() {
   return (
     <div className="ff-boat-anchor pointer-events-none absolute z-[5]" aria-hidden>
@@ -801,9 +801,9 @@ export function FishingBoat() {
             <rect x="8" y="1" width="2" height="1" fill="#7cb342" />
             <rect x="9" y="2" width="2" height="1" fill="#8bc34a" />
             <rect x="10" y="3" width="1" height="1" fill="#7cb342" />
-            {/* p — stem */}
+            {/* p - stem */}
             <rect x="2" y="3" width="2" height="11" fill="#1a1a1a" />
-            {/* p — bowl ring */}
+            {/* p - bowl ring */}
             <rect x="4" y="3" width="5" height="2" fill="#1a1a1a" />
             <rect x="8" y="4" width="1" height="1" fill="#1a1a1a" />
             <rect x="9" y="5" width="2" height="3" fill="#1a1a1a" />
@@ -862,7 +862,7 @@ export function FishingBoat() {
             <rect x="9" y="15" width="2" height="3" fill="#c9b08a" />
             <rect x="9" y="18" width="2" height="2" fill="#a89068" />
           </svg>
-          {/* Anchor for the long cable — center of the rope stub under the pulley */}
+          {/* Anchor for the long cable - center of the rope stub under the pulley */}
           <span data-ff-crane-boom className="ff-boat-crane-tip" />
         </div>
       </div>

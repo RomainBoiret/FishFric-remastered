@@ -131,10 +131,10 @@ export function DepositHistoryList({
     return (
       <div className="space-y-4">
         <h2 id="deposit-history-heading" className="ff-display text-lg">
-          Recent deposits
+          Recent catches
         </h2>
         <p className="text-sm text-[var(--ff-muted)]" role="status">
-          No deposits yet. Submitted cheques show up here (max{" "}
+          No cheques yet. Submitted deposits surface here (max{" "}
           {DEPOSIT_HISTORY_RULES.maxPerUser} kept).
         </p>
       </div>
@@ -148,7 +148,7 @@ export function DepositHistoryList({
           id="deposit-history-heading"
           className="ff-display min-w-0 text-lg"
         >
-          Recent deposits
+          Recent catches
         </h2>
         <ClearAllButton hasItems />
       </div>

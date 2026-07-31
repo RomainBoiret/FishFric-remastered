@@ -95,11 +95,11 @@ export function AccountHistoryList({
     return (
       <div className="space-y-4">
         <h2 id="history-heading" className="ff-display text-lg">
-          History
+          Tide log
         </h2>
         <p className="text-sm text-[var(--ff-muted)]" role="status">
-          Still waters - no transactions yet (max{" "}
-          {ACCOUNT_HISTORY_RULES.maxVisiblePerAccount} kept visible).
+          Still waters - no movements yet (up to{" "}
+          {ACCOUNT_HISTORY_RULES.maxVisiblePerAccount} rows stay visible).
         </p>
       </div>
     );
@@ -109,7 +109,7 @@ export function AccountHistoryList({
     <div className="flex flex-col gap-4">
       <div className="flex flex-wrap items-center justify-between gap-2 sm:gap-3">
         <h2 id="history-heading" className="ff-display min-w-0 text-lg">
-          History
+          Tide log
         </h2>
         <ClearAllButton accountId={accountId} hasItems />
       </div>

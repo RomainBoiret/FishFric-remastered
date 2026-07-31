@@ -37,7 +37,7 @@ const LOOT = [
   },
   {
     title: "Savings flex",
-    body: "APR 0.0% — pride: 100%.",
+    body: "APR 0.0% - pride: 100%.",
   },
   {
     title: "Reef approves",
@@ -195,7 +195,7 @@ export function TreasureChest({
         title="Tap for loot"
       >
         <span id={labelId} className="ff-sr-only">
-          Secret treasure chest — click for loot
+          Secret treasure chest - click for loot
         </span>
         <svg
           width="64"
