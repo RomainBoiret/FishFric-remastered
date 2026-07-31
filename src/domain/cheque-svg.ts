@@ -76,9 +76,9 @@ export function extractChequeSecurityFromSvg(
 ): ChequeSecurityAttrs | null {
   const chequeId = svg.match(/data-ff-cheque-id="([^"]+)"/i)?.[1];
   const signature = svg.match(/data-ff-sig="([a-f0-9]+)"/i)?.[1];
-  const amountRaw = svg.match(/data-ff-amount-cents="(\d+)"/i)?.[1];
+  const amountRaw = svg.match(/data-ff-amount-cents="([^"]+)"/i)?.[1];
   const payeeUserId = svg.match(/data-ff-payee-user-id="([^"]+)"/i)?.[1];
-  const expiresRaw = svg.match(/data-ff-exp="(\d+)"/i)?.[1];
+  const expiresRaw = svg.match(/data-ff-exp="([^"]+)"/i)?.[1];
 
   if (!chequeId || !signature || !amountRaw || !payeeUserId || !expiresRaw) {
     return null;

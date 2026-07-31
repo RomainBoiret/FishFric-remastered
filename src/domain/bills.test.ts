@@ -1,6 +1,10 @@
 import assert from "node:assert/strict";
 import { describe, it } from "node:test";
-import { getBillPayee, validateBillPayment } from "./bills";
+import {
+  canPayBillFrom,
+  getBillPayee,
+  validateBillPayment,
+} from "./bills";
 
 describe("validateBillPayment", () => {
   const checking = {
@@ -27,6 +31,16 @@ describe("validateBillPayment", () => {
       amountCents: 1000,
     });
     assert.equal(result.ok, false);
+  });
+
+  it("rejects a non-positive amount", () => {
+    const result = validateBillPayment({
+      from: checking,
+      payeeId: "ocean-hydro",
+      amountCents: 0,
+    });
+    assert.equal(result.ok, false);
+    if (!result.ok) assert.match(result.reason, /positive/i);
   });
 
   it("rejects insufficient funds", () => {
@@ -67,10 +81,37 @@ describe("validateBillPayment", () => {
     assert.equal(result.ok, false);
     if (!result.ok) assert.match(result.reason, /credit limit/i);
   });
+
+  it("rejects payments from unsupported account types", () => {
+    const result = validateBillPayment({
+      from: {
+        id: "x",
+        type: "NOPE" as "CHECKING",
+        balanceCents: 10_000,
+        creditLimitCents: null,
+      },
+      payeeId: "ocean-hydro",
+      amountCents: 100,
+    });
+    assert.equal(result.ok, false);
+    if (!result.ok) assert.match(result.reason, /cannot pay bills/i);
+  });
 });
 
 describe("getBillPayee", () => {
   it("finds a known payee", () => {
     assert.equal(getBillPayee("ocean-hydro")?.name, "Ocean Hydro");
+  });
+
+  it("returns null for unknown payees", () => {
+    assert.equal(getBillPayee("missing"), null);
+  });
+});
+
+describe("canPayBillFrom", () => {
+  it("allows all retail account types", () => {
+    assert.equal(canPayBillFrom("CHECKING"), true);
+    assert.equal(canPayBillFrom("SAVINGS"), true);
+    assert.equal(canPayBillFrom("CREDIT"), true);
   });
 });

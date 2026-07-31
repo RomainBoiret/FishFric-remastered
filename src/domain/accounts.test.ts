@@ -1,9 +1,11 @@
 import assert from "node:assert/strict";
 import { describe, it } from "node:test";
 import {
+  assertSufficientFunds,
   canOpenAccount,
   defaultAccountLabel,
   getOpenableAccountTypes,
+  type AccountType,
 } from "./accounts";
 
 describe("canOpenAccount", () => {
@@ -63,6 +65,16 @@ describe("canOpenAccount", () => {
     assert.equal(result.ok, false);
     assert.match(result.reason ?? "", /shark card already exists/i);
   });
+
+  it("rejects an invalid account type", () => {
+    const result = canOpenAccount({
+      type: "NOPE" as AccountType,
+      existingTypes: [],
+      savingsCount: 0,
+    });
+    assert.equal(result.ok, false);
+    assert.match(result.reason ?? "", /invalid account type/i);
+  });
 });
 
 describe("getOpenableAccountTypes", () => {
@@ -88,11 +100,30 @@ describe("getOpenableAccountTypes", () => {
 });
 
 describe("defaultAccountLabel", () => {
+  it("labels checking and credit", () => {
+    assert.equal(defaultAccountLabel("CHECKING"), "Checking account");
+    assert.equal(defaultAccountLabel("CREDIT"), "Shark Card");
+  });
+
   it("labels the first savings simply", () => {
     assert.equal(defaultAccountLabel("SAVINGS", 0), "Savings account");
   });
 
   it("numbers later savings accounts", () => {
     assert.equal(defaultAccountLabel("SAVINGS", 1), "Savings account 2");
+  });
+});
+
+describe("assertSufficientFunds", () => {
+  it("passes when funds cover the amount", () => {
+    assert.doesNotThrow(() => assertSufficientFunds(500, 100));
+  });
+
+  it("rejects non-positive amounts", () => {
+    assert.throws(() => assertSufficientFunds(500, 0), /positive/i);
+  });
+
+  it("rejects insufficient balance", () => {
+    assert.throws(() => assertSufficientFunds(50, 100), /insufficient/i);
   });
 });

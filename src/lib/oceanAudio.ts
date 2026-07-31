@@ -28,8 +28,17 @@ export const OCEAN_PRESENCE_IDS = [
 
 type Listener = (enabled: boolean) => void;
 
+function getAudioContextCtor(): (new () => AudioContext) | null {
+  if (typeof window === "undefined") return null;
+  const w = window as unknown as {
+    AudioContext?: new () => AudioContext;
+    webkitAudioContext?: new () => AudioContext;
+  };
+  return w.AudioContext ?? w.webkitAudioContext ?? null;
+}
+
 function canUseAudio() {
-  return typeof window !== "undefined" && typeof AudioContext !== "undefined";
+  return getAudioContextCtor() != null;
 }
 
 function readStoredEnabled(): boolean {
@@ -59,7 +68,7 @@ function rampGain(g: GainNode, value: number, ctx: AudioContext, sec = 0.45) {
   g.gain.linearRampToValueAtTime(target, now + sec);
 }
 
-class OceanAudioEngine {
+export class OceanAudioEngine {
   private ctx: AudioContext | null = null;
   private master: GainNode | null = null;
   private sfxGain: GainNode | null = null;
@@ -231,10 +240,8 @@ class OceanAudioEngine {
 
   private async ensureGraph() {
     if (this.ready && this.ctx) return;
-    const Ctx =
-      window.AudioContext ||
-      (window as unknown as { webkitAudioContext: typeof AudioContext })
-        .webkitAudioContext;
+    const Ctx = getAudioContextCtor();
+    if (!Ctx) return;
     this.ctx = new Ctx();
     this.master = this.ctx.createGain();
     this.master.gain.value = 0.9;

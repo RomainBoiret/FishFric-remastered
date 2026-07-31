@@ -43,6 +43,15 @@ describe("validateMobileDeposit", () => {
     assert.equal(result.ok, false);
     if (!result.ok) assert.match(result.reason, /minimum/i);
   });
+
+  it("rejects amounts above the maximum", () => {
+    const result = validateMobileDeposit({
+      account: { id: "a1", type: "CHECKING" },
+      amountCents: 600_000,
+    });
+    assert.equal(result.ok, false);
+    if (!result.ok) assert.match(result.reason, /maximum/i);
+  });
 });
 
 describe("cheque face amount parsing", () => {
@@ -153,6 +162,26 @@ describe("validateGeneratedChequeAmount", () => {
     assert.equal(result.ok, false);
     if (!result.ok) assert.match(result.reason, /150\.00|120\.00/i);
   });
+
+  it("rejects a mismatched filename", () => {
+    const result = validateGeneratedChequeAmount({
+      amountCents: 12_000,
+      chequeAmountCents: 12_000,
+      chequeFileName: "wrong.svg",
+    });
+    assert.equal(result.ok, false);
+    if (!result.ok) assert.match(result.reason, /file does not match/i);
+  });
+
+  it("accepts a matching face", () => {
+    assert.equal(
+      validateChequeFaceMatchesDeposit({
+        amountCents: 1000,
+        faceAmountCents: 1000,
+      }).ok,
+      true,
+    );
+  });
 });
 
 describe("canDepositTo", () => {
@@ -165,10 +194,8 @@ describe("canDepositTo", () => {
 
 describe("isAllowedDepositImage", () => {
   it("accepts a small png", () => {
-    assert.equal(
-      isAllowedDepositImage({ type: "image/png", size: 12_000 }).ok,
-      true,
-    );
+    const result = isAllowedDepositImage({ type: "image/png", size: 12_000 });
+    assert.equal(result.ok, true);
   });
 
   it("rejects oversized files", () => {
@@ -177,5 +204,25 @@ describe("isAllowedDepositImage", () => {
       size: 3 * 1024 * 1024,
     });
     assert.equal(result.ok, false);
+    if (!result.ok) assert.match(result.reason, /2 MB/i);
+  });
+
+  it("rejects disallowed mime types", () => {
+    const result = isAllowedDepositImage({
+      type: "application/pdf",
+      size: 1000,
+    });
+    assert.equal(result.ok, false);
+    if (!result.ok) assert.match(result.reason, /JPG|PNG|WebP|SVG/i);
+  });
+
+  it("accepts boundary size exactly at the max", () => {
+    assert.equal(
+      isAllowedDepositImage({
+        type: "image/webp",
+        size: 2 * 1024 * 1024,
+      }).ok,
+      true,
+    );
   });
 });

@@ -14,7 +14,8 @@
     "db:seed": "tsx prisma/seed.ts",
     "db:studio": "prisma studio",
     "db:verify-ledger": "tsx scripts/verify-ledger.ts",
-    "test": "tsx --test src/domain/**/*.test.ts"
+    "test": "tsx --test \"src/domain/**/*.test.ts\" \"src/lib/**/*.test.ts\"",
+    "test:coverage": "c8 --reporter=text --include=\"src/domain/**/*.ts\" --include=\"src/lib/oceanAudio.ts\" --exclude=\"**/*.test.ts\" --check-coverage --lines 100 --statements 100 tsx --test \"src/domain/**/*.test.ts\" \"src/lib/**/*.test.ts\""
   },
   "dependencies": {
     "@prisma/adapter-pg": "^7.9.1",
@@ -35,6 +36,7 @@
     "@types/pg": "^8.20.0",
     "@types/react": "^19",
     "@types/react-dom": "^19",
+    "c8": "^12.0.0",
     "eslint": "^9",
     "eslint-config-next": "16.2.12",
     "prisma": "^7.9.1",
