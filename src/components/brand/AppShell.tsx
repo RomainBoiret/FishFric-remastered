@@ -4,6 +4,7 @@ import { BrandMark } from "@/components/brand/BrandMark";
 import { EggBrandLink } from "@/components/brand/EasterEggs";
 import { GitHubHeaderLink } from "@/components/brand/GitHubLink";
 import { SiteFooter } from "@/components/brand/SiteFooter";
+import { SoundToggle } from "@/components/brand/SoundToggle";
 import { logoutAction } from "@/features/auth/actions";
 import { SITE_NAME } from "@/lib/site";
 
@@ -38,6 +39,7 @@ export function AppHeader() {
           aria-label="Account"
           className="flex shrink-0 flex-wrap items-center justify-end gap-1.5 sm:gap-2"
         >
+          <SoundToggle />
           <Link href="/docs" className="ff-nav-link">
             Docs
           </Link>

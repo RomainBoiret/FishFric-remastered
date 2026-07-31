@@ -612,6 +612,55 @@ button:disabled {
   color: #8a6810;
 }
 
+.ff-sound-toggle {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2rem;
+  height: 2rem;
+  padding: 0;
+  border: none;
+  border-radius: 0;
+  background: transparent;
+  color: inherit;
+  cursor: pointer;
+  transition:
+    color 0.25s var(--ff-ease),
+    opacity 0.25s var(--ff-ease),
+    transform 0.2s var(--ff-ease);
+}
+
+.ff-sound-toggle:hover {
+  transform: translateY(-1px);
+}
+
+.ff-sound-toggle:focus-visible {
+  outline: 3px solid var(--ff-gold-hi);
+  outline-offset: 2px;
+}
+
+.ff-nav-deep .ff-sound-toggle {
+  color: #e8f4f8;
+}
+
+.ff-nav-deep .ff-sound-toggle:hover,
+.ff-nav-deep .ff-sound-toggle.is-on {
+  color: var(--ff-gold-hi);
+}
+
+.ff-nav-sky .ff-sound-toggle {
+  color: #1a4a5e;
+}
+
+.ff-nav-sky .ff-sound-toggle:hover,
+.ff-nav-sky .ff-sound-toggle.is-on {
+  color: #8a6810;
+}
+
+.ff-sound-toggle.is-muted {
+  opacity: 0.72;
+}
+
 /* Header CTAs: crisp pixel blocks that stay readable on bright sky */
 .ff-nav .ff-btn-sm {
   font-size: 0.75rem;

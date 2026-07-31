@@ -9,6 +9,7 @@ import {
   type CSSProperties,
 } from "react";
 import { createPortal } from "react-dom";
+import { oceanAudio } from "@/lib/oceanAudio";
 
 const LOOT = [
   {
@@ -155,10 +156,12 @@ export function TreasureChest({
       setLoot(JACKPOT);
       spawnParticles(22, true);
       setJackpot(true);
+      oceanAudio.play("jackpot");
     } else {
       const entry = LOOT[(opens.current - 1) % LOOT.length];
       setLoot(entry);
       spawnParticles(10 + Math.min(nextCombo, 6), false);
+      oceanAudio.play("chest");
     }
 
     if (clearTimer.current) clearTimeout(clearTimer.current);

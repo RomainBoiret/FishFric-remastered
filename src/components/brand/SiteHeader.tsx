@@ -2,6 +2,7 @@ import Link from "next/link";
 import { BrandMark } from "@/components/brand/BrandMark";
 import { EggBrandLink } from "@/components/brand/EasterEggs";
 import { GitHubHeaderLink } from "@/components/brand/GitHubLink";
+import { SoundToggle } from "@/components/brand/SoundToggle";
 import { auth } from "@/lib/auth";
 import { SITE_NAME } from "@/lib/site";
 
@@ -29,6 +30,9 @@ export async function SiteHeader({ current = "home" }: SiteHeaderProps) {
         </EggBrandLink>
         <nav aria-label="Primary">
           <ul className="m-0 flex list-none flex-wrap items-center justify-end gap-1.5 p-0 sm:gap-2">
+            <li>
+              <SoundToggle />
+            </li>
             <li>
               {current === "docs" ? (
                 <span className="ff-nav-link" aria-current="page">

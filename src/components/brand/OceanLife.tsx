@@ -233,6 +233,7 @@ export function Whale({
         animationDuration: "78s",
         animationDelay: delay,
       }}
+      data-ff-sound="whale"
     >
       <span className="ff-whale-roll" style={{ animationDelay: delay }}>
         <svg
@@ -386,6 +387,7 @@ export function YellowSubmarine({
     <div
       className={`ff-fish-lane ${dir === "right" ? "ff-sub-right" : "ff-sub-left"} absolute opacity-90`}
       style={{ top, animationDuration: "64s", animationDelay: delay }}
+      data-ff-sound="sub"
     >
       <span className="ff-sub-bob">
         <svg
@@ -985,53 +987,6 @@ export function SkyClouds() {
   );
 }
 
-/**
- * Aerial tow - continuous left → right flyby across the sky.
- */
-export function BannerPlane() {
-  return (
-    <div
-      className="ff-tow-lane ff-px-plane pointer-events-none absolute inset-x-0 z-[3]"
-      style={{
-        top: "4.5rem",
-        height: "clamp(3.75rem, 11vw, 5.25rem)",
-      }}
-      role="img"
-      aria-label="Reef Update · Faune & Flore"
-    >
-      <div className="ff-tow-cruise" style={{ animationDelay: "-8s" }}>
-        <div className="ff-tow-compose">
-          <div className="ff-tow-banner">
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img
-              src="/brand/tow-banner-only.png"
-              alt=""
-              width={800}
-              height={71}
-              className="ff-tow-banner-sprite"
-              draggable={false}
-            />
-          </div>
-          <div className="ff-tow-plane">
-            <div className="ff-tow-plane-tilt">
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img
-                src="/brand/tow-plane-only.png"
-                alt=""
-                width={143}
-                height={71}
-                className="ff-tow-plane-sprite"
-                draggable={false}
-              />
-              <span className="ff-tow-prop" aria-hidden />
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  );
-}
-
 /** Pixel-art water surface - irregular crest + sparse sparkles, scroll loop. */
 export function SurfaceWaves() {
   return (
@@ -1050,7 +1005,7 @@ export function SurfaceWaves() {
 /** Belle Isle - hull + deck crane; boom hangs cargo clear of the cabin. */
 export function FishingBoat() {
   return (
-    <div className="ff-boat-anchor pointer-events-none absolute z-[5]" aria-hidden>
+    <div className="ff-boat-anchor pointer-events-none absolute z-[5]" aria-hidden data-ff-sound="boat">
       <div className="ff-boat-float relative">
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img
@@ -1241,6 +1196,7 @@ export function SeagullsFront() {
       className="ff-px-gulls-front pointer-events-none absolute inset-x-0 top-0 z-[2]"
       style={{ height: "calc(var(--ff-waterline) - 2rem)", paddingTop: "4.5rem" }}
       aria-hidden
+      data-ff-sound="gulls"
     >
       {SEAGULLS.map((g) => (
         <div

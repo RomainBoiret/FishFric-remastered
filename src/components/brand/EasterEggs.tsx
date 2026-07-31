@@ -12,6 +12,7 @@ import {
 } from "react";
 import { createPortal } from "react-dom";
 import Link from "next/link";
+import { oceanAudio } from "@/lib/oceanAudio";
 
 const KONAMI = [
   "ArrowUp",
@@ -160,7 +161,7 @@ export function EasterEggsHost() {
     );
     // eslint-disable-next-line no-console
     console.log(
-      "%cPsst - try the chest, the plane, the boat, a starfish… or type reef.",
+      "%cPsst - try the chest, the plane, the boat, a starfish… or type reef. Flip the speaker icon for ocean sounds.",
       "color:#5ec8e8;",
     );
   }, []);
@@ -195,6 +196,7 @@ export function EasterEggsHost() {
             () => document.body.classList.remove("ff-egg-konami"),
             1800,
           );
+          oceanAudio.play("konami");
           startRain();
         }
       } else {
@@ -211,6 +213,7 @@ export function EasterEggsHost() {
               () => document.body.classList.remove(`ff-egg-word-${egg.tone}`),
               1600,
             );
+            oceanAudio.play(egg.word === "doubloon" ? "konami" : "chime");
             if (egg.word === "doubloon") startRain();
             break;
           }
@@ -268,6 +271,7 @@ export function EggBannerPlane() {
   const onClick = () => {
     setActive(true);
     setSparks(makeSparks(12, 36));
+    oceanAudio.play("plane");
     if (timer.current) clearTimeout(timer.current);
     timer.current = setTimeout(() => {
       setActive(false);
@@ -294,7 +298,7 @@ export function EggBannerPlane() {
       role="img"
       aria-label="Reef Update · Faune & Flore"
     >
-      <div className="ff-tow-cruise" style={{ animationDelay: "-8s" }}>
+      <div className="ff-tow-cruise" style={{ animationDelay: "-8s" }} data-ff-sound="plane">
         <div className="ff-tow-compose">
           <div className="ff-tow-banner" aria-hidden>
             {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -343,6 +347,7 @@ export function EggBoatHit() {
   const onClick = () => {
     setActive(true);
     document.body.classList.add("ff-egg-boat-hail");
+    oceanAudio.play("foghorn");
     if (timer.current) clearTimeout(timer.current);
     timer.current = setTimeout(() => {
       setActive(false);
@@ -399,6 +404,7 @@ export function EggStarfish({
   const onClick = () => {
     setWishing(true);
     setSparks(makeSparks(14, 48));
+    oceanAudio.play("wish");
     if (timer.current) clearTimeout(timer.current);
     timer.current = setTimeout(() => {
       setWishing(false);
@@ -477,6 +483,7 @@ export function EggBrandLink({
       e.preventDefault();
       clicks.current = 0;
       setBlink(true);
+      oceanAudio.play("brand");
       window.setTimeout(() => setBlink(false), 1400);
       return;
     }
