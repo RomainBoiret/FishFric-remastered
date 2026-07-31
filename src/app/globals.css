@@ -730,25 +730,124 @@ button:disabled {
 
 @keyframes ff-swim-right {
   0% {
-    transform: translate3d(-12vw, 0, 0);
+    transform: translate3d(-14vw, 0, 0);
   }
-  50% {
-    transform: translate3d(50vw, -6px, 0);
+  14% {
+    transform: translate3d(6vw, calc(var(--ff-swim-amp, 12px) * -1), 0);
+  }
+  28% {
+    transform: translate3d(24vw, calc(var(--ff-swim-amp, 12px) * 0.45), 0);
+  }
+  42% {
+    transform: translate3d(42vw, calc(var(--ff-swim-amp, 12px) * -0.85), 0);
+  }
+  56% {
+    transform: translate3d(60vw, calc(var(--ff-swim-amp, 12px) * 0.55), 0);
+  }
+  70% {
+    transform: translate3d(78vw, calc(var(--ff-swim-amp, 12px) * -0.65), 0);
+  }
+  84% {
+    transform: translate3d(94vw, calc(var(--ff-swim-amp, 12px) * 0.3), 0);
   }
   100% {
-    transform: translate3d(112vw, 0, 0);
+    transform: translate3d(114vw, 0, 0);
   }
 }
 
 @keyframes ff-swim-left {
   0% {
-    transform: translate3d(112vw, 0, 0);
+    transform: translate3d(114vw, 0, 0);
   }
-  50% {
-    transform: translate3d(50vw, 6px, 0);
+  14% {
+    transform: translate3d(94vw, calc(var(--ff-swim-amp, 12px) * -1), 0);
+  }
+  28% {
+    transform: translate3d(78vw, calc(var(--ff-swim-amp, 12px) * 0.45), 0);
+  }
+  42% {
+    transform: translate3d(60vw, calc(var(--ff-swim-amp, 12px) * -0.85), 0);
+  }
+  56% {
+    transform: translate3d(42vw, calc(var(--ff-swim-amp, 12px) * 0.55), 0);
+  }
+  70% {
+    transform: translate3d(24vw, calc(var(--ff-swim-amp, 12px) * -0.65), 0);
+  }
+  84% {
+    transform: translate3d(6vw, calc(var(--ff-swim-amp, 12px) * 0.3), 0);
   }
   100% {
-    transform: translate3d(-12vw, 0, 0);
+    transform: translate3d(-14vw, 0, 0);
+  }
+}
+
+/* Heavier, slower undulation for the yellow submarine */
+@keyframes ff-sub-right {
+  0% {
+    transform: translate3d(-18vw, 0, 0) rotate(0deg);
+  }
+  18% {
+    transform: translate3d(10vw, -14px, 0) rotate(-1.8deg);
+  }
+  36% {
+    transform: translate3d(35vw, 6px, 0) rotate(1.2deg);
+  }
+  54% {
+    transform: translate3d(58vw, -10px, 0) rotate(-1.4deg);
+  }
+  72% {
+    transform: translate3d(82vw, 8px, 0) rotate(1deg);
+  }
+  88% {
+    transform: translate3d(100vw, -4px, 0) rotate(-0.6deg);
+  }
+  100% {
+    transform: translate3d(120vw, 0, 0) rotate(0deg);
+  }
+}
+
+@keyframes ff-sub-left {
+  0% {
+    transform: translate3d(120vw, 0, 0) rotate(0deg);
+  }
+  18% {
+    transform: translate3d(100vw, -14px, 0) rotate(1.8deg);
+  }
+  36% {
+    transform: translate3d(82vw, 6px, 0) rotate(-1.2deg);
+  }
+  54% {
+    transform: translate3d(58vw, -10px, 0) rotate(1.4deg);
+  }
+  72% {
+    transform: translate3d(35vw, 8px, 0) rotate(-1deg);
+  }
+  88% {
+    transform: translate3d(10vw, -4px, 0) rotate(0.6deg);
+  }
+  100% {
+    transform: translate3d(-18vw, 0, 0) rotate(0deg);
+  }
+}
+
+@keyframes ff-fish-wiggle {
+  0%,
+  100% {
+    transform: rotate(-4deg) translateY(0);
+  }
+  50% {
+    transform: rotate(4deg) translateY(-1.5px);
+  }
+}
+
+@keyframes ff-sub-bob {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-3px);
   }
 }
 
@@ -771,6 +870,31 @@ button:disabled {
   animation-name: ff-swim-left;
   animation-timing-function: linear;
   animation-iteration-count: infinite;
+}
+
+.ff-sub-right {
+  animation-name: ff-sub-right;
+  animation-timing-function: linear;
+  animation-iteration-count: infinite;
+}
+
+.ff-sub-left {
+  animation-name: ff-sub-left;
+  animation-timing-function: linear;
+  animation-iteration-count: infinite;
+}
+
+.ff-fish-wiggle {
+  display: block;
+  transform-origin: 35% 50%;
+  animation: ff-fish-wiggle var(--ff-wiggle, 0.72s) ease-in-out infinite;
+  will-change: transform;
+}
+
+.ff-sub-bob {
+  display: block;
+  animation: ff-sub-bob 3.8s ease-in-out infinite;
+  will-change: transform;
 }
 
 /* -- Motion -- */
@@ -796,12 +920,303 @@ button:disabled {
 }
 
 @keyframes ff-sway {
-  0%,
-  100% {
-    transform: translateX(0) rotate(0deg);
+  0% {
+    transform: rotate(-1.4deg) translateX(-1.5px);
+  }
+  25% {
+    transform: rotate(1.8deg) translateX(2px);
   }
   50% {
-    transform: translateX(3px) rotate(1.5deg);
+    transform: rotate(-0.8deg) translateX(-1px);
+  }
+  75% {
+    transform: rotate(1.2deg) translateX(1.5px);
+  }
+  100% {
+    transform: rotate(-1.4deg) translateX(-1.5px);
+  }
+}
+
+/* Shark: purposeful hunt, flat banked glide */
+@keyframes ff-shark-right {
+  0% {
+    transform: translate3d(-16vw, 0, 0) rotate(0deg);
+  }
+  16% {
+    transform: translate3d(8vw, -10px, 0) rotate(-1.2deg);
+  }
+  32% {
+    transform: translate3d(28vw, 4px, 0) rotate(0.8deg);
+  }
+  50% {
+    transform: translate3d(50vw, -14px, 0) rotate(-1.6deg);
+  }
+  68% {
+    transform: translate3d(72vw, 6px, 0) rotate(1deg);
+  }
+  84% {
+    transform: translate3d(94vw, -6px, 0) rotate(-0.6deg);
+  }
+  100% {
+    transform: translate3d(118vw, 0, 0) rotate(0deg);
+  }
+}
+
+@keyframes ff-shark-left {
+  0% {
+    transform: translate3d(118vw, 0, 0) rotate(0deg);
+  }
+  16% {
+    transform: translate3d(94vw, -10px, 0) rotate(1.2deg);
+  }
+  32% {
+    transform: translate3d(72vw, 4px, 0) rotate(-0.8deg);
+  }
+  50% {
+    transform: translate3d(50vw, -14px, 0) rotate(1.6deg);
+  }
+  68% {
+    transform: translate3d(28vw, 6px, 0) rotate(-1deg);
+  }
+  84% {
+    transform: translate3d(8vw, -6px, 0) rotate(0.6deg);
+  }
+  100% {
+    transform: translate3d(-16vw, 0, 0) rotate(0deg);
+  }
+}
+
+@keyframes ff-shark-tail {
+  0%,
+  100% {
+    transform: rotate(-2deg) translateY(0);
+  }
+  50% {
+    transform: rotate(2deg) translateY(-1px);
+  }
+}
+
+/* Whale: slow majestic heave */
+@keyframes ff-whale-right {
+  0% {
+    transform: translate3d(-20vw, 0, 0) rotate(0deg);
+  }
+  20% {
+    transform: translate3d(12vw, -18px, 0) rotate(-1deg);
+  }
+  40% {
+    transform: translate3d(40vw, 8px, 0) rotate(0.8deg);
+  }
+  60% {
+    transform: translate3d(68vw, -14px, 0) rotate(-0.9deg);
+  }
+  80% {
+    transform: translate3d(96vw, 6px, 0) rotate(0.5deg);
+  }
+  100% {
+    transform: translate3d(124vw, 0, 0) rotate(0deg);
+  }
+}
+
+@keyframes ff-whale-left {
+  0% {
+    transform: translate3d(124vw, 0, 0) rotate(0deg);
+  }
+  20% {
+    transform: translate3d(96vw, -18px, 0) rotate(1deg);
+  }
+  40% {
+    transform: translate3d(68vw, 8px, 0) rotate(-0.8deg);
+  }
+  60% {
+    transform: translate3d(40vw, -14px, 0) rotate(0.9deg);
+  }
+  80% {
+    transform: translate3d(12vw, 6px, 0) rotate(-0.5deg);
+  }
+  100% {
+    transform: translate3d(-20vw, 0, 0) rotate(0deg);
+  }
+}
+
+@keyframes ff-whale-roll {
+  0%,
+  100% {
+    transform: translateY(0) rotate(-0.6deg);
+  }
+  50% {
+    transform: translateY(-5px) rotate(0.6deg);
+  }
+}
+
+@keyframes ff-whale-spout {
+  0%,
+  55%,
+  100% {
+    opacity: 0.15;
+    transform: translateY(2px) scaleY(0.7);
+  }
+  62% {
+    opacity: 0.7;
+    transform: translateY(-2px) scaleY(1.15);
+  }
+  72% {
+    opacity: 0.35;
+    transform: translateY(-6px) scaleY(1);
+  }
+}
+
+/* Turtle: stroke / glide paddle rhythm */
+@keyframes ff-turtle-right {
+  0% {
+    transform: translate3d(-14vw, 0, 0);
+  }
+  12% {
+    transform: translate3d(4vw, -12px, 0);
+  }
+  18% {
+    transform: translate3d(12vw, -4px, 0);
+  }
+  30% {
+    transform: translate3d(28vw, -16px, 0);
+  }
+  36% {
+    transform: translate3d(36vw, -6px, 0);
+  }
+  50% {
+    transform: translate3d(52vw, -18px, 0);
+  }
+  56% {
+    transform: translate3d(60vw, -5px, 0);
+  }
+  70% {
+    transform: translate3d(78vw, -14px, 0);
+  }
+  76% {
+    transform: translate3d(86vw, -3px, 0);
+  }
+  90% {
+    transform: translate3d(102vw, -10px, 0);
+  }
+  100% {
+    transform: translate3d(114vw, 0, 0);
+  }
+}
+
+@keyframes ff-turtle-left {
+  0% {
+    transform: translate3d(114vw, 0, 0);
+  }
+  12% {
+    transform: translate3d(102vw, -12px, 0);
+  }
+  18% {
+    transform: translate3d(94vw, -4px, 0);
+  }
+  30% {
+    transform: translate3d(78vw, -16px, 0);
+  }
+  36% {
+    transform: translate3d(70vw, -6px, 0);
+  }
+  50% {
+    transform: translate3d(52vw, -18px, 0);
+  }
+  56% {
+    transform: translate3d(44vw, -5px, 0);
+  }
+  70% {
+    transform: translate3d(28vw, -14px, 0);
+  }
+  76% {
+    transform: translate3d(20vw, -3px, 0);
+  }
+  90% {
+    transform: translate3d(4vw, -10px, 0);
+  }
+  100% {
+    transform: translate3d(-14vw, 0, 0);
+  }
+}
+
+@keyframes ff-turtle-paddle {
+  0%,
+  100% {
+    transform: rotate(-3deg) translateY(0);
+  }
+  25% {
+    transform: rotate(4deg) translateY(-2px);
+  }
+  50% {
+    transform: rotate(-2deg) translateY(1px);
+  }
+  75% {
+    transform: rotate(3deg) translateY(-1.5px);
+  }
+}
+
+/* Stingray: soft wing undulation */
+@keyframes ff-ray-right {
+  0% {
+    transform: translate3d(-14vw, 0, 0) rotate(0deg);
+  }
+  15% {
+    transform: translate3d(8vw, -16px, 0) rotate(-2deg);
+  }
+  30% {
+    transform: translate3d(26vw, 8px, 0) rotate(2.2deg);
+  }
+  45% {
+    transform: translate3d(44vw, -12px, 0) rotate(-1.8deg);
+  }
+  60% {
+    transform: translate3d(64vw, 10px, 0) rotate(2deg);
+  }
+  75% {
+    transform: translate3d(84vw, -8px, 0) rotate(-1.4deg);
+  }
+  90% {
+    transform: translate3d(102vw, 4px, 0) rotate(1deg);
+  }
+  100% {
+    transform: translate3d(116vw, 0, 0) rotate(0deg);
+  }
+}
+
+@keyframes ff-ray-left {
+  0% {
+    transform: translate3d(116vw, 0, 0) rotate(0deg);
+  }
+  15% {
+    transform: translate3d(102vw, -16px, 0) rotate(2deg);
+  }
+  30% {
+    transform: translate3d(84vw, 8px, 0) rotate(-2.2deg);
+  }
+  45% {
+    transform: translate3d(64vw, -12px, 0) rotate(1.8deg);
+  }
+  60% {
+    transform: translate3d(44vw, 10px, 0) rotate(-2deg);
+  }
+  75% {
+    transform: translate3d(26vw, -8px, 0) rotate(1.4deg);
+  }
+  90% {
+    transform: translate3d(8vw, 4px, 0) rotate(-1deg);
+  }
+  100% {
+    transform: translate3d(-14vw, 0, 0) rotate(0deg);
+  }
+}
+
+@keyframes ff-ray-flap {
+  0%,
+  100% {
+    transform: scaleY(1) rotate(-1deg);
+  }
+  50% {
+    transform: scaleY(0.88) rotate(1.5deg);
   }
 }
 
@@ -1600,19 +2015,39 @@ body.ff-egg-word-coral {
   max-width: min(20rem, 58vw);
 }
 
-@keyframes ff-cloud-bob {
+/* Soft breeze: slight lateral drift + gentle bob (stays near parked slots). */
+@keyframes ff-cloud-drift {
   0%,
   100% {
     transform: translate3d(0, 0, 0);
   }
-  50% {
-    transform: translate3d(0, -5px, 0);
+  35% {
+    transform: translate3d(var(--ff-cloud-x, 14px), -4px, 0);
+  }
+  70% {
+    transform: translate3d(calc(var(--ff-cloud-x, 14px) * -0.35), 3px, 0);
   }
 }
 
 .ff-cloud-bob {
-  animation: ff-cloud-bob 8s ease-in-out infinite;
+  --ff-cloud-x: 14px;
+  animation: ff-cloud-drift var(--ff-cloud-dur, 22s) ease-in-out infinite;
   will-change: transform;
+}
+
+.ff-cloud-bob--slow {
+  --ff-cloud-x: 18px;
+  --ff-cloud-dur: 28s;
+}
+
+.ff-cloud-bob--far {
+  --ff-cloud-x: -12px;
+  --ff-cloud-dur: 26s;
+}
+
+.ff-cloud-bob--near {
+  --ff-cloud-x: 10px;
+  --ff-cloud-dur: 18s;
 }
 
 .ff-cloud {
@@ -1748,8 +2183,90 @@ body.ff-egg-word-coral {
 }
 
 .ff-sway {
-  animation: ff-sway 4.5s ease-in-out infinite;
+  animation: ff-sway var(--ff-sway-dur, 5.8s) ease-in-out infinite;
   transform-origin: bottom center;
+  will-change: transform;
+}
+
+.ff-shark-right {
+  animation-name: ff-shark-right;
+  animation-timing-function: linear;
+  animation-iteration-count: infinite;
+}
+
+.ff-shark-left {
+  animation-name: ff-shark-left;
+  animation-timing-function: linear;
+  animation-iteration-count: infinite;
+}
+
+.ff-shark-tail {
+  display: block;
+  transform-origin: 30% 55%;
+  animation: ff-shark-tail 0.55s ease-in-out infinite;
+  will-change: transform;
+}
+
+.ff-whale-right {
+  animation-name: ff-whale-right;
+  animation-timing-function: linear;
+  animation-iteration-count: infinite;
+}
+
+.ff-whale-left {
+  animation-name: ff-whale-left;
+  animation-timing-function: linear;
+  animation-iteration-count: infinite;
+}
+
+.ff-whale-roll {
+  display: block;
+  animation: ff-whale-roll 5.2s ease-in-out infinite;
+  will-change: transform;
+}
+
+.ff-whale-spout {
+  transform-origin: center bottom;
+  animation: ff-whale-spout 5.2s ease-in-out infinite;
+  will-change: transform, opacity;
+}
+
+.ff-turtle-right {
+  animation-name: ff-turtle-right;
+  animation-timing-function: ease-in-out;
+  animation-iteration-count: infinite;
+}
+
+.ff-turtle-left {
+  animation-name: ff-turtle-left;
+  animation-timing-function: ease-in-out;
+  animation-iteration-count: infinite;
+}
+
+.ff-turtle-paddle {
+  display: block;
+  transform-origin: 45% 50%;
+  animation: ff-turtle-paddle 1.4s ease-in-out infinite;
+  will-change: transform;
+}
+
+.ff-ray-right {
+  animation-name: ff-ray-right;
+  animation-timing-function: ease-in-out;
+  animation-iteration-count: infinite;
+}
+
+.ff-ray-left {
+  animation-name: ff-ray-left;
+  animation-timing-function: ease-in-out;
+  animation-iteration-count: infinite;
+}
+
+.ff-ray-flap {
+  display: block;
+  transform-origin: 40% 50%;
+  animation: ff-ray-flap 1.1s ease-in-out infinite;
+  will-change: transform;
 }
 
 .ff-bubble {
@@ -1952,23 +2469,108 @@ body.ff-egg-word-coral {
   }
 }
 
-/* ---- Seagulls (right sky, short shuttle) ---- */
-@keyframes ff-gull-shuttle {
-  0%,
-  100% {
-    transform: translate3d(0, 0, 0);
+/* ---- Seagulls (lazy soar + banked turns) ---- */
+@keyframes ff-gull-soar-a {
+  0% {
+    transform: translate3d(0, 0, 0) rotate(-2deg);
   }
-  50% {
-    transform: translate3d(3.5vw, -8px, 0);
+  18% {
+    transform: translate3d(
+        calc(var(--ff-gull-x, 5vw) * 0.55),
+        calc(var(--ff-gull-y, 16px) * -1),
+        0
+      )
+      rotate(-9deg);
+  }
+  36% {
+    transform: translate3d(var(--ff-gull-x, 5vw), calc(var(--ff-gull-y, 16px) * -0.25), 0)
+      rotate(1deg);
+  }
+  52% {
+    transform: translate3d(
+        calc(var(--ff-gull-x, 5vw) * 0.7),
+        calc(var(--ff-gull-y, 16px) * 0.45),
+        0
+      )
+      rotate(7deg);
+  }
+  70% {
+    transform: translate3d(
+        calc(var(--ff-gull-x, 5vw) * 0.2),
+        calc(var(--ff-gull-y, 16px) * -0.35),
+        0
+      )
+      rotate(-4deg);
+  }
+  86% {
+    transform: translate3d(
+        calc(var(--ff-gull-x, 5vw) * -0.15),
+        calc(var(--ff-gull-y, 16px) * 0.2),
+        0
+      )
+      rotate(3deg);
+  }
+  100% {
+    transform: translate3d(0, 0, 0) rotate(-2deg);
   }
 }
 
+@keyframes ff-gull-soar-b {
+  0% {
+    transform: translate3d(0, 0, 0) rotate(2deg);
+  }
+  18% {
+    transform: translate3d(
+        calc(var(--ff-gull-x, 5vw) * -0.55),
+        calc(var(--ff-gull-y, 16px) * -1),
+        0
+      )
+      rotate(9deg);
+  }
+  36% {
+    transform: translate3d(
+        calc(var(--ff-gull-x, 5vw) * -1),
+        calc(var(--ff-gull-y, 16px) * -0.2),
+        0
+      )
+      rotate(-1deg);
+  }
+  52% {
+    transform: translate3d(
+        calc(var(--ff-gull-x, 5vw) * -0.65),
+        calc(var(--ff-gull-y, 16px) * 0.5),
+        0
+      )
+      rotate(-7deg);
+  }
+  70% {
+    transform: translate3d(
+        calc(var(--ff-gull-x, 5vw) * -0.15),
+        calc(var(--ff-gull-y, 16px) * -0.3),
+        0
+      )
+      rotate(4deg);
+  }
+  86% {
+    transform: translate3d(
+        calc(var(--ff-gull-x, 5vw) * 0.2),
+        calc(var(--ff-gull-y, 16px) * 0.15),
+        0
+      )
+      rotate(-3deg);
+  }
+  100% {
+    transform: translate3d(0, 0, 0) rotate(2deg);
+  }
+}
+
+/* Wing cycle: longer glide on frame A, quick flap on B */
 @keyframes ff-gull-frames {
   0%,
-  49% {
+  62% {
     opacity: 1;
   }
-  50%,
+  63%,
   100% {
     opacity: 0;
   }
@@ -1976,10 +2578,10 @@ body.ff-egg-word-coral {
 
 @keyframes ff-gull-frames-b {
   0%,
-  49% {
+  62% {
     opacity: 0;
   }
-  50%,
+  63%,
   100% {
     opacity: 1;
   }
@@ -1987,10 +2589,17 @@ body.ff-egg-word-coral {
 
 .ff-gull {
   position: absolute;
-  animation-name: ff-gull-shuttle;
   animation-timing-function: ease-in-out;
   animation-iteration-count: infinite;
   will-change: transform;
+}
+
+.ff-gull-soar-a {
+  animation-name: ff-gull-soar-a;
+}
+
+.ff-gull-soar-b {
+  animation-name: ff-gull-soar-b;
 }
 
 .ff-gull-frame {
@@ -2000,11 +2609,11 @@ body.ff-egg-word-coral {
 }
 
 .ff-gull-frame-a {
-  animation: ff-gull-frames 0.55s steps(1) infinite;
+  animation: ff-gull-frames var(--ff-gull-flap, 0.7s) steps(1) infinite;
 }
 
 .ff-gull-frame-b {
-  animation: ff-gull-frames-b 0.55s steps(1) infinite;
+  animation: ff-gull-frames-b var(--ff-gull-flap, 0.7s) steps(1) infinite;
 }
 
 .ff-gull-flap {
@@ -2054,68 +2663,87 @@ body.ff-egg-word-coral {
 @keyframes ff-crab-right {
   0%,
   100% {
-    transform: translateX(0);
+    transform: translate3d(0, 0, 0);
   }
-  10% {
-    transform: translateX(6px) translateY(-1px);
+  12% {
+    transform: translate3d(10px, 0, 0);
   }
-  20% {
-    transform: translateX(14px);
+  24% {
+    transform: translate3d(20px, 0, 0);
   }
-  30% {
-    transform: translateX(22px) translateY(-1px);
+  36% {
+    transform: translate3d(30px, 0, 0);
   }
-  40% {
-    transform: translateX(28px);
-  }
-  50% {
-    transform: translateX(34px) translateY(-1px);
+  48% {
+    transform: translate3d(36px, 0, 0);
   }
   60% {
-    transform: translateX(26px);
+    transform: translate3d(28px, 0, 0);
   }
-  70% {
-    transform: translateX(16px) translateY(-1px);
+  72% {
+    transform: translate3d(18px, 0, 0);
   }
-  80% {
-    transform: translateX(8px);
-  }
-  90% {
-    transform: translateX(2px) translateY(-1px);
+  84% {
+    transform: translate3d(8px, 0, 0);
   }
 }
 
 @keyframes ff-crab-left {
   0%,
   100% {
-    transform: translateX(0);
+    transform: translate3d(0, 0, 0);
   }
-  10% {
-    transform: translateX(-6px) translateY(-1px);
+  12% {
+    transform: translate3d(-10px, 0, 0);
   }
-  20% {
-    transform: translateX(-14px);
+  24% {
+    transform: translate3d(-20px, 0, 0);
   }
-  30% {
-    transform: translateX(-22px) translateY(-1px);
+  36% {
+    transform: translate3d(-30px, 0, 0);
   }
-  40% {
-    transform: translateX(-28px);
-  }
-  50% {
-    transform: translateX(-34px) translateY(-1px);
+  48% {
+    transform: translate3d(-36px, 0, 0);
   }
   60% {
-    transform: translateX(-26px);
+    transform: translate3d(-28px, 0, 0);
   }
-  70% {
-    transform: translateX(-16px) translateY(-1px);
+  72% {
+    transform: translate3d(-18px, 0, 0);
   }
-  80% {
-    transform: translateX(-8px);
+  84% {
+    transform: translate3d(-8px, 0, 0);
   }
-  90% {
-    transform: translateX(-2px) translateY(-1px);
+}
+
+/* Occasional hops while scuttling */
+@keyframes ff-crab-hop {
+  0%,
+  18% {
+    transform: translateY(0) rotate(0deg);
+  }
+  20% {
+    transform: translateY(-11px) rotate(-6deg);
+  }
+  23% {
+    transform: translateY(0) rotate(2deg);
+  }
+  24.5% {
+    transform: translateY(-3px) rotate(0deg);
+  }
+  26%,
+  61% {
+    transform: translateY(0) rotate(0deg);
+  }
+  63% {
+    transform: translateY(-8px) rotate(5deg);
+  }
+  66% {
+    transform: translateY(0) rotate(-1deg);
+  }
+  67%,
+  100% {
+    transform: translateY(0) rotate(0deg);
   }
 }
 
@@ -2133,6 +2761,14 @@ body.ff-egg-word-coral {
 .ff-crab-left {
   animation-name: ff-crab-left;
   animation-duration: 11s;
+}
+
+.ff-crab-body {
+  display: block;
+  line-height: 0;
+  transform-origin: 50% 100%;
+  animation: ff-crab-hop 6.8s ease-in-out infinite;
+  will-change: transform;
 }
 
 /* -- Toasts -- */
@@ -2243,11 +2879,31 @@ body.ff-egg-word-coral {
   .ff-crab,
   .ff-crab-right,
   .ff-crab-left,
+  .ff-crab-body,
   .ff-gull,
+  .ff-gull-soar-a,
+  .ff-gull-soar-b,
   .ff-gull-frame-a,
   .ff-gull-frame-b,
   .ff-fish-right,
   .ff-fish-left,
+  .ff-sub-right,
+  .ff-sub-left,
+  .ff-fish-wiggle,
+  .ff-sub-bob,
+  .ff-shark-right,
+  .ff-shark-left,
+  .ff-shark-tail,
+  .ff-whale-right,
+  .ff-whale-left,
+  .ff-whale-roll,
+  .ff-whale-spout,
+  .ff-turtle-right,
+  .ff-turtle-left,
+  .ff-turtle-paddle,
+  .ff-ray-right,
+  .ff-ray-left,
+  .ff-ray-flap,
   .ff-toast {
     animation: none !important;
   }

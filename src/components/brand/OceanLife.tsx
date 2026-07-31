@@ -18,10 +18,17 @@ export function PixelKelp({
         ? ["#2d8f83", "#1f6b62"]
         : ["#2d8f4a", "#247a3e"];
 
+  /* Taller kelp sways a bit slower */
+  const swayDur = `${5.2 + (height % 5) * 0.55}s`;
+
   return (
     <div
       className="ff-sway absolute bottom-[4.25rem] z-[2] flex flex-col-reverse items-center"
-      style={{ left, animationDelay: delay }}
+      style={{
+        left,
+        animationDelay: delay,
+        ["--ff-sway-dur" as string]: swayDur,
+      }}
     >
       {Array.from({ length: height }).map((_, i) => (
         <div
@@ -118,7 +125,12 @@ export function Squid({
   return (
     <div
       className={`ff-fish-lane ${dir === "right" ? "ff-fish-right" : "ff-fish-left"} absolute opacity-75`}
-      style={{ top, animationDuration: "48s", animationDelay: delay }}
+      style={{
+        top,
+        animationDuration: "48s",
+        animationDelay: delay,
+        ["--ff-swim-amp" as string]: "20px",
+      }}
     >
       <svg
         width="36"
@@ -159,41 +171,47 @@ export function Shark({
   const h = 28 * size;
   return (
     <div
-      className={`ff-fish-lane ${dir === "right" ? "ff-fish-right" : "ff-fish-left"} absolute opacity-80`}
-      style={{ top, animationDuration: "38s", animationDelay: delay }}
+      className={`ff-fish-lane ${dir === "right" ? "ff-shark-right" : "ff-shark-left"} absolute opacity-80`}
+      style={{
+        top,
+        animationDuration: "36s",
+        animationDelay: delay,
+      }}
     >
-      <svg
-        width={w}
-        height={h}
-        viewBox="0 0 32 14"
-        shapeRendering="crispEdges"
-        style={{
-          imageRendering: "pixelated",
-          transform: dir === "left" ? "scaleX(-1)" : undefined,
-        }}
-      >
-        {/* Body */}
-        <rect x="4" y="5" width="20" height="5" fill="#6a7a88" />
-        <rect x="6" y="4" width="16" height="2" fill="#7a8a98" />
-        <rect x="6" y="9" width="16" height="2" fill="#5a6a78" />
-        {/* Nose */}
-        <rect x="24" y="6" width="5" height="3" fill="#6a7a88" />
-        <rect x="28" y="7" width="2" height="1" fill="#5a6a78" />
-        {/* Dorsal fin */}
-        <rect x="12" y="1" width="3" height="4" fill="#5a6a78" />
-        <rect x="13" y="0" width="2" height="2" fill="#4a5a68" />
-        {/* Tail */}
-        <rect x="1" y="3" width="3" height="2" fill="#5a6a78" />
-        <rect x="0" y="5" width="4" height="3" fill="#4a5a68" />
-        <rect x="1" y="8" width="3" height="2" fill="#5a6a78" />
-        {/* Pectoral */}
-        <rect x="14" y="10" width="5" height="2" fill="#5a6a78" />
-        {/* Eye + gill */}
-        <rect x="23" y="6" width="2" height="2" fill="#1b1b1b" />
-        <rect x="21" y="6" width="1" height="3" fill="#4a5a68" />
-        {/* Belly */}
-        <rect x="8" y="8" width="10" height="1" fill="#c8d0d8" />
-      </svg>
+      <span className="ff-shark-tail" style={{ animationDelay: delay }}>
+        <svg
+          width={w}
+          height={h}
+          viewBox="0 0 32 14"
+          shapeRendering="crispEdges"
+          style={{
+            imageRendering: "pixelated",
+            transform: dir === "left" ? "scaleX(-1)" : undefined,
+          }}
+        >
+          {/* Body */}
+          <rect x="4" y="5" width="20" height="5" fill="#6a7a88" />
+          <rect x="6" y="4" width="16" height="2" fill="#7a8a98" />
+          <rect x="6" y="9" width="16" height="2" fill="#5a6a78" />
+          {/* Nose */}
+          <rect x="24" y="6" width="5" height="3" fill="#6a7a88" />
+          <rect x="28" y="7" width="2" height="1" fill="#5a6a78" />
+          {/* Dorsal fin */}
+          <rect x="12" y="1" width="3" height="4" fill="#5a6a78" />
+          <rect x="13" y="0" width="2" height="2" fill="#4a5a68" />
+          {/* Tail */}
+          <rect x="1" y="3" width="3" height="2" fill="#5a6a78" />
+          <rect x="0" y="5" width="4" height="3" fill="#4a5a68" />
+          <rect x="1" y="8" width="3" height="2" fill="#5a6a78" />
+          {/* Pectoral */}
+          <rect x="14" y="10" width="5" height="2" fill="#5a6a78" />
+          {/* Eye + gill */}
+          <rect x="23" y="6" width="2" height="2" fill="#1b1b1b" />
+          <rect x="21" y="6" width="1" height="3" fill="#4a5a68" />
+          {/* Belly */}
+          <rect x="8" y="8" width="10" height="1" fill="#c8d0d8" />
+        </svg>
+      </span>
     </div>
   );
 }
@@ -209,43 +227,51 @@ export function Whale({
 }) {
   return (
     <div
-      className={`ff-fish-lane ${dir === "right" ? "ff-fish-right" : "ff-fish-left"} absolute opacity-70`}
-      style={{ top, animationDuration: "70s", animationDelay: delay }}
+      className={`ff-fish-lane ${dir === "right" ? "ff-whale-right" : "ff-whale-left"} absolute opacity-70`}
+      style={{
+        top,
+        animationDuration: "78s",
+        animationDelay: delay,
+      }}
     >
-      <svg
-        width="120"
-        height="48"
-        viewBox="0 0 60 24"
-        shapeRendering="crispEdges"
-        style={{
-          imageRendering: "pixelated",
-          transform: dir === "left" ? "scaleX(-1)" : undefined,
-        }}
-      >
-        {/* Body */}
-        <rect x="8" y="8" width="38" height="10" fill="#3a4a6a" />
-        <rect x="12" y="6" width="30" height="4" fill="#4a5a7a" />
-        <rect x="14" y="16" width="28" height="3" fill="#2a3a5a" />
-        {/* Head */}
-        <rect x="44" y="9" width="10" height="8" fill="#3a4a6a" />
-        <rect x="52" y="11" width="5" height="5" fill="#4a5a7a" />
-        {/* Eye */}
-        <rect x="48" y="11" width="2" height="2" fill="#1b1b1b" />
-        <rect x="49" y="11" width="1" height="1" fill="#ffffff" />
-        {/* Tail */}
-        <rect x="2" y="4" width="6" height="3" fill="#2a3a5a" />
-        <rect x="0" y="7" width="8" height="5" fill="#3a4a6a" />
-        <rect x="2" y="12" width="6" height="3" fill="#2a3a5a" />
-        {/* Flipper */}
-        <rect x="22" y="17" width="8" height="3" fill="#2a3a5a" />
-        <rect x="24" y="19" width="5" height="2" fill="#1a2a4a" />
-        {/* Spout puff */}
-        <rect x="46" y="2" width="2" height="4" fill="#a8c0c9" opacity="0.55" />
-        <rect x="44" y="1" width="3" height="2" fill="#c8d8e0" opacity="0.4" />
-        <rect x="48" y="1" width="3" height="2" fill="#c8d8e0" opacity="0.4" />
-        {/* Belly */}
-        <rect x="16" y="14" width="22" height="2" fill="#8a9ab0" />
-      </svg>
+      <span className="ff-whale-roll" style={{ animationDelay: delay }}>
+        <svg
+          width="120"
+          height="48"
+          viewBox="0 0 60 24"
+          shapeRendering="crispEdges"
+          style={{
+            imageRendering: "pixelated",
+            transform: dir === "left" ? "scaleX(-1)" : undefined,
+          }}
+        >
+          {/* Body */}
+          <rect x="8" y="8" width="38" height="10" fill="#3a4a6a" />
+          <rect x="12" y="6" width="30" height="4" fill="#4a5a7a" />
+          <rect x="14" y="16" width="28" height="3" fill="#2a3a5a" />
+          {/* Head */}
+          <rect x="44" y="9" width="10" height="8" fill="#3a4a6a" />
+          <rect x="52" y="11" width="5" height="5" fill="#4a5a7a" />
+          {/* Eye */}
+          <rect x="48" y="11" width="2" height="2" fill="#1b1b1b" />
+          <rect x="49" y="11" width="1" height="1" fill="#ffffff" />
+          {/* Tail */}
+          <rect x="2" y="4" width="6" height="3" fill="#2a3a5a" />
+          <rect x="0" y="7" width="8" height="5" fill="#3a4a6a" />
+          <rect x="2" y="12" width="6" height="3" fill="#2a3a5a" />
+          {/* Flipper */}
+          <rect x="22" y="17" width="8" height="3" fill="#2a3a5a" />
+          <rect x="24" y="19" width="5" height="2" fill="#1a2a4a" />
+          {/* Spout puff */}
+          <g className="ff-whale-spout" style={{ animationDelay: delay }}>
+            <rect x="46" y="2" width="2" height="4" fill="#a8c0c9" />
+            <rect x="44" y="1" width="3" height="2" fill="#c8d8e0" />
+            <rect x="48" y="1" width="3" height="2" fill="#c8d8e0" />
+          </g>
+          {/* Belly */}
+          <rect x="16" y="14" width="22" height="2" fill="#8a9ab0" />
+        </svg>
+      </span>
     </div>
   );
 }
@@ -261,34 +287,40 @@ export function SeaTurtle({
 }) {
   return (
     <div
-      className={`ff-fish-lane ${dir === "right" ? "ff-fish-right" : "ff-fish-left"} absolute opacity-75`}
-      style={{ top, animationDuration: "52s", animationDelay: delay }}
+      className={`ff-fish-lane ${dir === "right" ? "ff-turtle-right" : "ff-turtle-left"} absolute opacity-75`}
+      style={{
+        top,
+        animationDuration: "56s",
+        animationDelay: delay,
+      }}
     >
-      <svg
-        width="48"
-        height="28"
-        viewBox="0 0 24 14"
-        shapeRendering="crispEdges"
-        style={{
-          imageRendering: "pixelated",
-          transform: dir === "left" ? "scaleX(-1)" : undefined,
-        }}
-      >
-        {/* Shell */}
-        <rect x="5" y="3" width="12" height="7" fill="#2d8f4a" />
-        <rect x="7" y="2" width="8" height="2" fill="#3ca85a" />
-        <rect x="7" y="4" width="3" height="3" fill="#1a6b34" />
-        <rect x="12" y="4" width="3" height="3" fill="#247a3e" />
-        <rect x="9" y="6" width="4" height="2" fill="#1a5c34" />
-        {/* Head */}
-        <rect x="17" y="5" width="4" height="3" fill="#7ed957" />
-        <rect x="19" y="5" width="1" height="1" fill="#1b1b1b" />
-        {/* Flippers */}
-        <rect x="2" y="4" width="4" height="2" fill="#5ea83a" />
-        <rect x="3" y="8" width="4" height="2" fill="#5ea83a" />
-        <rect x="14" y="9" width="4" height="2" fill="#3c8527" />
-        <rect x="8" y="10" width="3" height="2" fill="#3c8527" />
-      </svg>
+      <span className="ff-turtle-paddle" style={{ animationDelay: delay }}>
+        <svg
+          width="48"
+          height="28"
+          viewBox="0 0 24 14"
+          shapeRendering="crispEdges"
+          style={{
+            imageRendering: "pixelated",
+            transform: dir === "left" ? "scaleX(-1)" : undefined,
+          }}
+        >
+          {/* Shell */}
+          <rect x="5" y="3" width="12" height="7" fill="#2d8f4a" />
+          <rect x="7" y="2" width="8" height="2" fill="#3ca85a" />
+          <rect x="7" y="4" width="3" height="3" fill="#1a6b34" />
+          <rect x="12" y="4" width="3" height="3" fill="#247a3e" />
+          <rect x="9" y="6" width="4" height="2" fill="#1a5c34" />
+          {/* Head */}
+          <rect x="17" y="5" width="4" height="3" fill="#7ed957" />
+          <rect x="19" y="5" width="1" height="1" fill="#1b1b1b" />
+          {/* Flippers */}
+          <rect x="2" y="4" width="4" height="2" fill="#5ea83a" />
+          <rect x="3" y="8" width="4" height="2" fill="#5ea83a" />
+          <rect x="14" y="9" width="4" height="2" fill="#3c8527" />
+          <rect x="8" y="10" width="3" height="2" fill="#3c8527" />
+        </svg>
+      </span>
     </div>
   );
 }
@@ -304,32 +336,38 @@ export function Stingray({
 }) {
   return (
     <div
-      className={`ff-fish-lane ${dir === "right" ? "ff-fish-right" : "ff-fish-left"} absolute opacity-65`}
-      style={{ top, animationDuration: "44s", animationDelay: delay }}
+      className={`ff-fish-lane ${dir === "right" ? "ff-ray-right" : "ff-ray-left"} absolute opacity-65`}
+      style={{
+        top,
+        animationDuration: "48s",
+        animationDelay: delay,
+      }}
     >
-      <svg
-        width="56"
-        height="28"
-        viewBox="0 0 28 14"
-        shapeRendering="crispEdges"
-        style={{
-          imageRendering: "pixelated",
-          transform: dir === "left" ? "scaleX(-1)" : undefined,
-        }}
-      >
-        {/* Wings */}
-        <rect x="4" y="5" width="16" height="4" fill="#7a50b8" />
-        <rect x="6" y="3" width="12" height="3" fill="#9a70d0" />
-        <rect x="8" y="2" width="8" height="2" fill="#c9a0ff" />
-        <rect x="6" y="8" width="12" height="2" fill="#5a3088" />
-        {/* Body / tail */}
-        <rect x="10" y="4" width="6" height="5" fill="#8a60c0" />
-        <rect x="20" y="6" width="6" height="2" fill="#6a40a0" />
-        <rect x="25" y="5" width="2" height="1" fill="#5a3088" />
-        {/* Eyes */}
-        <rect x="11" y="4" width="1" height="1" fill="#1b1b1b" />
-        <rect x="14" y="4" width="1" height="1" fill="#1b1b1b" />
-      </svg>
+      <span className="ff-ray-flap" style={{ animationDelay: delay }}>
+        <svg
+          width="56"
+          height="28"
+          viewBox="0 0 28 14"
+          shapeRendering="crispEdges"
+          style={{
+            imageRendering: "pixelated",
+            transform: dir === "left" ? "scaleX(-1)" : undefined,
+          }}
+        >
+          {/* Wings */}
+          <rect x="4" y="5" width="16" height="4" fill="#7a50b8" />
+          <rect x="6" y="3" width="12" height="3" fill="#9a70d0" />
+          <rect x="8" y="2" width="8" height="2" fill="#c9a0ff" />
+          <rect x="6" y="8" width="12" height="2" fill="#5a3088" />
+          {/* Body / tail */}
+          <rect x="10" y="4" width="6" height="5" fill="#8a60c0" />
+          <rect x="20" y="6" width="6" height="2" fill="#6a40a0" />
+          <rect x="25" y="5" width="2" height="1" fill="#5a3088" />
+          {/* Eyes */}
+          <rect x="11" y="4" width="1" height="1" fill="#1b1b1b" />
+          <rect x="14" y="4" width="1" height="1" fill="#1b1b1b" />
+        </svg>
+      </span>
     </div>
   );
 }
@@ -346,45 +384,47 @@ export function YellowSubmarine({
 }) {
   return (
     <div
-      className={`ff-fish-lane ${dir === "right" ? "ff-fish-right" : "ff-fish-left"} absolute opacity-90`}
-      style={{ top, animationDuration: "56s", animationDelay: delay }}
+      className={`ff-fish-lane ${dir === "right" ? "ff-sub-right" : "ff-sub-left"} absolute opacity-90`}
+      style={{ top, animationDuration: "64s", animationDelay: delay }}
     >
-      <svg
-        width="140"
-        height="70"
-        viewBox="0 0 44 22"
-        shapeRendering="crispEdges"
-        className="h-14 w-auto sm:h-[4.5rem]"
-        style={{
-          imageRendering: "pixelated",
-          transform: dir === "left" ? "scaleX(-1)" : undefined,
-        }}
-      >
-        <rect x="6" y="8" width="28" height="8" fill="#e0aa2c" />
-        <rect x="8" y="7" width="24" height="2" fill="#f0c040" />
-        <rect x="8" y="15" width="24" height="2" fill="#b8860b" />
-        <rect x="10" y="16" width="20" height="1" fill="#8a6810" />
-        <rect x="34" y="9" width="5" height="6" fill="#e0aa2c" />
-        <rect x="38" y="10" width="3" height="4" fill="#f0c040" />
-        <rect x="16" y="3" width="10" height="5" fill="#e0aa2c" />
-        <rect x="17" y="2" width="8" height="2" fill="#f0c040" />
-        <rect x="22" y="0" width="2" height="3" fill="#5a6570" />
-        <rect x="20" y="0" width="4" height="1" fill="#3a454f" />
-        <rect x="12" y="10" width="3" height="3" fill="#5ec8e8" />
-        <rect x="13" y="11" width="1" height="1" fill="#b8ecff" />
-        <rect x="18" y="10" width="3" height="3" fill="#2f6f9f" />
-        <rect x="19" y="11" width="1" height="1" fill="#5ec8e8" />
-        <rect x="24" y="10" width="3" height="3" fill="#5ec8e8" />
-        <rect x="25" y="11" width="1" height="1" fill="#b8ecff" />
-        <rect x="2" y="9" width="4" height="5" fill="#6a7580" />
-        <rect x="1" y="8" width="2" height="2" fill="#8a95a0" />
-        <rect x="1" y="13" width="2" height="2" fill="#8a95a0" />
-        <rect x="0" y="10" width="2" height="3" fill="#4a5560" />
-        <rect x="28" y="5" width="4" height="3" fill="#b8860b" />
-        <rect x="8" y="12" width="24" height="1" fill="#ffe08a" />
-        <rect x="3" y="6" width="1" height="1" fill="#ffffff" opacity="0.45" />
-        <rect x="1" y="4" width="1" height="1" fill="#ffffff" opacity="0.3" />
-      </svg>
+      <span className="ff-sub-bob">
+        <svg
+          width="140"
+          height="70"
+          viewBox="0 0 44 22"
+          shapeRendering="crispEdges"
+          className="h-14 w-auto sm:h-[4.5rem]"
+          style={{
+            imageRendering: "pixelated",
+            transform: dir === "left" ? "scaleX(-1)" : undefined,
+          }}
+        >
+          <rect x="6" y="8" width="28" height="8" fill="#e0aa2c" />
+          <rect x="8" y="7" width="24" height="2" fill="#f0c040" />
+          <rect x="8" y="15" width="24" height="2" fill="#b8860b" />
+          <rect x="10" y="16" width="20" height="1" fill="#8a6810" />
+          <rect x="34" y="9" width="5" height="6" fill="#e0aa2c" />
+          <rect x="38" y="10" width="3" height="4" fill="#f0c040" />
+          <rect x="16" y="3" width="10" height="5" fill="#e0aa2c" />
+          <rect x="17" y="2" width="8" height="2" fill="#f0c040" />
+          <rect x="22" y="0" width="2" height="3" fill="#5a6570" />
+          <rect x="20" y="0" width="4" height="1" fill="#3a454f" />
+          <rect x="12" y="10" width="3" height="3" fill="#5ec8e8" />
+          <rect x="13" y="11" width="1" height="1" fill="#b8ecff" />
+          <rect x="18" y="10" width="3" height="3" fill="#2f6f9f" />
+          <rect x="19" y="11" width="1" height="1" fill="#5ec8e8" />
+          <rect x="24" y="10" width="3" height="3" fill="#5ec8e8" />
+          <rect x="25" y="11" width="1" height="1" fill="#b8ecff" />
+          <rect x="2" y="9" width="4" height="5" fill="#6a7580" />
+          <rect x="1" y="8" width="2" height="2" fill="#8a95a0" />
+          <rect x="1" y="13" width="2" height="2" fill="#8a95a0" />
+          <rect x="0" y="10" width="2" height="3" fill="#4a5560" />
+          <rect x="28" y="5" width="4" height="3" fill="#b8860b" />
+          <rect x="8" y="12" width="24" height="1" fill="#ffe08a" />
+          <rect x="3" y="6" width="1" height="1" fill="#ffffff" opacity="0.45" />
+          <rect x="1" y="4" width="1" height="1" fill="#ffffff" opacity="0.3" />
+        </svg>
+      </span>
     </div>
   );
 }
@@ -408,28 +448,30 @@ export function Crab({
       style={{ left, bottom, animationDelay: delay }}
       aria-hidden
     >
-      <svg
-        width="28"
-        height="16"
-        viewBox="0 0 14 8"
-        shapeRendering="crispEdges"
-        style={{
-          imageRendering: "pixelated",
-          transform: dir === "left" ? "scaleX(-1)" : undefined,
-        }}
-      >
-        <rect x="3" y="2" width="8" height="4" fill="#e05a3a" />
-        <rect x="4" y="1" width="6" height="1" fill="#f07050" />
-        <rect x="5" y="3" width="1" height="1" fill="#1b1b1b" />
-        <rect x="8" y="3" width="1" height="1" fill="#1b1b1b" />
-        <rect x="0" y="1" width="3" height="1" fill="#c44b3a" />
-        <rect x="0" y="2" width="1" height="2" fill="#c44b3a" />
-        <rect x="11" y="1" width="3" height="1" fill="#c44b3a" />
-        <rect x="13" y="2" width="1" height="2" fill="#c44b3a" />
-        <rect x="3" y="6" width="1" height="2" fill="#a03828" />
-        <rect x="6" y="6" width="1" height="2" fill="#a03828" />
-        <rect x="9" y="6" width="1" height="2" fill="#a03828" />
-      </svg>
+      <span className="ff-crab-body" style={{ animationDelay: delay }}>
+        <svg
+          width="28"
+          height="16"
+          viewBox="0 0 14 8"
+          shapeRendering="crispEdges"
+          style={{
+            imageRendering: "pixelated",
+            transform: dir === "left" ? "scaleX(-1)" : undefined,
+          }}
+        >
+          <rect x="3" y="2" width="8" height="4" fill="#e05a3a" />
+          <rect x="4" y="1" width="6" height="1" fill="#f07050" />
+          <rect x="5" y="3" width="1" height="1" fill="#1b1b1b" />
+          <rect x="8" y="3" width="1" height="1" fill="#1b1b1b" />
+          <rect x="0" y="1" width="3" height="1" fill="#c44b3a" />
+          <rect x="0" y="2" width="1" height="2" fill="#c44b3a" />
+          <rect x="11" y="1" width="3" height="1" fill="#c44b3a" />
+          <rect x="13" y="2" width="1" height="2" fill="#c44b3a" />
+          <rect x="3" y="6" width="1" height="2" fill="#a03828" />
+          <rect x="6" y="6" width="1" height="2" fill="#a03828" />
+          <rect x="9" y="6" width="1" height="2" fill="#a03828" />
+        </svg>
+      </span>
     </div>
   );
 }
@@ -467,6 +509,170 @@ export function Coral({
   );
 }
 
+/** Pixel seabed rock — boulder / pile / flat ledge. */
+export function Rock({
+  left,
+  bottom,
+  variant = "boulder",
+  scale = 1,
+  flip = false,
+}: {
+  left: string;
+  bottom: string;
+  variant?: "boulder" | "pile" | "ledge";
+  scale?: number;
+  flip?: boolean;
+}) {
+  const stone = "#6a7a82";
+  const mid = "#5a6a72";
+  const deep = "#3e4a52";
+  const hi = "#8a9aa2";
+  const moss = "#3c6b4a";
+
+  const art =
+    variant === "pile" ? (
+      <svg
+        width={36 * scale}
+        height={22 * scale}
+        viewBox="0 0 18 11"
+        shapeRendering="crispEdges"
+        style={{
+          imageRendering: "pixelated",
+          transform: flip ? "scaleX(-1)" : undefined,
+        }}
+      >
+        <rect x="1" y="6" width="7" height="5" fill={mid} />
+        <rect x="2" y="5" width="5" height="1" fill={stone} />
+        <rect x="3" y="4" width="3" height="1" fill={hi} />
+        <rect x="7" y="7" width="8" height="4" fill={deep} />
+        <rect x="8" y="6" width="6" height="1" fill={mid} />
+        <rect x="9" y="5" width="4" height="1" fill={stone} />
+        <rect x="11" y="8" width="2" height="1" fill={moss} opacity="0.85" />
+        <rect x="3" y="8" width="2" height="1" fill={hi} opacity="0.5" />
+      </svg>
+    ) : variant === "ledge" ? (
+      <svg
+        width={44 * scale}
+        height={16 * scale}
+        viewBox="0 0 22 8"
+        shapeRendering="crispEdges"
+        style={{
+          imageRendering: "pixelated",
+          transform: flip ? "scaleX(-1)" : undefined,
+        }}
+      >
+        <rect x="0" y="4" width="22" height="4" fill={deep} />
+        <rect x="1" y="3" width="20" height="1" fill={mid} />
+        <rect x="3" y="2" width="14" height="1" fill={stone} />
+        <rect x="6" y="1" width="8" height="1" fill={hi} />
+        <rect x="5" y="5" width="3" height="1" fill={moss} opacity="0.7" />
+        <rect x="14" y="5" width="2" height="1" fill={hi} opacity="0.45" />
+      </svg>
+    ) : (
+      <svg
+        width={40 * scale}
+        height={28 * scale}
+        viewBox="0 0 20 14"
+        shapeRendering="crispEdges"
+        style={{
+          imageRendering: "pixelated",
+          transform: flip ? "scaleX(-1)" : undefined,
+        }}
+      >
+        <rect x="4" y="6" width="12" height="8" fill={mid} />
+        <rect x="3" y="8" width="2" height="6" fill={deep} />
+        <rect x="15" y="8" width="2" height="6" fill={deep} />
+        <rect x="5" y="4" width="10" height="2" fill={stone} />
+        <rect x="6" y="2" width="8" height="2" fill={hi} />
+        <rect x="7" y="1" width="5" height="1" fill={stone} />
+        <rect x="8" y="7" width="3" height="2" fill={deep} opacity="0.55" />
+        <rect x="11" y="10" width="3" height="1" fill={moss} opacity="0.8" />
+        <rect x="6" y="11" width="2" height="1" fill={hi} opacity="0.4" />
+      </svg>
+    );
+
+  return (
+    <div className="absolute z-[2]" style={{ left, bottom }} aria-hidden>
+      {art}
+    </div>
+  );
+}
+
+/** Soft sea anemone with a tiny sway. */
+export function SeaAnemone({
+  left,
+  bottom,
+  delay = "0s",
+  color = "#e05a9a",
+}: {
+  left: string;
+  bottom: string;
+  delay?: string;
+  color?: string;
+}) {
+  const stem = "#6b3a58";
+  return (
+    <div
+      className="ff-sway absolute z-[2]"
+      style={{ left, bottom, animationDelay: delay }}
+      aria-hidden
+    >
+      <svg
+        width="18"
+        height="22"
+        viewBox="0 0 9 11"
+        shapeRendering="crispEdges"
+        style={{ imageRendering: "pixelated" }}
+      >
+        <rect x="3" y="7" width="3" height="4" fill={stem} />
+        <rect x="2" y="5" width="1" height="3" fill={color} opacity="0.85" />
+        <rect x="4" y="4" width="1" height="4" fill={color} />
+        <rect x="6" y="5" width="1" height="3" fill={color} opacity="0.9" />
+        <rect x="1" y="3" width="1" height="2" fill="#ffb0d0" opacity="0.75" />
+        <rect x="3" y="2" width="1" height="3" fill="#ffb0d0" />
+        <rect x="5" y="2" width="1" height="3" fill="#ffb0d0" opacity="0.85" />
+        <rect x="7" y="3" width="1" height="2" fill="#ffb0d0" opacity="0.7" />
+        <rect x="4" y="1" width="1" height="1" fill="#ffe0f0" opacity="0.9" />
+      </svg>
+    </div>
+  );
+}
+
+/** Tiny scallop / shell on the sand. */
+export function Seashell({
+  left,
+  bottom,
+  color = "#f0d0b0",
+  flip = false,
+}: {
+  left: string;
+  bottom: string;
+  color?: string;
+  flip?: boolean;
+}) {
+  return (
+    <div className="absolute z-[2]" style={{ left, bottom }} aria-hidden>
+      <svg
+        width="16"
+        height="12"
+        viewBox="0 0 8 6"
+        shapeRendering="crispEdges"
+        style={{
+          imageRendering: "pixelated",
+          transform: flip ? "scaleX(-1)" : undefined,
+        }}
+      >
+        <rect x="1" y="3" width="6" height="2" fill={color} />
+        <rect x="2" y="2" width="4" height="1" fill="#fff0e0" />
+        <rect x="3" y="1" width="2" height="1" fill={color} />
+        <rect x="2" y="4" width="1" height="1" fill="#c8a888" />
+        <rect x="4" y="4" width="1" height="1" fill="#c8a888" />
+        <rect x="5" y="3" width="1" height="1" fill="#fff8f0" opacity="0.7" />
+      </svg>
+    </div>
+  );
+}
+
 export function Bubble({
   left,
   size,
@@ -495,8 +701,64 @@ export function Bubble({
   );
 }
 
+/** Pixel sand dune sitting on the shelf (not deforming the flat seabed). */
+export function SandDune({
+  left,
+  right,
+  bottom,
+  scale = 1,
+  flip = false,
+}: {
+  left?: string;
+  right?: string;
+  bottom: string;
+  scale?: number;
+  flip?: boolean;
+}) {
+  const hi = "#ebe0b8";
+  const mid = "#d4c48a";
+  const sand = "#c2b280";
+  const shade = "#a89860";
+  const deep = "#8a7a4e";
+
+  return (
+    <div
+      className="pointer-events-none absolute z-[2]"
+      style={{ left, right, bottom }}
+      aria-hidden
+    >
+      <svg
+        width={72 * scale}
+        height={40 * scale}
+        viewBox="0 0 36 20"
+        shapeRendering="crispEdges"
+        style={{
+          imageRendering: "pixelated",
+          display: "block",
+          transform: flip ? "scaleX(-1)" : undefined,
+        }}
+      >
+        {/* Base resting on sand */}
+        <rect x="2" y="14" width="32" height="6" fill={shade} />
+        <rect x="1" y="16" width="34" height="4" fill={deep} />
+        {/* Mid slope */}
+        <rect x="4" y="10" width="26" height="4" fill={sand} />
+        <rect x="6" y="7" width="20" height="3" fill={mid} />
+        {/* Crest */}
+        <rect x="10" y="4" width="14" height="3" fill={hi} />
+        <rect x="13" y="2" width="8" height="2" fill={hi} />
+        <rect x="15" y="1" width="4" height="1" fill="#f2ead0" />
+        {/* Soft shade on lee side */}
+        <rect x="22" y="8" width="6" height="6" fill={shade} opacity="0.55" />
+        <rect x="8" y="12" width="3" height="1" fill={hi} opacity="0.5" />
+        <rect x="18" y="5" width="2" height="1" fill="#6a7a82" opacity="0.55" />
+      </svg>
+    </div>
+  );
+}
+
 /** Sand packed to the page bottom so it never floats.
- *  Total height must stay in sync with FLOOR in Atmosphere (4.25rem).
+ *  Total shelf height must stay in sync with FLOOR in Atmosphere (4.25rem).
  */
 export function Seabed() {
   return (
@@ -559,6 +821,10 @@ export function Seabed() {
       <div className="absolute bottom-[3.05rem] left-[32%] h-2 w-2 bg-[#5a6a72]/80" />
       <div className="absolute bottom-[3.2rem] right-[22%] h-2 w-4 bg-[#7a8a92]/80" />
       <div className="absolute bottom-[3.1rem] right-[40%] h-2 w-2 bg-[#4a5a62]/80" />
+      <div className="absolute bottom-[3.25rem] left-[48%] h-2 w-2 bg-[#7a8a92]/75" />
+      <div className="absolute bottom-[3.05rem] left-[61%] h-2 w-3 bg-[#4a5a62]/80" />
+      <div className="absolute bottom-[3.2rem] right-[8%] h-2 w-2 bg-[#6a7a82]/75" />
+      <div className="absolute bottom-[3.1rem] left-[18%] h-1 w-2 bg-[#8a9aa2]/70" />
     </div>
   );
 }
@@ -656,6 +922,8 @@ const SKY_CLOUDS = [
     style: { top: "12%", left: "3%" },
     size: "h-14 sm:h-16",
     visibility: "",
+    motion: "ff-cloud-bob--slow",
+    delay: "-4s",
   },
   {
     id: "c2",
@@ -663,6 +931,8 @@ const SKY_CLOUDS = [
     style: { top: "8%", right: "6%" },
     size: "h-12 sm:h-16",
     visibility: "",
+    motion: "ff-cloud-bob--far",
+    delay: "-11s",
   },
   {
     id: "c3",
@@ -670,6 +940,8 @@ const SKY_CLOUDS = [
     style: { top: "28%", left: "38%" },
     size: "h-10 sm:h-12",
     visibility: "hidden sm:block",
+    motion: "ff-cloud-bob--near",
+    delay: "-2s",
   },
   {
     id: "c4",
@@ -677,6 +949,8 @@ const SKY_CLOUDS = [
     style: { top: "42%", left: "8%" },
     size: "h-12 sm:h-14",
     visibility: "hidden md:block",
+    motion: "ff-cloud-bob--slow",
+    delay: "-16s",
   },
   {
     id: "c5",
@@ -684,10 +958,12 @@ const SKY_CLOUDS = [
     style: { top: "36%", right: "18%" },
     size: "h-10 sm:h-12",
     visibility: "",
+    motion: "ff-cloud-bob--far",
+    delay: "-7s",
   },
 ];
 
-/** Pixel clouds parked in sky corners/edges (never clipped mid-drift). */
+/** Pixel clouds in the sky with a soft breeze drift (stays near slots). */
 export function SkyClouds() {
   return (
     <div className="ff-cloud-layer ff-px-clouds pointer-events-none absolute inset-x-0 z-[1]">
@@ -698,8 +974,8 @@ export function SkyClouds() {
           style={cloud.style}
         >
           <div
-            className={`ff-cloud ff-cloud-bob ${cloud.size}`}
-            style={{ animationDelay: `${cloud.id.charCodeAt(1) % 5}s` }}
+            className={`ff-cloud ff-cloud-bob ${cloud.motion} ${cloud.size}`}
+            style={{ animationDelay: cloud.delay }}
           >
             <PixelCloud variant={cloud.variant} className="h-full w-auto" />
           </div>
@@ -873,53 +1149,69 @@ export function FishingBoat() {
 const SEAGULLS = [
   {
     key: "g1",
+    soar: "a" as const,
     style: {
       top: "18%",
       left: "48%",
-      animationDuration: "10s",
+      animationDuration: "16s",
       animationDelay: "-2s",
+      ["--ff-gull-x" as string]: "6.5vw",
+      ["--ff-gull-y" as string]: "22px",
+      ["--ff-gull-flap" as string]: "0.85s",
     },
-    size: "h-11 sm:h-14",
+    size: "h-7 sm:h-9",
     visibility: "",
   },
   {
     key: "g2",
+    soar: "a" as const,
     style: {
       top: "30%",
       left: "72%",
-      animationDuration: "12s",
+      animationDuration: "19s",
       animationDelay: "-5s",
+      ["--ff-gull-x" as string]: "5vw",
+      ["--ff-gull-y" as string]: "18px",
+      ["--ff-gull-flap" as string]: "0.55s",
     },
-    size: "h-10 sm:h-12",
+    size: "h-6 sm:h-8",
     visibility: "",
   },
   {
     key: "g3",
+    soar: "a" as const,
     style: {
       top: "48%",
       left: "56%",
-      animationDuration: "14s",
+      animationDuration: "22s",
       animationDelay: "-8s",
+      ["--ff-gull-x" as string]: "4vw",
+      ["--ff-gull-y" as string]: "14px",
+      ["--ff-gull-flap" as string]: "0.95s",
     },
-    size: "h-9 sm:h-11",
+    size: "h-5 sm:h-7",
     visibility: "hidden sm:block",
   },
   {
     key: "g4",
+    soar: "a" as const,
     style: {
       top: "22%",
       left: "22%",
-      animationDuration: "11s",
+      animationDuration: "17s",
       animationDelay: "-3s",
+      ["--ff-gull-x" as string]: "7vw",
+      ["--ff-gull-y" as string]: "20px",
+      ["--ff-gull-flap" as string]: "0.65s",
     },
-    size: "h-8 sm:h-10",
+    size: "h-5 sm:h-6",
     visibility: "hidden md:block",
   },
 ] as const;
 
 function GullSprite({ size }: { size: string }) {
   return (
-    <div className={`ff-gull-flap relative ${size} aspect-[28/18] min-w-[2.75rem]`}>
+    <div className={`ff-gull-flap relative ${size} aspect-[28/18] min-w-[1.75rem]`}>
       {/* eslint-disable-next-line @next/next/no-img-element */}
       <img
         src="/brand/gull-simple-a.png"
@@ -953,7 +1245,7 @@ export function SeagullsFront() {
       {SEAGULLS.map((g) => (
         <div
           key={g.key}
-          className={`ff-gull ${g.visibility}`}
+          className={`ff-gull ff-gull-soar-${g.soar} ${g.visibility}`}
           style={g.style}
         >
           <GullSprite size={g.size} />
