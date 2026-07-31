@@ -785,6 +785,32 @@ export function FishingBoat() {
           className="ff-boat-sprite"
           draggable={false}
         />
+        {/* Pomikit mark on the right hull (white plate + pixel “p”) */}
+        <span className="ff-boat-pomikit" aria-hidden>
+          <svg
+            viewBox="0 0 13 16"
+            width="13"
+            height="16"
+            shapeRendering="crispEdges"
+          >
+            {/* White plate */}
+            <rect x="1" y="0" width="11" height="1" fill="#f4f7fa" />
+            <rect x="0" y="1" width="13" height="13" fill="#f4f7fa" />
+            <rect x="1" y="14" width="11" height="1" fill="#f4f7fa" />
+            {/* Leaf */}
+            <rect x="8" y="1" width="2" height="1" fill="#7cb342" />
+            <rect x="9" y="2" width="2" height="1" fill="#8bc34a" />
+            <rect x="10" y="3" width="1" height="1" fill="#7cb342" />
+            {/* p — stem */}
+            <rect x="2" y="3" width="2" height="11" fill="#1a1a1a" />
+            {/* p — bowl ring */}
+            <rect x="4" y="3" width="5" height="2" fill="#1a1a1a" />
+            <rect x="8" y="4" width="1" height="1" fill="#1a1a1a" />
+            <rect x="9" y="5" width="2" height="3" fill="#1a1a1a" />
+            <rect x="8" y="8" width="1" height="1" fill="#1a1a1a" />
+            <rect x="4" y="9" width="5" height="2" fill="#1a1a1a" />
+          </svg>
+        </span>
         {/*
           Crane sits on the foredeck (left). Boom reaches past the bow
           so the cable drops into open water, not through the cabin.

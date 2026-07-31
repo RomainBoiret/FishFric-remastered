@@ -1768,6 +1768,36 @@ body.ff-egg-word-coral {
   image-rendering: crisp-edges;
 }
 
+/* Pomikit pixel mark — right hull, white plate */
+.ff-boat-pomikit {
+  position: absolute;
+  left: 68%;
+  bottom: 18%;
+  z-index: 1;
+  display: block;
+  width: clamp(0.85rem, 9.5%, 1.2rem);
+  line-height: 0;
+  image-rendering: pixelated;
+  image-rendering: crisp-edges;
+  filter: drop-shadow(0 1px 0 rgba(7, 18, 24, 0.45));
+  pointer-events: none;
+}
+
+.ff-boat-pomikit svg {
+  display: block;
+  width: 100%;
+  height: auto;
+  overflow: visible;
+}
+
+@media (max-width: 767px) {
+  .ff-boat-pomikit {
+    left: 66%;
+    bottom: 16%;
+    width: clamp(0.75rem, 10%, 1.05rem);
+  }
+}
+
 .ff-boat-crane {
   /* Foredeck — boom clears the cabin and hangs over open water */
   position: absolute;
