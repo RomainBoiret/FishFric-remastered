@@ -1,6 +1,11 @@
 # Fish&Fric (remastered)
 
-Full-stack remaster of **Fish&Fric**, an ocean-themed online banking demo. Recruiters can explore it live: accounts, transfers, P2P, bill pay, and **HMAC-signed cheque deposits** on a real cent-based ledger.
+[![CI](https://github.com/RomainBoiret/FishFric-remastered/actions/workflows/ci.yml/badge.svg)](https://github.com/RomainBoiret/FishFric-remastered/actions/workflows/ci.yml)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](./LICENSE)
+
+**Live demo:** [fish-fric-remastered-8ag2.vercel.app](https://fish-fric-remastered-8ag2.vercel.app) · in-app story at [`/docs`](https://fish-fric-remastered-8ag2.vercel.app/docs)
+
+Full-stack remaster of **Fish&Fric**, an ocean-themed online banking demo for recruiters: accounts, transfers, P2P, bill pay, and **HMAC-signed cheque deposits** on a cent-based ledger.
 
 > **Fictional data only.** All users, balances, transfers, and transactions are fake. Do not enter real banking credentials or personal financial information.
 
@@ -8,9 +13,21 @@ Full-stack remaster of **Fish&Fric**, an ocean-themed online banking demo. Recru
 
 | | |
 |---|---|
-| **2024** | Original **ÉTS integrator team project** - [FishFric-Bank](https://github.com/RomainBoiret/FishFric-Bank) |
-| **2026** | Solo remaster - this repo |
+| **2024** | Original **ÉTS integrator team project** — [FishFric-Bank](https://github.com/RomainBoiret/FishFric-Bank) |
+| **2026** | Solo remaster — this repo |
 | **Now** | Live demo with a stricter domain layer, notifications, and one-time cheque clearing |
+
+## Try it in 60 seconds
+
+1. Open the [live demo](https://fish-fric-remastered-8ag2.vercel.app)
+2. Click **Try the demo** (or use the credentials below)
+3. Transfer between accounts, accept the pending bottle drop (answer: `shark`), issue a signed cheque and deposit it once
+4. If the reef looks messy, use **Reset demo reef** on `/app` (demo user only)
+
+| Account | Email | Password |
+|---------|-------|----------|
+| Demo | `demo@fishfric.app` | `Demo-FishFric-2026!` |
+| Friend (P2P) | `ami@fishfric.app` | `Demo-FishFric-2026!` |
 
 ## Highlights
 
@@ -23,14 +40,46 @@ Full-stack remaster of **Fish&Fric**, an ocean-themed online banking demo. Recru
 | Cheque deposit | Server-issued SVG, payee + HMAC + one-time clear |
 | Alerts & history | Capped inbox / histories: dismiss one or clear all |
 
-Issue a demo cheque, download it, deposit once. Re-uploading the same file is rejected. More context lives in the in-app story at `/docs`.
-
 ## Stack
 
 - **Next.js** (App Router) + TypeScript + Tailwind CSS
 - **PostgreSQL** (Neon) + **Prisma**
 - **Auth.js** (credentials + JWT sessions)
-- Lightweight domain layer (`src/domain`) with an **immutable ledger**
+- Lightweight domain layer (`src/domain`) with an **append-only ledger** (by app convention)
+
+## How money moves
+
+`BankAccount.balanceCents` is a denormalized cache. New movements append signed `LedgerEntry` rows (amounts in cents). Conditional updates keep concurrent debits / one-shot cheque clears honest under load.
+
+```mermaid
+flowchart LR
+  A[Server action] --> B{Validate domain rules}
+  B -->|ok| C["$transaction"]
+  C --> D[Append LedgerEntry rows]
+  C --> E[Conditional balance / status update]
+  E --> F[Cached balanceCents]
+  D --> G["db:verify-ledger Σ entries"]
+  F --> G
+```
+
+Cheque catch (demo):
+
+```mermaid
+sequenceDiagram
+  participant U as Demo user
+  participant S as Server
+  participant DB as Postgres
+  U->>S: Issue signed cheque
+  S->>DB: Insert ChequeInstrument + HMAC
+  S-->>U: Download SVG
+  U->>S: Submit deposit
+  S->>DB: updateMany CLEARED where unused
+  alt first clear wins
+    S->>DB: Append MOBILE_DEPOSIT ledger + credit
+  else already cleared
+    S-->>U: Reject double-cash
+  end
+```
 
 ## Local setup
 
@@ -44,20 +93,9 @@ npm run db:seed
 npm run dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) - or read the in-app story at `/docs`.
+Open [http://localhost:3000](http://localhost:3000).
 
-### Demo credentials
-
-| Account | Email | Password |
-|---------|-------|----------|
-| Demo | `demo@fishfric.app` | `Demo-FishFric-2026!` |
-| Friend (P2P) | `ami@fishfric.app` | `Demo-FishFric-2026!` |
-
-One-click demo from the landing page logs in as the Demo account.
-
-## Ledger integrity
-
-`BankAccount.balanceCents` is a denormalized cache. The source of truth is the immutable `LedgerEntry` stream (amounts in cents, signed).
+## Tests & quality
 
 ```bash
 # Pure domain / lib unit tests (no database)
@@ -68,66 +106,86 @@ npm test
 npm run db:migrate:deploy
 npm run test:integration
 
+# Recruiter smoke E2E (Playwright) — needs a seeded DB + AUTH_SECRET (+ CRON_SECRET for API reset)
+npm run test:e2e
+
 # Reconcile every account against Σ LedgerEntry (needs DATABASE_URL)
 npm run db:verify-ledger
-
-# Recruiter smoke E2E (Playwright) — needs a seeded DB + AUTH_SECRET
-# Prefer a dedicated local DB; CI uses Postgres service + migrate + seed + build
-npm run test:e2e
 ```
 
-The verify script exits non-zero if any cached balance drifts from the ledger sum.
+CI (`.github/workflows/ci.yml`) on PR / `main`: lint, typecheck, unit tests, Postgres integration, Playwright recruiter journey.
 
 ## Deploy (Vercel)
 
 1. Import this repo on [vercel.com](https://vercel.com)
 2. Set environment variables:
-   - `DATABASE_URL` - Neon **pooled** URL (host includes `-pooler`)
-   - `DIRECT_URL` - Neon **direct** URL (same credentials, host **without** `-pooler`) - required for migrations
-   - `AUTH_SECRET` - Auth.js secret
-3. Deploy - `npm run build` only generates the Prisma client and builds Next.js (**no migrations** during build)
-4. Apply schema changes to production separately:
-   - Preferred: GitHub Action [Migrate production](./.github/workflows/migrate-production.yml) (manual dispatch, or automatic when `prisma/` changes on `main`)
-   - Or locally: `npm run db:migrate:deploy` with production `DATABASE_URL` / `DIRECT_URL`
-5. Seed production once: `npm run db:seed` (with `DATABASE_URL` pointing at Neon)
+   - `DATABASE_URL` — Neon **pooled** URL (host includes `-pooler`)
+   - `DIRECT_URL` — Neon **direct** URL (same credentials, host **without** `-pooler`) — required for migrations
+   - `AUTH_SECRET` — Auth.js + cheque HMAC secret
+   - `CRON_SECRET` — protects demo reset cron / API
+   - Optional: `NEXT_PUBLIC_SITE_URL` — canonical production URL
+3. Deploy — `npm run build` only generates the Prisma client and builds Next.js (**no migrations** during build)
+4. Apply schema changes separately via [Migrate production](./.github/workflows/migrate-production.yml) (or `npm run db:migrate:deploy`)
+5. Seed once: `npm run db:seed`
 
 ### Demo reef reset
 
 Shared demo accounts can drift as visitors explore. Three ways to restore them:
 
-1. **In-app** - signed in as the demo user, use **Reset demo reef** on `/app`
-2. **Cron** - `vercel.json` hits `POST /api/demo/reset` daily (12:00 UTC). Set `CRON_SECRET` on Vercel (Hobby/Pro cron support required)
-3. **CLI** - `npm run db:seed`
+1. **In-app** — signed in as the demo user, **Reset demo reef** on `/app`
+2. **Cron** — `vercel.json` hits `POST /api/demo/reset` daily (12:00 UTC). Set `CRON_SECRET` on Vercel
+3. **CLI** — `npm run db:seed`
 
-Add repository secrets `DATABASE_URL` and `DIRECT_URL` so the migrate workflow can reach Neon.
+> Preview deployments share the build command but **must not** migrate a shared production database. Keep migrations on `main` / manual deploy only.
 
-> Preview deployments share the build command but **must not** migrate a shared production database. Keep migrations on `main` / manual deploy only. If the migrate job fails with `P1002`, confirm `DIRECT_URL` has no `-pooler` host.
+## Security model (demo)
+
+This is a **portfolio banking demo**, not a real bank.
+
+| Control | What it does |
+|---------|----------------|
+| Ownership checks | Money actions require a session and account ownership |
+| Password hashing | `bcrypt` for credentials |
+| Cheque HMAC | Server-issued SVG bound to payee / amount / expiry |
+| One-shot clear | Conditional `updateMany` so a cheque credits once |
+| Concurrent balances | Conditional balance updates / claim helpers |
+| Demo reset API | Bearer `CRON_SECRET` / `DEMO_RESET_SECRET` |
+| HTTP headers | `nosniff`, `DENY` framing, HSTS, tight `Permissions-Policy` |
+
+Not in scope: KYC, real payment rails, fraud ops, SOC2, rate-limit mesh, DB-enforced ledger immutability.
+
+## Known limitations
+
+- **Shared demo reef** — visitors share `demo@` / `ami@`; reset (button / cron / seed) restores sample state
+- **Ledger append-only by convention** — no PostgreSQL `REVOKE` / triggers; soft-hide exists for history UX
+- **P2P expiry** — expired transfers are rejected on accept; there is no background refund job yet
+- **Photo cheque upload** — unsigned photos skip instrument checks (demo convenience); signed SVG path is the serious path
+- **Lighthouse** — public routes only (`/`, `/login`, `/signup`, `/docs`); authenticated `/app` is covered by Playwright
 
 ## Quality gate (Lighthouse)
 
-`.github/workflows/lighthouse.yml` audits the public routes (`/`, `/login`, `/signup`, `/docs`) with [Lighthouse CI](https://github.com/GoogleChrome/lighthouse-ci):
-
-- On PRs, it waits for the Vercel preview deployment and audits that URL.
-- On pushes to `main`, on a weekly schedule, and on manual dispatch, it audits production.
-- Thresholds live in [`.lighthouserc.json`](./.lighthouserc.json): accessibility, best practices, and SEO must score ≥ 90 (build fails otherwise); performance warns below 80.
+`.github/workflows/lighthouse.yml` audits public routes with [Lighthouse CI](https://github.com/GoogleChrome/lighthouse-ci). Thresholds live in [`.lighthouserc.json`](./.lighthouserc.json).
 
 ## Project layout
 
 ```
 prisma/           # schema, migrations, seed
+e2e/              # Playwright recruiter journey
 scripts/          # migrate + ledger verify helpers
 src/
   app/            # Next.js routes (incl. /docs)
   domain/         # pure business rules (+ ledger integrity)
-  features/       # auth, accounts, transfers, p2p, deposits, bills…
+  features/       # auth, accounts, transfers, p2p, deposits, bills, demo…
   lib/            # prisma, auth, shared utils
+  test/           # Postgres integration helpers + suites
 ```
 
 ## Links
 
+- Live demo: https://fish-fric-remastered-8ag2.vercel.app
 - Remaster (this repo): https://github.com/RomainBoiret/FishFric-remastered
 - Original team project: https://github.com/RomainBoiret/FishFric-Bank
 
 ## License
 
-MIT
+MIT — see [LICENSE](./LICENSE)

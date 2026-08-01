@@ -46,7 +46,7 @@ const TIMELINE = [
     year: "Now",
     depth: "Deep water",
     title: "Live demo reef",
-    body: "Recruiters can sign in, move money, deposit signed cheques, and watch every cent hit an immutable ledger.",
+    body: "Recruiters can sign in, move money, deposit signed cheques, and watch every cent land on an append-only ledger.",
     accent: "#e0aa2c",
     fish: { color: "#f2a63a", fin: "#c87820" },
   },
