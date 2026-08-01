@@ -1,28 +1,18 @@
-import { expect, test, type APIRequestContext } from "@playwright/test";
-
-const RESET_SECRET =
-  process.env.CRON_SECRET ??
-  process.env.DEMO_RESET_SECRET ??
-  "ci-test-secret";
-
-async function resetDemoReef(request: APIRequestContext) {
-  const response = await request.post("/api/demo/reset", {
-    headers: { Authorization: `Bearer ${RESET_SECRET}` },
-  });
-  expect(response.ok(), await response.text()).toBeTruthy();
-}
+import { expect, test } from "@playwright/test";
+import { loginAsDemo, resetDemoReef } from "./helpers";
 
 /**
- * One serial recruiter smoke path against the seeded demo reef.
- * Starts with API reset so retries / local re-runs stay deterministic.
+ * Recruiter smoke (not a full money-path suite).
+ * Covers: demo login, transfer, P2P accept, that bills/deposit routes render,
+ * and demo reset. Full signed-cheque cycle lives in `signed-cheque.spec.ts`.
  */
-test("recruiter demo journey", async ({ page, request }) => {
+test("recruiter smoke: demo login, transfer, P2P, surfaces, reset", async ({
+  page,
+  request,
+}) => {
   await resetDemoReef(request);
+  await loginAsDemo(page);
 
-  await page.goto("/");
-  await page.getByRole("button", { name: "Try the demo" }).first().click();
-  await expect(page).toHaveURL(/\/app\/?$/);
-  await expect(page.getByRole("heading", { name: /Hello, Aqua/i })).toBeVisible();
   await expect(
     page.getByRole("link", { name: /Checking account.*2,450\.00/i }),
   ).toBeVisible();
@@ -64,7 +54,6 @@ test("recruiter demo journey", async ({ page, request }) => {
   await page.goto("/app");
   page.once("dialog", (dialog) => dialog.accept());
   await page.getByRole("button", { name: "Reset demo reef" }).click();
-  // Prefer balance restore over toast — RSC revalidate can drop client toasts.
   await expect(
     page.getByRole("link", { name: /Checking account.*2,450\.00/i }),
   ).toBeVisible({ timeout: 20_000 });

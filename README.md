@@ -21,7 +21,7 @@ Full-stack remaster of **Fish&Fric**, an ocean-themed online banking demo for re
 
 1. Open the [live demo](https://fish-fric-remastered-8ag2.vercel.app)
 2. Click **Try the demo** (or use the credentials below)
-3. Transfer between accounts, accept the pending bottle drop (answer: `shark`), issue a signed cheque and deposit it once
+3. Transfer between accounts, accept the pending bottle drop (answer: `shark`), then try the signed cheque flow on **Deposit a cheque**
 4. If the reef looks messy, use **Reset demo reef** on `/app` (demo user only)
 
 | Account | Email | Password |
@@ -97,6 +97,13 @@ Open [http://localhost:3000](http://localhost:3000).
 
 ## Tests & quality
 
+| Command | What it covers |
+|---------|----------------|
+| `npm test` | Pure domain / lib unit tests (no database) |
+| `npm run test:integration` | Postgres money paths (needs `TEST_DATABASE_URL`) |
+| `npm run test:e2e` | Playwright: **smoke** (login, transfer, P2P, surfaces, reset) + **signed cheque** (issue → download → deposit → reject double-cash) |
+| `npm run db:verify-ledger` | Every account: `balanceCents === Σ LedgerEntry` |
+
 ```bash
 # Pure domain / lib unit tests (no database)
 npm test
@@ -106,14 +113,16 @@ npm test
 npm run db:migrate:deploy
 npm run test:integration
 
-# Recruiter smoke E2E (Playwright) — needs a seeded DB + AUTH_SECRET (+ CRON_SECRET for API reset)
+# Recruiter smoke + signed-cheque E2E (Playwright)
+# Needs a seeded DB + AUTH_SECRET (+ CRON_SECRET for API reset in tests)
+# Prefer a dedicated local DB; CI uses Postgres service + migrate + seed + verify-ledger + build
 npm run test:e2e
 
 # Reconcile every account against Σ LedgerEntry (needs DATABASE_URL)
 npm run db:verify-ledger
 ```
 
-CI (`.github/workflows/ci.yml`) on PR / `main`: lint, typecheck, unit tests, Postgres integration, Playwright recruiter journey.
+CI (`.github/workflows/ci.yml`) on PR / `main`: lint, typecheck, unit tests, Postgres integration, Playwright (smoke + one-shot cheque), and `db:verify-ledger` after the E2E seed.
 
 ## Deploy (Vercel)
 
@@ -160,7 +169,7 @@ Not in scope: KYC, real payment rails, fraud ops, SOC2, rate-limit mesh, DB-enfo
 - **Ledger append-only by convention** — no PostgreSQL `REVOKE` / triggers; soft-hide exists for history UX
 - **P2P expiry** — expired transfers are rejected on accept; there is no background refund job yet
 - **Photo cheque upload** — unsigned photos skip instrument checks (demo convenience); signed SVG path is the serious path
-- **Lighthouse** — public routes only (`/`, `/login`, `/signup`, `/docs`); authenticated `/app` is covered by Playwright
+- **Lighthouse** — public routes only (`/`, `/login`, `/signup`, `/docs`); authenticated `/app` is covered by Playwright smoke + signed-cheque E2E
 
 ## Quality gate (Lighthouse)
 
@@ -170,7 +179,7 @@ Not in scope: KYC, real payment rails, fraud ops, SOC2, rate-limit mesh, DB-enfo
 
 ```
 prisma/           # schema, migrations, seed
-e2e/              # Playwright recruiter journey
+e2e/              # Playwright: recruiter smoke + signed-cheque one-shot
 scripts/          # migrate + ledger verify helpers
 src/
   app/            # Next.js routes (incl. /docs)

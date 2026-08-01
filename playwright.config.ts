@@ -4,8 +4,9 @@ const port = Number(process.env.PLAYWRIGHT_PORT ?? 3000);
 const baseURL = process.env.PLAYWRIGHT_BASE_URL ?? `http://127.0.0.1:${port}`;
 
 /**
- * Recruiter smoke E2E against a seeded Postgres (demo@fishfric.app).
- * CI: migrate + seed + build, then this config starts `next start`.
+ * Playwright E2E against a seeded Postgres (demo@fishfric.app).
+ * Specs: recruiter smoke + signed-cheque one-shot deposit.
+ * CI: migrate + seed + verify-ledger + build, then this config starts `next start`.
  * Local: reuse an already-running `npm run dev`, or let webServer start it.
  */
 export default defineConfig({

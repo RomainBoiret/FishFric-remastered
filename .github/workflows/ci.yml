@@ -129,13 +129,16 @@ jobs:
       - name: Seed demo reef
         run: npm run db:seed
 
+      - name: Verify seeded ledger
+        run: npm run db:verify-ledger
+
       - name: Build app
         run: npm run build
 
       - name: Install Playwright Chromium
         run: npx playwright install --with-deps chromium
 
-      - name: Recruiter E2E
+      - name: E2E (smoke + signed cheque)
         run: npm run test:e2e
 
       - name: Upload Playwright report
