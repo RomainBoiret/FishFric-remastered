@@ -19,6 +19,10 @@ import {
   type P2PActionState,
 } from "@/features/p2p/schemas";
 import { auth } from "@/lib/auth";
+import {
+  applyBalanceDelta,
+  claimPendingP2P,
+} from "@/lib/account-balance";
 import { prisma } from "@/lib/db";
 
 function revalidateP2P(extra: string[] = []) {
@@ -109,9 +113,10 @@ export async function createP2PAction(
 
       await pruneAccountLedgerHistory(tx, source.id);
 
-      await tx.bankAccount.update({
-        where: { id: source.id },
-        data: { balanceCents: source.balanceCents - amountCents },
+      await applyBalanceDelta(tx, {
+        accountId: source.id,
+        expectedBalanceCents: source.balanceCents,
+        deltaCents: -amountCents,
       });
 
       if (recipient) {
@@ -180,6 +185,13 @@ export async function acceptP2PAction(
         throw new Error("Incorrect answer.");
       }
 
+      // Claim before side effects so a parallel accept/reject cannot double-pay.
+      await claimPendingP2P(tx, {
+        p2pId: p2p.id,
+        nextStatus: "ACCEPTED",
+        recipientUserId: session.user.id,
+      });
+
       let checking = await tx.bankAccount.findFirst({
         where: {
           userId: session.user.id,
@@ -214,18 +226,10 @@ export async function acceptP2PAction(
 
       await pruneAccountLedgerHistory(tx, checking.id);
 
-      await tx.bankAccount.update({
-        where: { id: checking.id },
-        data: { balanceCents: checking.balanceCents + p2p.amountCents },
-      });
-
-      await tx.p2PTransfer.update({
-        where: { id: p2p.id },
-        data: {
-          status: "ACCEPTED",
-          resolvedAt: new Date(),
-          recipientUserId: session.user.id,
-        },
+      await applyBalanceDelta(tx, {
+        accountId: checking.id,
+        expectedBalanceCents: checking.balanceCents,
+        deltaCents: p2p.amountCents,
       });
 
       await tx.ledgerEntry.updateMany({
@@ -286,6 +290,12 @@ export async function rejectP2PAction(
         throw new Error("This transfer is not for you.");
       }
 
+      await claimPendingP2P(tx, {
+        p2pId: p2p.id,
+        nextStatus: "REJECTED",
+        recipientUserId: session.user.id,
+      });
+
       const source = await tx.bankAccount.findUnique({
         where: { id: p2p.sourceAccountId },
       });
@@ -303,18 +313,10 @@ export async function rejectP2PAction(
 
       await pruneAccountLedgerHistory(tx, source.id);
 
-      await tx.bankAccount.update({
-        where: { id: source.id },
-        data: { balanceCents: source.balanceCents + p2p.amountCents },
-      });
-
-      await tx.p2PTransfer.update({
-        where: { id: p2p.id },
-        data: {
-          status: "REJECTED",
-          resolvedAt: new Date(),
-          recipientUserId: session.user.id,
-        },
+      await applyBalanceDelta(tx, {
+        accountId: source.id,
+        expectedBalanceCents: source.balanceCents,
+        deltaCents: p2p.amountCents,
       });
 
       await createUserNotification(tx, {

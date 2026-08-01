@@ -31,6 +31,10 @@ import {
 import { createUserNotification } from "@/features/notifications/create";
 import { pruneUserMobileDeposits } from "@/features/deposits/history";
 import { pruneAccountLedgerHistory } from "@/features/accounts/history";
+import {
+  applyBalanceDelta,
+  claimPendingDeposit,
+} from "@/lib/account-balance";
 import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/db";
 
@@ -447,6 +451,11 @@ export async function creditMobileDepositAction(
 
   try {
     await prisma.$transaction(async (tx) => {
+      await claimPendingDeposit(tx, {
+        depositId: parsed.data.depositId,
+        userId,
+      });
+
       const deposit = await tx.mobileDeposit.findFirst({
         where: {
           id: parsed.data.depositId,
@@ -455,9 +464,6 @@ export async function creditMobileDepositAction(
       });
 
       if (!deposit) throw new Error("Deposit not found.");
-      if (deposit.status !== "PENDING") {
-        throw new Error("This deposit was already processed.");
-      }
 
       const account = await tx.bankAccount.findFirst({
         where: {
@@ -483,17 +489,10 @@ export async function creditMobileDepositAction(
 
       await pruneAccountLedgerHistory(tx, account.id);
 
-      await tx.bankAccount.update({
-        where: { id: account.id },
-        data: { balanceCents: account.balanceCents + deposit.amountCents },
-      });
-
-      await tx.mobileDeposit.update({
-        where: { id: deposit.id },
-        data: {
-          status: "CREDITED",
-          resolvedAt: new Date(),
-        },
+      await applyBalanceDelta(tx, {
+        accountId: account.id,
+        expectedBalanceCents: account.balanceCents,
+        deltaCents: deposit.amountCents,
       });
 
       await createUserNotification(tx, {

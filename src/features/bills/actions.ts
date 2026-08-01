@@ -10,6 +10,7 @@ import {
 } from "@/features/bills/schemas";
 import { createUserNotification } from "@/features/notifications/create";
 import { pruneAccountLedgerHistory } from "@/features/accounts/history";
+import { applyBalanceDelta } from "@/lib/account-balance";
 import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/db";
 
@@ -88,9 +89,10 @@ export async function payBillAction(
 
       await pruneAccountLedgerHistory(tx, from.id);
 
-      await tx.bankAccount.update({
-        where: { id: from.id },
-        data: { balanceCents: from.balanceCents - amountCents },
+      await applyBalanceDelta(tx, {
+        accountId: from.id,
+        expectedBalanceCents: from.balanceCents,
+        deltaCents: -amountCents,
       });
 
       await createUserNotification(tx, {

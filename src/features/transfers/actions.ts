@@ -7,6 +7,7 @@ import {
   validateInternalTransfer,
 } from "@/domain/transfers";
 import { auth } from "@/lib/auth";
+import { applyBalanceDelta } from "@/lib/account-balance";
 import { prisma } from "@/lib/db";
 import { pruneAccountLedgerHistory } from "@/features/accounts/history";
 import {
@@ -108,14 +109,16 @@ export async function transferInternalAction(
       await pruneAccountLedgerHistory(tx, from.id);
       await pruneAccountLedgerHistory(tx, to.id);
 
-      await tx.bankAccount.update({
-        where: { id: from.id },
-        data: { balanceCents: from.balanceCents - amountCents },
+      await applyBalanceDelta(tx, {
+        accountId: from.id,
+        expectedBalanceCents: from.balanceCents,
+        deltaCents: -amountCents,
       });
 
-      await tx.bankAccount.update({
-        where: { id: to.id },
-        data: { balanceCents: to.balanceCents + amountCents },
+      await applyBalanceDelta(tx, {
+        accountId: to.id,
+        expectedBalanceCents: to.balanceCents,
+        deltaCents: amountCents,
       });
     });
   } catch (error) {

@@ -13,6 +13,7 @@ import {
 } from "@/features/accounts/schemas";
 import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/db";
+import { Prisma } from "@/generated/prisma/client";
 
 export async function openAccountAction(
   _prev: OpenAccountActionState,
@@ -40,48 +41,80 @@ export async function openAccountAction(
   let label: string;
 
   try {
-    const created = await prisma.$transaction(async (tx) => {
-      const accounts = await tx.bankAccount.findMany({
-        where: { userId, status: "ACTIVE" },
-        select: { type: true },
-      });
+    const created = await prisma.$transaction(
+      async (tx) => {
+        const accounts = await tx.bankAccount.findMany({
+          where: { userId, status: "ACTIVE" },
+          select: { type: true },
+        });
 
-      const existingTypes = accounts.map((a) => a.type as AccountType);
-      const savingsCount = accounts.filter((a) => a.type === "SAVINGS").length;
+        const existingTypes = accounts.map((a) => a.type as AccountType);
+        const savingsCount = accounts.filter((a) => a.type === "SAVINGS").length;
 
-      const validation = canOpenAccount({
-        type,
-        existingTypes,
-        savingsCount,
-      });
-
-      if (!validation.ok) {
-        throw new Error(validation.reason ?? "Cannot open this account.");
-      }
-
-      const resolvedLabel =
-        customLabel ?? defaultAccountLabel(type, savingsCount);
-
-      const account = await tx.bankAccount.create({
-        data: {
-          userId,
+        const validation = canOpenAccount({
           type,
-          label: resolvedLabel,
-          balanceCents: 0,
-          interestBps: ACCOUNT_RULES.interestBps[type],
-          creditLimitCents:
-            type === "CREDIT"
-              ? ACCOUNT_RULES.defaultCreditLimitCents
-              : null,
-        },
-      });
+          existingTypes,
+          savingsCount,
+        });
 
-      return { id: account.id, label: resolvedLabel };
-    });
+        if (!validation.ok) {
+          throw new Error(validation.reason ?? "Cannot open this account.");
+        }
+
+        const resolvedLabel =
+          customLabel ?? defaultAccountLabel(type, savingsCount);
+
+        const account = await tx.bankAccount.create({
+          data: {
+            userId,
+            type,
+            label: resolvedLabel,
+            balanceCents: 0,
+            interestBps: ACCOUNT_RULES.interestBps[type],
+            creditLimitCents:
+              type === "CREDIT"
+                ? ACCOUNT_RULES.defaultCreditLimitCents
+                : null,
+          },
+        });
+
+        // Re-check after insert so a concurrent open cannot slip past the gate.
+        const after = await tx.bankAccount.findMany({
+          where: { userId, status: "ACTIVE" },
+          select: { type: true },
+        });
+        const typesAfter = after.map((a) => a.type as AccountType);
+        const savingsAfter = after.filter((a) => a.type === "SAVINGS").length;
+        const checkingCount = typesAfter.filter((t) => t === "CHECKING").length;
+        const creditCount = typesAfter.filter((t) => t === "CREDIT").length;
+
+        if (
+          (type === "CHECKING" && checkingCount > 1) ||
+          (type === "CREDIT" && creditCount > 1) ||
+          (type === "SAVINGS" &&
+            savingsAfter > ACCOUNT_RULES.maxSavingsAccounts)
+        ) {
+          throw new Error(
+            validation.reason ?? "Cannot open this account right now.",
+          );
+        }
+
+        return { id: account.id, label: resolvedLabel };
+      },
+      { isolationLevel: Prisma.TransactionIsolationLevel.Serializable },
+    );
 
     accountId = created.id;
     label = created.label;
   } catch (error) {
+    if (
+      error instanceof Prisma.PrismaClientKnownRequestError &&
+      error.code === "P2034"
+    ) {
+      return {
+        error: "Could not open this account right now. Please try again.",
+      };
+    }
     const message =
       error instanceof Error ? error.message : "Could not open account.";
     return { error: message };
