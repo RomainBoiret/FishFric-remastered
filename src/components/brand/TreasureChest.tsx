@@ -10,6 +10,7 @@ import {
 } from "react";
 import { createPortal } from "react-dom";
 import { oceanAudio } from "@/lib/oceanAudio";
+import { useIsClient } from "@/lib/use-is-client";
 
 const LOOT = [
   {
@@ -92,18 +93,18 @@ export function TreasureChest({
   );
   const [particles, setParticles] = useState<Particle[]>([]);
   const [jackpot, setJackpot] = useState(false);
-  const [mounted, setMounted] = useState(false);
+  const mounted = useIsClient();
   const opens = useRef(0);
   const clearTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
   const comboTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   useEffect(() => {
-    setMounted(true);
     try {
       const saved = Number(sessionStorage.getItem(STORAGE_KEY) || "0");
       if (Number.isFinite(saved) && saved > 0) {
         opens.current = saved;
-        setIsOpen(true);
+        // Defer so hydration does not cascade setState in the effect body.
+        queueMicrotask(() => setIsOpen(true));
       }
     } catch {
       /* ignore */

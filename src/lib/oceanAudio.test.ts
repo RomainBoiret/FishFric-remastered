@@ -152,13 +152,13 @@ function installAudioMock(options?: { throwOnStop?: boolean }) {
     AudioContext,
   } as unknown as Window & typeof globalThis;
 
-  g.AudioContext = AudioContext;
-  delete g.webkitAudioContext;
+  (g as { AudioContext?: unknown }).AudioContext = AudioContext;
+  delete (g as { webkitAudioContext?: unknown }).webkitAudioContext;
 
   return {
     storage,
     listeners,
-    AudioContext,
+    AudioContext: AudioContext as unknown as new () => AudioContext,
     dispatch(type: string) {
       for (const fn of listeners.get(type) ?? []) {
         (fn as () => void)();
@@ -342,7 +342,6 @@ describe("oceanAudio", () => {
   it("no-ops audio helpers when window is missing", async () => {
     const g = globalThis as { window?: unknown };
     const prev = g.window;
-    // @ts-expect-error intentional SSR probe
     delete g.window;
     const ssr = new OceanAudioEngine();
     ssr.hydrate();

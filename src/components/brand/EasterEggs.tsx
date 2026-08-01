@@ -13,6 +13,7 @@ import {
 import { createPortal } from "react-dom";
 import Link from "next/link";
 import { oceanAudio } from "@/lib/oceanAudio";
+import { useIsClient } from "@/lib/use-is-client";
 
 const KONAMI = [
   "ArrowUp",
@@ -147,19 +148,16 @@ function LocalSparks({ sparks }: { sparks: EggSpark[] }) {
 export function EasterEggsHost() {
   const konamiIdx = useRef(0);
   const typed = useRef("");
-  const [mounted, setMounted] = useState(false);
+  const mounted = useIsClient();
   const [gems, setGems] = useState<RainGem[] | null>(null);
   const [stage, setStage] = useState<HTMLElement | null>(null);
   const clearTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   useEffect(() => {
-    setMounted(true);
-    // eslint-disable-next-line no-console
     console.log(
       "%c><(((º>  Fish&Fric  <º)))><",
       "color:#e0aa2c;font-weight:bold;font-size:14px;",
     );
-    // eslint-disable-next-line no-console
     console.log(
       "%cPsst - try the chest, the plane, the boat, a starfish… or type reef. Flip the speaker icon for ocean sounds.",
       "color:#5ec8e8;",

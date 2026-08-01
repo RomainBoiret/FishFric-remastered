@@ -1,16 +1,16 @@
 "use client";
 
-import { useEffect, useState } from "react";
 import { oceanAudio } from "@/lib/oceanAudio";
+import { useIsClient } from "@/lib/use-is-client";
+import { useEffect, useState } from "react";
 
 /** Header control: ocean ambience + SFX off by default. */
 export function SoundToggle({ className = "" }: { className?: string }) {
   const [enabled, setEnabled] = useState(false);
-  const [mounted, setMounted] = useState(false);
+  const mounted = useIsClient();
 
   useEffect(() => {
     oceanAudio.hydrate();
-    setMounted(true);
     return oceanAudio.subscribe(setEnabled);
   }, []);
 

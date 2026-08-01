@@ -169,10 +169,6 @@ export function MobileDepositForm({
   }, [issueState]);
 
   useEffect(() => {
-    if (pending) setHideSubmitError(false);
-  }, [pending]);
-
-  useEffect(() => {
     return () => {
       if (uploadPreview) URL.revokeObjectURL(uploadPreview);
     };
@@ -204,6 +200,7 @@ export function MobileDepositForm({
   return (
     <form
       action={formAction}
+      onSubmit={() => setHideSubmitError(false)}
       className="flex w-full flex-col gap-4"
       aria-busy={busy}
     >

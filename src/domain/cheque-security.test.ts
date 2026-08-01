@@ -192,9 +192,9 @@ describe("verifyChequeSignature edges", () => {
     };
     const signature = signChequePayload(payload, secret);
     const original = Buffer.from.bind(Buffer);
-    mock.method(Buffer, "from", (...args: Parameters<typeof Buffer.from>) => {
+    mock.method(Buffer, "from", (...args: unknown[]) => {
       if (args[1] === "utf8") throw new Error("compare failed");
-      return original(...args);
+      return original(...(args as Parameters<typeof Buffer.from>));
     });
     try {
       assert.equal(verifyChequeSignature(payload, signature, secret), false);
