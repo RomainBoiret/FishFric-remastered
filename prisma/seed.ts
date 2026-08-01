@@ -2,6 +2,9 @@
  * Recruiter demo seed.
  * Demo:   demo@fishfric.app / Demo-FishFric-2026!
  * Friend: ami@fishfric.app / Demo-FishFric-2026!
+ *
+ * Invariant: BankAccount.balanceCents === Σ LedgerEntry.amountCents
+ * (same rule as `npm run db:verify-ledger`).
  */
 import "dotenv/config";
 import bcrypt from "bcryptjs";
@@ -38,6 +41,7 @@ async function wipeUserBanking(userId: string) {
     where: { account: { userId } },
   });
   await prisma.mobileDeposit.deleteMany({ where: { userId } });
+  await prisma.chequeInstrument.deleteMany({ where: { payeeUserId: userId } });
   await prisma.p2PTransfer.deleteMany({
     where: {
       OR: [{ senderUserId: userId }, { recipientUserId: userId }],
@@ -45,6 +49,20 @@ async function wipeUserBanking(userId: string) {
   });
   await prisma.notification.deleteMany({ where: { userId } });
   await prisma.bankAccount.deleteMany({ where: { userId } });
+}
+
+/** Sync the denormalized cache from the ledger (source of truth). */
+async function syncBalanceFromLedger(accountId: string) {
+  const entries = await prisma.ledgerEntry.findMany({
+    where: { accountId },
+    select: { amountCents: true },
+  });
+  const balanceCents = entries.reduce((sum, row) => sum + row.amountCents, 0);
+  await prisma.bankAccount.update({
+    where: { id: accountId },
+    data: { balanceCents },
+  });
+  return balanceCents;
 }
 
 async function main() {
@@ -80,7 +98,7 @@ async function main() {
       userId: demo.id,
       type: "CHECKING",
       label: "Checking account",
-      balanceCents: 245_000,
+      balanceCents: 0,
       interestBps: ACCOUNT_RULES.interestBps.CHECKING,
     },
   });
@@ -90,17 +108,17 @@ async function main() {
       userId: demo.id,
       type: "SAVINGS",
       label: "Reef savings",
-      balanceCents: 812_000,
+      balanceCents: 0,
       interestBps: ACCOUNT_RULES.interestBps.SAVINGS,
     },
   });
 
-  await prisma.bankAccount.create({
+  const credit = await prisma.bankAccount.create({
     data: {
       userId: demo.id,
       type: "CREDIT",
       label: "Shark Card",
-      balanceCents: -34_000,
+      balanceCents: 0,
       creditLimitCents: ACCOUNT_RULES.defaultCreditLimitCents,
       interestBps: ACCOUNT_RULES.interestBps.CREDIT,
     },
@@ -111,7 +129,7 @@ async function main() {
       userId: friend.id,
       type: "CHECKING",
       label: "Checking account",
-      balanceCents: 150_000,
+      balanceCents: 0,
       interestBps: ACCOUNT_RULES.interestBps.CHECKING,
     },
   });
@@ -119,14 +137,39 @@ async function main() {
   const now = Date.now();
   const daysAgo = (d: number) => new Date(now - d * 24 * 60 * 60 * 1000);
 
+  /**
+   * Sample history chosen so final balances stay recruiter-friendly:
+   * checking $2,450 · savings $8,120 · Shark Card -$340 · friend $1,460 (after pending P2P).
+   */
   await prisma.ledgerEntry.createMany({
     data: [
       {
         accountId: checking.id,
-        amountCents: 320_000,
+        amountCents: 337_500,
         kind: "ADJUSTMENT",
-        description: "Payroll - Ocean Corp",
-        createdAt: daysAgo(12),
+        description: "Opening deposit - Ocean Corp",
+        createdAt: daysAgo(20),
+      },
+      {
+        accountId: savings.id,
+        amountCents: 730_000,
+        kind: "ADJUSTMENT",
+        description: "Opening transfer into Reef savings",
+        createdAt: daysAgo(20),
+      },
+      {
+        accountId: credit.id,
+        amountCents: -34_000,
+        kind: "ADJUSTMENT",
+        description: "Shark Card purchase - dive gear",
+        createdAt: daysAgo(15),
+      },
+      {
+        accountId: friendChecking.id,
+        amountCents: 150_000,
+        kind: "ADJUSTMENT",
+        description: "Opening deposit",
+        createdAt: daysAgo(18),
       },
       {
         accountId: checking.id,
@@ -188,10 +231,12 @@ async function main() {
     },
   });
 
-  await prisma.bankAccount.update({
-    where: { id: friendChecking.id },
-    data: { balanceCents: 150_000 - pendingAmount },
-  });
+  const [checkingBal, savingsBal, creditBal, friendBal] = await Promise.all([
+    syncBalanceFromLedger(checking.id),
+    syncBalanceFromLedger(savings.id),
+    syncBalanceFromLedger(credit.id),
+    syncBalanceFromLedger(friendChecking.id),
+  ]);
 
   await prisma.notification.create({
     data: {
@@ -202,10 +247,13 @@ async function main() {
     },
   });
 
-  console.log("Seed OK");
+  console.log("Seed OK (ledger-balanced)");
   console.log(`  Demo:   ${DEMO_CREDENTIALS.email} / ${DEMO_CREDENTIALS.password}`);
   console.log(`  Friend: ${FRIEND_CREDENTIALS.email} / ${FRIEND_CREDENTIALS.password}`);
   console.log("  Pending P2P → demo, answer: shark");
+  console.log(
+    `  Balances: checking=${checkingBal} savings=${savingsBal} credit=${creditBal} friend=${friendBal}`,
+  );
 }
 
 main()
