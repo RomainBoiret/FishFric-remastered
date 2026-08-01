@@ -82,6 +82,14 @@ The verify script exits non-zero if any cached balance drifts from the ledger su
    - Or locally: `npm run db:migrate:deploy` with production `DATABASE_URL` / `DIRECT_URL`
 5. Seed production once: `npm run db:seed` (with `DATABASE_URL` pointing at Neon)
 
+### Demo reef reset
+
+Shared demo accounts can drift as visitors explore. Three ways to restore them:
+
+1. **In-app** - signed in as the demo user, use **Reset demo reef** on `/app`
+2. **Cron** - `vercel.json` hits `POST /api/demo/reset` daily (12:00 UTC). Set `CRON_SECRET` on Vercel (Hobby/Pro cron support required)
+3. **CLI** - `npm run db:seed`
+
 Add repository secrets `DATABASE_URL` and `DIRECT_URL` so the migrate workflow can reach Neon.
 
 > Preview deployments share the build command but **must not** migrate a shared production database. Keep migrations on `main` / manual deploy only. If the migrate job fails with `P1002`, confirm `DIRECT_URL` has no `-pooler` host.

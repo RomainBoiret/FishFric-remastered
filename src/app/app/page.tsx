@@ -5,6 +5,7 @@ import { AppHeader, AppShell } from "@/components/brand/AppShell";
 import { ACCOUNT_TYPE_LABELS } from "@/domain/labels";
 import { formatMoney } from "@/domain/money";
 import { NotificationBell } from "@/features/notifications/NotificationBell";
+import { ResetDemoButton } from "@/features/demo/ResetDemoButton";
 import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/db";
 
@@ -45,6 +46,11 @@ export default async function AppHubPage() {
               ? " Demo waters - sample balances for visitors."
               : null}
           </p>
+          {session.user.isDemo ? (
+            <div className="pt-1">
+              <ResetDemoButton />
+            </div>
+          ) : null}
         </div>
 
         <nav aria-label="Quick actions" className="ff-in ff-in-1 space-y-2">
