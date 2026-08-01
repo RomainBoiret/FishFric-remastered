@@ -163,6 +163,22 @@ This is a **portfolio banking demo**, not a real bank.
 
 Not in scope: KYC, real payment rails, fraud ops, SOC2, rate-limit mesh, DB-enforced ledger immutability.
 
+## Repository security (GitHub)
+
+Local application controls are listed above. Repository governance lives in GitHub settings (branch ruleset, Actions permissions, secret scanning) — see `SECURITY.md` for vulnerability reporting.
+
+Committed helpers:
+
+| Path | Role |
+|------|------|
+| `.github/workflows/ci.yml` | Required PR checks (lint, typecheck, unit, Postgres integration, Playwright) |
+| `.github/workflows/codeql.yml` | CodeQL analysis (JavaScript/TypeScript) |
+| `.github/workflows/migrate-production.yml` | Prod migrations on `main` only (`environment: production`) |
+| `.github/workflows/lighthouse.yml` | Public-route Lighthouse (not a merge blocker) |
+| `.github/dependabot.yml` | Weekly npm + Actions updates |
+| `.github/CODEOWNERS` | Ownership metadata (approval **not** required while solo) |
+| `SECURITY.md` | How to report vulnerabilities privately |
+
 ## Known limitations
 
 - **Shared demo reef** — visitors share `demo@` / `ami@`; reset (button / cron / seed) restores sample state

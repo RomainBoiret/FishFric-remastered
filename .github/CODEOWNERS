@@ -1,0 +1,4 @@
+# Default owner for this solo portfolio repository.
+# Do NOT enable "Require review from Code Owners" while working alone —
+# that would block every PR including your own.
+* @RomainBoiret

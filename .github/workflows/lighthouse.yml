@@ -4,6 +4,7 @@ on:
   push:
     branches: [main]
   pull_request:
+    branches: [main]
   schedule:
     - cron: "40 4 * * 1"
   workflow_dispatch:
@@ -23,6 +24,7 @@ jobs:
   lighthouse:
     name: Lighthouse audit
     runs-on: ubuntu-latest
+    timeout-minutes: 20
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -32,7 +34,8 @@ jobs:
       - name: Wait for Vercel preview
         if: github.event_name == 'pull_request'
         id: preview
-        uses: patrickedqvist/wait-for-vercel-preview@v1.3.3
+        # patrickedqvist/wait-for-vercel-preview@v1.3.3
+        uses: patrickedqvist/wait-for-vercel-preview@d7982701e6fcd3ae073bff929e408e004404d38d
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           max_timeout: 300
@@ -49,7 +52,8 @@ jobs:
       # Only public, unauthenticated routes: everything under /app requires a session.
       - name: Audit with Lighthouse
         id: lhci
-        uses: treosh/lighthouse-ci-action@v12
+        # treosh/lighthouse-ci-action@v12
+        uses: treosh/lighthouse-ci-action@3e7e23fb74242897f95c0ba9cabad3d0227b9b18
         with:
           urls: |
             ${{ steps.target.outputs.url }}/

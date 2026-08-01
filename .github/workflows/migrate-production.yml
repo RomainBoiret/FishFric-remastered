@@ -1,11 +1,12 @@
 name: Migrate production
 
 # Applies Prisma migrations to the production database.
-# Does not run on pull requests (previews must not mutate prod schema).
+# Never runs on pull_request (previews must not mutate prod schema).
 #
-# Required repository secrets:
+# Prefer GitHub Environment secrets (production):
 #   DATABASE_URL  — Neon pooled or direct URL
 #   DIRECT_URL    — Neon direct URL (no `-pooler`) preferred for migrate
+# Fallback: repository secrets with the same names.
 
 on:
   workflow_dispatch:
@@ -27,8 +28,11 @@ permissions:
 jobs:
   migrate:
     name: prisma migrate deploy
+    # Block dispatch from non-main refs; push trigger is already main-only.
+    if: github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
     timeout-minutes: 15
+    environment: production
     steps:
       - name: Checkout
         uses: actions/checkout@v4
