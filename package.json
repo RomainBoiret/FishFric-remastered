@@ -16,6 +16,7 @@
     "db:studio": "prisma studio",
     "db:verify-ledger": "tsx scripts/verify-ledger.ts",
     "test": "tsx --test \"src/domain/**/*.test.ts\" \"src/lib/**/*.test.ts\"",
+    "test:integration": "tsx --test \"src/test/integration/**/*.integration.test.ts\"",
     "test:coverage": "c8 --reporter=text --include=\"src/domain/**/*.ts\" --include=\"src/lib/oceanAudio.ts\" --exclude=\"**/*.test.ts\" --check-coverage --lines 100 --statements 100 tsx --test \"src/domain/**/*.test.ts\" \"src/lib/**/*.test.ts\""
   },
   "dependencies": {

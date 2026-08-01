@@ -60,8 +60,13 @@ One-click demo from the landing page logs in as the Demo account.
 `BankAccount.balanceCents` is a denormalized cache. The source of truth is the immutable `LedgerEntry` stream (amounts in cents, signed).
 
 ```bash
-# Pure domain tests (no database)
+# Pure domain / lib unit tests (no database)
 npm test
+
+# Integration tests against Postgres (requires TEST_DATABASE_URL + migrations)
+# Example: TEST_DATABASE_URL=postgresql://fishfric:fishfric@localhost:5432/fishfric_test
+npm run db:migrate:deploy
+npm run test:integration
 
 # Reconcile every account against Σ LedgerEntry (needs DATABASE_URL)
 npm run db:verify-ledger
