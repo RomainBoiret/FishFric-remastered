@@ -76,10 +76,15 @@ The verify script exits non-zero if any cached balance drifts from the ledger su
    - `DATABASE_URL` - Neon **pooled** URL (host includes `-pooler`)
    - `DIRECT_URL` - Neon **direct** URL (same credentials, host **without** `-pooler`) - required for migrations
    - `AUTH_SECRET` - Auth.js secret
-3. Deploy - the build runs migrations (advisory lock disabled for Neon) then `next build`
-4. Seed production once: `npm run db:seed` (with `DATABASE_URL` pointing at Neon)
+3. Deploy - `npm run build` only generates the Prisma client and builds Next.js (**no migrations** during build)
+4. Apply schema changes to production separately:
+   - Preferred: GitHub Action [Migrate production](./.github/workflows/migrate-production.yml) (manual dispatch, or automatic when `prisma/` changes on `main`)
+   - Or locally: `npm run db:migrate:deploy` with production `DATABASE_URL` / `DIRECT_URL`
+5. Seed production once: `npm run db:seed` (with `DATABASE_URL` pointing at Neon)
 
-> If the build fails with `P1002`, check that `DIRECT_URL` has no `-pooler` host. `scripts/migrate-deploy.mjs` already disables Prisma advisory locking.
+Add repository secrets `DATABASE_URL` and `DIRECT_URL` so the migrate workflow can reach Neon.
+
+> Preview deployments share the build command but **must not** migrate a shared production database. Keep migrations on `main` / manual deploy only. If the migrate job fails with `P1002`, confirm `DIRECT_URL` has no `-pooler` host.
 
 ## Quality gate (Lighthouse)
 

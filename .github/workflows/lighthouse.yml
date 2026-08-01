@@ -28,7 +28,7 @@ jobs:
         uses: actions/checkout@v4
 
       # PRs are audited against their live Vercel preview deployment instead
-      # of a local build, since `next build` needs a seeded database.
+      # of a local `next build` (preview apps need a live URL + env).
       - name: Wait for Vercel preview
         if: github.event_name == 'pull_request'
         id: preview
