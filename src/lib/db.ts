@@ -53,10 +53,10 @@ function getPrismaClient(): PrismaClient {
   }
 
   const client = createPrismaClient();
-  if (process.env.NODE_ENV !== "production") {
-    globalForPrisma.prisma = client;
-    globalForPrisma.prismaRev = PRISMA_SCHEMA_REV;
-  }
+  // Always cache: without this, `next start` opens a new pg pool per
+  // Proxy access and exhausts Postgres (seen under Playwright).
+  globalForPrisma.prisma = client;
+  globalForPrisma.prismaRev = PRISMA_SCHEMA_REV;
   return client;
 }
 

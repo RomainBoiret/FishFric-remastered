@@ -70,6 +70,10 @@ npm run test:integration
 
 # Reconcile every account against Σ LedgerEntry (needs DATABASE_URL)
 npm run db:verify-ledger
+
+# Recruiter smoke E2E (Playwright) — needs a seeded DB + AUTH_SECRET
+# Prefer a dedicated local DB; CI uses Postgres service + migrate + seed + build
+npm run test:e2e
 ```
 
 The verify script exits non-zero if any cached balance drifts from the ledger sum.

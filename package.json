@@ -17,6 +17,7 @@
     "db:verify-ledger": "tsx scripts/verify-ledger.ts",
     "test": "tsx --test \"src/domain/**/*.test.ts\" \"src/lib/**/*.test.ts\"",
     "test:integration": "tsx --test \"src/test/integration/**/*.integration.test.ts\"",
+    "test:e2e": "playwright test",
     "test:coverage": "c8 --reporter=text --include=\"src/domain/**/*.ts\" --include=\"src/lib/oceanAudio.ts\" --exclude=\"**/*.test.ts\" --check-coverage --lines 100 --statements 100 tsx --test \"src/domain/**/*.test.ts\" \"src/lib/**/*.test.ts\""
   },
   "dependencies": {
@@ -34,6 +35,7 @@
   "devDependencies": {
     "@emnapi/core": "1.11.3",
     "@emnapi/runtime": "1.11.3",
+    "@playwright/test": "^1.62.1",
     "@tailwindcss/postcss": "^4",
     "@types/bcryptjs": "^2.4.6",
     "@types/node": "^20",
