@@ -1,9 +1,10 @@
 name: Lighthouse
 
+# Audits the public production URL only.
+# PR previews are skipped: Vercel Deployment Protection returns 401 to CI
+# without a Protection Bypass secret, and this job is not a merge blocker.
 on:
   push:
-    branches: [main]
-  pull_request:
     branches: [main]
   schedule:
     - cron: "40 4 * * 1"
@@ -15,7 +16,6 @@ concurrency:
 
 permissions:
   contents: read
-  deployments: read
 
 env:
   PRODUCTION_URL: https://fish-fric-remastered-8ag2.vercel.app
@@ -27,27 +27,7 @@ jobs:
     timeout-minutes: 20
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
-
-      # PRs are audited against their live Vercel preview deployment instead
-      # of a local `next build` (preview apps need a live URL + env).
-      - name: Wait for Vercel preview
-        if: github.event_name == 'pull_request'
-        id: preview
-        # patrickedqvist/wait-for-vercel-preview@v1.3.3
-        uses: patrickedqvist/wait-for-vercel-preview@d7982701e6fcd3ae073bff929e408e004404d38d
-        with:
-          token: ${{ secrets.GITHUB_TOKEN }}
-          max_timeout: 300
-
-      - name: Resolve target URL
-        id: target
-        run: |
-          if [ "${{ github.event_name }}" = "pull_request" ]; then
-            echo "url=${{ steps.preview.outputs.url }}" >> "$GITHUB_OUTPUT"
-          else
-            echo "url=${{ env.PRODUCTION_URL }}" >> "$GITHUB_OUTPUT"
-          fi
+        uses: actions/checkout@v7
 
       # Only public, unauthenticated routes: everything under /app requires a session.
       - name: Audit with Lighthouse
@@ -56,17 +36,17 @@ jobs:
         uses: treosh/lighthouse-ci-action@3e7e23fb74242897f95c0ba9cabad3d0227b9b18
         with:
           urls: |
-            ${{ steps.target.outputs.url }}/
-            ${{ steps.target.outputs.url }}/login
-            ${{ steps.target.outputs.url }}/signup
-            ${{ steps.target.outputs.url }}/docs
+            ${{ env.PRODUCTION_URL }}/
+            ${{ env.PRODUCTION_URL }}/login
+            ${{ env.PRODUCTION_URL }}/signup
+            ${{ env.PRODUCTION_URL }}/docs
           configPath: ./.lighthouserc.json
           uploadArtifacts: true
           temporaryPublicStorage: true
 
       - name: Publish summary
         if: always()
-        uses: actions/github-script@v7
+        uses: actions/github-script@v9
         env:
           LHCI_MANIFEST: ${{ steps.lhci.outputs.manifest }}
         with:

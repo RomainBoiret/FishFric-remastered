@@ -189,7 +189,11 @@ Committed helpers:
 
 ## Quality gate (Lighthouse)
 
-`.github/workflows/lighthouse.yml` audits public routes with [Lighthouse CI](https://github.com/GoogleChrome/lighthouse-ci). Thresholds live in [`.lighthouserc.json`](./.lighthouserc.json).
+`.github/workflows/lighthouse.yml` audits **production** public routes (`/`, `/login`, `/signup`, `/docs`) on pushes to `main`, weekly, or manual dispatch.
+
+It does **not** run on pull requests: Vercel preview Deployment Protection returns `401` to CI without a Protection Bypass secret. Lighthouse is informative, not a required merge check.
+
+To audit previews later: Vercel → Deployment Protection → Protection Bypass for Automation, then wire `x-vercel-protection-bypass` into LHCI.
 
 ## Project layout
 
