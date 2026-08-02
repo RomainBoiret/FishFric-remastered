@@ -1,5 +1,8 @@
-# Dependabot — weekly grouped updates (low noise for a solo portfolio repo).
+# Dependabot — weekly updates, low noise for a solo portfolio repo.
 # Docs: https://docs.github.com/en/code-security/dependabot
+#
+# Create these labels once in the repo (Issues → Labels), or Dependabot will warn:
+#   dependencies, npm, github-actions
 
 version: 2
 
@@ -15,10 +18,36 @@ updates:
     labels:
       - dependencies
       - npm
+    # Group only non-breaking bumps so majors are never bulk-merged.
     groups:
-      npm-dependencies:
+      npm-patch-and-minor:
         patterns:
           - "*"
+        update-types:
+          - "minor"
+          - "patch"
+    # Keep framework / toolchain majors manual (review + dedicated PR).
+    ignore:
+      - dependency-name: "typescript"
+        update-types: ["version-update:semver-major"]
+      - dependency-name: "eslint"
+        update-types: ["version-update:semver-major"]
+      - dependency-name: "eslint-config-next"
+        update-types: ["version-update:semver-major"]
+      - dependency-name: "@types/node"
+        update-types: ["version-update:semver-major"]
+      - dependency-name: "next"
+        update-types: ["version-update:semver-major"]
+      - dependency-name: "react"
+        update-types: ["version-update:semver-major"]
+      - dependency-name: "react-dom"
+        update-types: ["version-update:semver-major"]
+      - dependency-name: "prisma"
+        update-types: ["version-update:semver-major"]
+      - dependency-name: "@prisma/client"
+        update-types: ["version-update:semver-major"]
+      - dependency-name: "@prisma/adapter-pg"
+        update-types: ["version-update:semver-major"]
 
   - package-ecosystem: github-actions
     directory: /
@@ -35,3 +64,6 @@ updates:
       github-actions:
         patterns:
           - "*"
+        update-types:
+          - "minor"
+          - "patch"
