@@ -3,7 +3,7 @@
 [![CI](https://github.com/RomainBoiret/FishFric-remastered/actions/workflows/ci.yml/badge.svg)](https://github.com/RomainBoiret/FishFric-remastered/actions/workflows/ci.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](./LICENSE)
 
-**Live demo:** [fish-fric-remastered-8ag2.vercel.app](https://fish-fric-remastered-8ag2.vercel.app) · in-app story at [`/docs`](https://fish-fric-remastered-8ag2.vercel.app/docs)
+**Live demo:** [https://fish-fric-remastered-psi.vercel.app/](https://fish-fric-remastered-psi.vercel.app/) · in-app story at [`/docs`](https://fish-fric-remastered-psi.vercel.app/docs)
 
 Full-stack remaster of **Fish&Fric**, an ocean-themed online banking demo for recruiters: accounts, transfers, P2P, bill pay, and **HMAC-signed cheque deposits** on a cent-based ledger.
 
@@ -19,7 +19,7 @@ Full-stack remaster of **Fish&Fric**, an ocean-themed online banking demo for re
 
 ## Try it in 60 seconds
 
-1. Open the [live demo](https://fish-fric-remastered-8ag2.vercel.app)
+1. Open the [live demo](https://fish-fric-remastered-psi.vercel.app)
 2. Click **Try the demo** (or use the credentials below)
 3. Transfer between accounts, accept the pending bottle drop (answer: `shark`), then try the signed cheque flow on **Deposit a cheque**
 4. If the reef looks messy, use **Reset demo reef** on `/app` (demo user only)
@@ -211,7 +211,7 @@ src/
 
 ## Links
 
-- Live demo: https://fish-fric-remastered-8ag2.vercel.app
+- Live demo: https://fish-fric-remastered-psi.vercel.app
 - Remaster (this repo): https://github.com/RomainBoiret/FishFric-remastered
 - Original team project: https://github.com/RomainBoiret/FishFric-Bank
 
