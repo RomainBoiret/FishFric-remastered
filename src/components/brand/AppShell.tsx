@@ -37,7 +37,7 @@ export function AppHeader() {
         </EggBrandLink>
         <nav
           aria-label="Account"
-          className="flex shrink-0 flex-wrap items-center justify-end gap-1.5 sm:gap-2"
+          className="flex shrink-0 items-center justify-end gap-1 sm:gap-2"
         >
           <SoundToggle />
           <Link href="/docs" className="ff-nav-link">

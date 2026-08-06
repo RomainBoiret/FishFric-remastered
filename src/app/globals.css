@@ -21,6 +21,13 @@
   --foreground: var(--ff-ink);
 }
 
+/* Phone: sky tall enough for brand + CTAs; boat parks to the side */
+@media (max-width: 767px) {
+  :root {
+    --ff-waterline: clamp(22rem, 58svh, 28rem);
+  }
+}
+
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
@@ -2049,10 +2056,42 @@ body.ff-egg-word-coral {
   animation: ff-bob 3.2s ease-in-out infinite;
 }
 
-/* Room for centered boat under copy on small screens */
+/* Room for side boat under copy on small screens + usable tap targets */
 @media (max-width: 767px) {
   .ff-hero-sky {
-    padding-bottom: clamp(6rem, 32vw, 9rem);
+    /* Room under sky copy for the hull; CTAs sit below the waterline */
+    padding-bottom: clamp(4.5rem, 22vw, 7rem);
+    padding-top: 1.5rem;
+  }
+
+  .ff-btn-icon {
+    width: 2.75rem;
+    height: 2.75rem;
+    min-width: 2.75rem;
+  }
+
+  .ff-sound-toggle {
+    width: 2.75rem;
+    height: 2.75rem;
+  }
+
+  .ff-nav-link {
+    min-height: 2.5rem;
+    padding: 0.5rem 0.4rem;
+    font-size: 0.75rem;
+    display: inline-flex;
+    align-items: center;
+  }
+
+  .ff-btn-sm {
+    font-size: 0.7rem;
+    letter-spacing: 0.04em;
+    padding: 0.6rem 0.85rem;
+    min-height: 2.5rem;
+  }
+
+  .ff-nav .ff-btn-sm {
+    padding: 0.6rem 0.8rem;
   }
 }
 .ff-cloud-layer {
@@ -2350,11 +2389,12 @@ body.ff-egg-word-coral {
 
 @media (max-width: 767px) {
   .ff-boat-anchor {
-    right: auto;
-    left: 50%;
-    width: min(68vw, 16rem);
+    /* Same waterline seating as desktop (-88%); smaller, right column */
+    right: max(0.75rem, calc((100vw - 64rem) / 2 + 0.75rem));
+    left: auto;
+    width: min(46vw, 12.5rem);
     max-width: calc(100vw - 2rem);
-    transform: translate3d(-50%, -88%, 0);
+    transform: translate3d(0, -88%, 0);
   }
 }
 
@@ -2470,9 +2510,9 @@ body.ff-egg-word-coral {
 
 @media (max-width: 767px) {
   .ff-boat-crane {
-    left: 0;
-    width: 48%;
-    max-width: 6rem;
+    left: 2%;
+    width: 52%;
+    max-width: 5.5rem;
   }
 }
 
