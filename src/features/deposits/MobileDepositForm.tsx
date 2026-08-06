@@ -397,7 +397,14 @@ export function MobileDepositForm({
                 noteFormEdit();
                 const file = event.target.files?.[0];
                 if (uploadPreview) URL.revokeObjectURL(uploadPreview);
-                setUploadPreview(file ? URL.createObjectURL(file) : null);
+                const isPreviewableRaster =
+                  !!file &&
+                  (file.type === "image/jpeg" ||
+                    file.type === "image/png" ||
+                    file.type === "image/webp");
+                setUploadPreview(
+                  isPreviewableRaster ? URL.createObjectURL(file) : null,
+                );
                 setUploadFaceCents(null);
                 setUploadChequeId(null);
 
