@@ -129,10 +129,10 @@ export default async function Home() {
               Boat itself is decorative in Atmosphere, aligned to the waterline.
             */}
             <div
-              className="ff-hero-sky ff-in relative z-[6] grid items-center gap-4 pb-8 pt-14 md:grid-cols-[minmax(0,1fr)_minmax(12rem,34%)] md:gap-10 md:pb-10 md:pt-16"
+              className="ff-hero-sky ff-in relative z-[6] grid grid-cols-[minmax(0,1fr)_minmax(5.75rem,34%)] items-start gap-3 pb-8 pt-14 md:items-center md:gap-10 md:pb-10 md:pt-16"
               style={{ minHeight: "calc(var(--ff-waterline) - 4rem)" }}
             >
-              <div className="ff-px-title flex max-w-xl flex-col justify-center gap-4">
+              <div className="ff-px-title relative z-[16] flex max-w-xl flex-col justify-center gap-3 sm:gap-4">
                 <p className="ff-display text-xs uppercase tracking-widest text-[var(--ff-gold)]">
                   Ocean bank · remastered by {SITE_AUTHOR}
                 </p>
@@ -143,14 +143,15 @@ export default async function Home() {
                 >
                   {SITE_NAME}
                 </h1>
-                <p className="ff-docs-lead [text-shadow:0_1px_2px_rgba(15,48,68,0.5)]">
+                <p className="max-w-prose text-base leading-relaxed text-[#eef6f9] [text-shadow:0_1px_2px_rgba(15,48,68,0.5)] sm:text-lg">
                   An ocean-pixel online bank you can click through - real ledger,
                   signed cheque deposits, P2P, and bill pay. Remastered from an
                   ÉTS team project with the same spirit and a new stack.
                 </p>
+                {/* Desktop: story / repo sit with the sky copy */}
                 <nav
                   aria-label="Home links"
-                  className="flex flex-wrap gap-x-1 gap-y-2 pt-1 text-base font-bold"
+                  className="relative hidden flex-wrap gap-x-1 gap-y-2 pt-1 text-sm font-bold [text-shadow:0_1px_2px_rgba(15,48,68,0.55)] sm:text-base md:flex"
                 >
                   <Link
                     href="/docs"
@@ -172,17 +173,48 @@ export default async function Home() {
                 </nav>
               </div>
 
-              {/* Desktop: reserves right column so copy never sits under the boat */}
+              {/* Reserves right column so copy never sits under the boat */}
               <div
-                className="pointer-events-none relative hidden md:block"
+                className="pointer-events-none relative min-h-[1px]"
                 aria-hidden
               />
             </div>
 
-            {/* Underwater: feature cards */}
-            <div className="flex flex-1 flex-col gap-6 pb-12 pt-14 sm:gap-8 sm:pb-14 sm:pt-16">
+            {/* Mobile: CTAs just under the waterline so the boat stays clear */}
+            <div className="relative z-[16] flex flex-col gap-3 pb-2 pt-3 md:hidden">
+              <DemoButton className="ff-btn w-full" label="Try the demo" />
+              <Link href="/signup" className="ff-btn ff-btn-stone w-full">
+                Create an account
+                <span aria-hidden="true"> ›</span>
+              </Link>
+              <nav
+                aria-label="Home links"
+                className="flex flex-wrap gap-x-1 gap-y-2 pt-1 text-sm font-bold"
+              >
+                <Link
+                  href="/docs"
+                  className="text-[var(--ff-gold)] hover:text-[var(--ff-gold-hi)]"
+                >
+                  Read the story
+                </Link>
+                <span className="mx-2 text-white/40" aria-hidden>
+                  ·
+                </span>
+                <a
+                  href={SITE_GITHUB_ORIGINAL}
+                  className="text-white hover:text-[var(--ff-gold-hi)]"
+                  rel="noopener noreferrer"
+                  target="_blank"
+                >
+                  Original team repo
+                </a>
+              </nav>
+            </div>
+
+            {/* Underwater: feature cards (primary CTAs also live here on desktop) */}
+            <div className="flex flex-1 flex-col gap-6 pb-12 pt-8 sm:gap-8 sm:pb-14 sm:pt-16 md:pt-10">
               <div className="grid items-stretch gap-5 lg:grid-cols-[minmax(0,22rem)_1fr]">
-                <div className="ff-in ff-in-1 ff-surface ff-surface-step ff-surface-accent w-full space-y-4 p-5 sm:p-6">
+                <div className="ff-in ff-in-1 ff-surface ff-surface-step ff-surface-accent hidden w-full space-y-4 p-5 sm:p-6 md:block">
                   <h2 className="ff-display text-xl text-white sm:text-2xl">
                     Start exploring
                   </h2>
@@ -199,7 +231,7 @@ export default async function Home() {
                   </div>
                 </div>
 
-                <ul className="ff-in ff-in-2 m-0 grid list-none grid-cols-1 gap-3 p-0 sm:grid-cols-3">
+                <ul className="ff-in ff-in-2 m-0 grid list-none grid-cols-1 gap-3 p-0 md:grid-cols-3">
                   {HERO_FEATURES.map((item, index) => (
                     <li
                       key={`hero-${item.title}`}
@@ -215,11 +247,11 @@ export default async function Home() {
                         <h3 className="ff-display text-base text-white">
                           {item.title}
                         </h3>
-                        <p className="text-[10px] font-bold uppercase tracking-wide text-[var(--ff-gold)]">
+                        <p className="text-xs font-bold uppercase tracking-wide text-[var(--ff-gold)]">
                           {item.subtitle}
                         </p>
                       </div>
-                      <p className="text-xs leading-relaxed text-[var(--ff-muted)] sm:text-sm">
+                      <p className="text-sm leading-relaxed text-[var(--ff-muted)]">
                         {item.body}
                       </p>
                     </li>

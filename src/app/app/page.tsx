@@ -55,20 +55,20 @@ export default async function AppHubPage() {
 
         <nav aria-label="Quick actions" className="ff-in ff-in-1 space-y-2">
           <div className="grid gap-2 sm:grid-cols-2 lg:grid-cols-3">
-            <Link href="/app/transfer" className="ff-btn ff-btn-sm w-full">
+            <Link href="/app/transfer" className="ff-btn w-full">
               Between accounts
               <span aria-hidden="true"> ›</span>
             </Link>
             <Link
               href="/app/p2p"
-              className="ff-btn ff-btn-sm ff-btn-prismarine w-full"
+              className="ff-btn ff-btn-prismarine w-full"
             >
               Send to a friend
               <span aria-hidden="true"> ›</span>
             </Link>
             <Link
               href="/app/bills"
-              className="ff-btn ff-btn-sm ff-btn-stone w-full sm:col-span-2 lg:col-span-1"
+              className="ff-btn ff-btn-stone w-full sm:col-span-2 lg:col-span-1"
             >
               Pay bills
               <span aria-hidden="true"> ›</span>
@@ -77,14 +77,14 @@ export default async function AppHubPage() {
           <div className="grid gap-2 sm:grid-cols-2">
             <Link
               href="/app/deposit"
-              className="ff-btn ff-btn-sm ff-btn-danger w-full"
+              className="ff-btn ff-btn-danger w-full"
             >
               Deposit a cheque
               <span aria-hidden="true"> ›</span>
             </Link>
             <Link
               href="/app/accounts/open"
-              className="ff-btn ff-btn-sm ff-btn-sand w-full"
+              className="ff-btn ff-btn-sand w-full"
             >
               Open an account
               <span aria-hidden="true"> ›</span>
