@@ -16,7 +16,7 @@ export async function SiteHeader({ current = "home" }: SiteHeaderProps) {
 
   return (
     <header className="ff-nav ff-nav-sky relative z-20">
-      <div className="mx-auto flex w-full max-w-5xl items-center justify-between gap-2 px-4 py-3 sm:gap-4 sm:px-6">
+      <div className="mx-auto flex w-full max-w-5xl items-center justify-between gap-1.5 px-3 py-3.5 sm:gap-4 sm:px-6 sm:py-3">
         <EggBrandLink
           href={signedIn ? "/app" : "/"}
           className="ff-brand inline-flex min-w-0 items-center gap-2 text-sm sm:text-base"
@@ -29,7 +29,7 @@ export async function SiteHeader({ current = "home" }: SiteHeaderProps) {
           <span className="truncate">{SITE_NAME}</span>
         </EggBrandLink>
         <nav aria-label="Primary">
-          <ul className="m-0 flex list-none flex-wrap items-center justify-end gap-1.5 p-0 sm:gap-2">
+          <ul className="m-0 flex list-none items-center justify-end gap-0.5 p-0 sm:gap-2">
             <li>
               <SoundToggle />
             </li>

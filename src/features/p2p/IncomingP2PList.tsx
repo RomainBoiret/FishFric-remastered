@@ -87,7 +87,7 @@ function RejectForm({
       <button
         type="submit"
         disabled={pending}
-        className="text-sm text-[var(--ff-muted)] underline underline-offset-4 hover:text-[var(--ff-danger)] disabled:opacity-60"
+        className="ff-btn ff-btn-sm ff-btn-ghost mt-1 min-h-11 px-3 text-[var(--ff-muted)] hover:text-[var(--ff-danger)]"
         aria-busy={pending}
       >
         {pending ? "Declining…" : "Decline"}
