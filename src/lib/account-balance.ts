@@ -39,7 +39,7 @@ export async function applyBalanceDelta(
   }
 }
 
-/** Claim a pending mobile deposit for credit (one winner under concurrency). */
+/** Claim a pending cheque deposit for credit (one winner under concurrency). */
 export async function claimPendingDeposit(
   tx: Tx,
   input: { depositId: string; userId: string },

@@ -172,7 +172,7 @@ export function DepositHistoryList({
                 buildDemoChequeSvg({
                   amountCents: previewCents,
                   payeeName,
-                  memo: "Mobile deposit - fictional",
+                  memo: "Cheque deposit · fictional",
                 }),
               )
             : null;

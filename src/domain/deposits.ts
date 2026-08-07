@@ -41,7 +41,7 @@ export function validateMobileDeposit(input: {
   if (!canDepositTo(account.type)) {
     return {
       ok: false,
-      reason: "Mobile deposits go to checking or savings only.",
+      reason: "Cheque deposits go to checking or savings only.",
     };
   }
 

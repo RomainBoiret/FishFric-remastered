@@ -4,7 +4,7 @@ import { DEPOSIT_HISTORY_RULES } from "@/domain/deposits";
 type DbClient = PrismaClient | Prisma.TransactionClient;
 
 /**
- * Drop oldest mobile-deposit history rows beyond the per-user cap.
+ * Drop oldest cheque-deposit history rows beyond the per-user cap.
  * Ledger credits are never reversed - history rows only.
  */
 export async function pruneUserMobileDeposits(
