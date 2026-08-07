@@ -192,7 +192,7 @@ export async function issueDemoChequeAction(
   const svg = buildDemoChequeSvg({
     amountCents,
     payeeName,
-    memo: "Mobile deposit - fictional",
+    memo: "Cheque deposit · fictional",
     chequeId,
     payeeUserId,
     signature,
@@ -402,7 +402,7 @@ export async function submitMobileDepositAction(
 
       await createUserNotification(tx, {
         userId,
-        title: "Mobile deposit pending",
+        title: "Cheque deposit pending",
         body: `${formatMoney(amountCents)} is under review (${imageLabel}).`,
       });
 
@@ -482,7 +482,7 @@ export async function creditMobileDepositAction(
           accountId: account.id,
           amountCents: deposit.amountCents,
           kind: "MOBILE_DEPOSIT",
-          description: `Mobile deposit · ${deposit.imageLabel ?? "cheque"}`,
+          description: `Cheque deposit · ${deposit.imageLabel ?? "cheque"}`,
           mobileDepositId: deposit.id,
         },
       });
@@ -497,7 +497,7 @@ export async function creditMobileDepositAction(
 
       await createUserNotification(tx, {
         userId,
-        title: "Mobile deposit credited",
+        title: "Cheque deposit credited",
         body: `${formatMoney(deposit.amountCents)} is now available.`,
       });
     });

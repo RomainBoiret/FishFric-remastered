@@ -13,7 +13,7 @@ import { prisma } from "@/lib/db";
 export const metadata: Metadata = {
   title: "Deposit a cheque",
   description:
-    "Drop a signed demo cheque into Fish&Fric - pending review, then credit.",
+    "Drop a signed demo cheque into Fish&Fric: pending review, then credit.",
   alternates: { canonical: "/app/deposit" },
 };
 

@@ -23,7 +23,7 @@ export const SITE_GITHUB =
 export const SITE_GITHUB_ORIGINAL =
   "https://github.com/RomainBoiret/FishFric-Bank";
 export const SITE_TAGLINE =
-  "An ocean-themed banking demo - accounts, transfers, P2P, bills, and signed cheque deposits on a real ledger.";
+  "An ocean-themed banking demo: accounts, transfers, P2P, bills, and signed cheque deposits on a real ledger.";
 
 /** Seeded accounts for recruiters (fictional only). */
 export const DEMO_CREDENTIALS = [

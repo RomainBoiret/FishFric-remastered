@@ -113,7 +113,7 @@ export function MobileDepositForm({
     return buildDemoChequeSvg({
       amountCents,
       payeeName,
-      memo: "Mobile deposit - fictional",
+      memo: "Cheque deposit · fictional",
     });
   }, [amountCents, payeeName]);
 

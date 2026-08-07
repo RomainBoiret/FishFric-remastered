@@ -21,7 +21,7 @@ import {
 
 export const metadata: Metadata = {
   title: "Docs",
-  description: `Dive into the story of ${SITE_NAME} - from an ÉTS team integrator project to a solo remaster with signed cheque deposits.`,
+  description: `The story of ${SITE_NAME}: from an ÉTS team integrator project to a solo remaster with signed cheque deposits.`,
   alternates: { canonical: "/docs" },
 };
 
@@ -30,7 +30,7 @@ const TIMELINE = [
     year: "2024",
     depth: "Surface",
     title: "ÉTS team integrator",
-    body: "Fish&Fric began as a school banking demo built with a team - ocean theme, accounts, and the first clickable ledger.",
+    body: "Fish&Fric began as a school banking demo built with a team: ocean theme, accounts, and the first clickable ledger.",
     accent: "#5ec8e8",
     fish: { color: "#5ec8e8", fin: "#2f6f9f" },
   },
@@ -154,7 +154,7 @@ export default function DocsPage() {
                 Captain&apos;s log
               </h1>
               <p className="ff-docs-lead [text-shadow:0_1px_2px_rgba(15,48,68,0.5)]">
-                How this ocean-pixel bank grew from a team school project - plus
+                How this ocean-pixel bank grew from a team school project, plus
                 the signed cheque catch and the rest of the reef.
               </p>
               <nav
@@ -314,8 +314,8 @@ export default function DocsPage() {
                 Signed cheque deposit
               </h2>
               <p className="ff-docs-copy">
-                The remaster&apos;s showpiece: issue a demo cheque, deposit it
-                like a mobile capture, and let anti-fraud rules fire underwater.
+                The remaster&apos;s showpiece: issue a demo cheque, deposit it,
+                and let anti-fraud rules fire underwater.
               </p>
             </div>
 

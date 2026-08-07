@@ -142,7 +142,7 @@ export function buildDemoChequeSvg(input: {
 }): string {
   const amountLabel = formatMoney(input.amountCents, "en-CA");
   const payee = escapeXml(input.payeeName.trim() || "Fish&Fric customer");
-  const memo = escapeXml(input.memo?.trim() || "Mobile deposit - fictional");
+  const memo = escapeXml(input.memo?.trim() || "Cheque deposit · fictional");
   const shortId =
     input.chequeId?.replace(/[^a-zA-Z0-9]/g, "").slice(-6).toUpperCase() ??
     null;
